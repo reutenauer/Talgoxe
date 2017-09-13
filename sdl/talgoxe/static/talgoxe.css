@@ -3,11 +3,13 @@ html {
 }
 
 #inmatning {
+  border: 1px solid black;
   width: 40%;
   float: left;
 }
 
 #artikel {
+  border: 1px solid black;
   width: 40%
 }
 
