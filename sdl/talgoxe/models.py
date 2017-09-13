@@ -15,11 +15,17 @@ class Lemma(models.Model):
     def __str__(self):
         return self.lemma
 
+    def __unicode__(self):
+        return self.lemma
+
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
 
     def __str__(self):
+        return self.abbrev.upper()
+
+    def __unicode__(self):
         return self.abbrev.upper()
 
 class Data(models.Model):
@@ -30,3 +36,6 @@ class Data(models.Model):
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.d
+
+    def __unicode__(self):
+        return self.type.__unicode__() + ' ' + self.d

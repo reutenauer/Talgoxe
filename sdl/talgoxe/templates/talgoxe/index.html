@@ -1,0 +1,19 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<div id="inmatning">
+<ul>
+{% for d in data %}
+    <li>{{ d }}</li>
+{% endfor %}
+</ul>
+</div>
+<div id="artikel">
+</div>
+</div>
+<div id="ordlista">
+Lista över alla aktuella ord:
+<ul>
+{% for lemma in lemmata %}
+    <li>{{ lemma.lemma }}</li>
+{% endfor %}
+</ul>
+</div>
