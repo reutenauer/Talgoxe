@@ -1,0 +1,17 @@
+html {
+  background-color: #ccf;
+}
+
+#inmatning {
+  width: 40%;
+  float: left;
+}
+
+#artikel {
+  width: 40%
+}
+
+#ordlista {
+  width: 20%;
+  float: right;
+}
