@@ -2,18 +2,24 @@ html {
   background-color: #ccf;
 }
 
+body {
+  font-family: 'Droid Serif', Georgia, Times, serif, roman;
+}
+
 #inmatning {
+  border: 1px solid black;
+  width: 40%;
+  float: left;
+  padding-right: 2%;
+}
+
+#artikel {
   border: 1px solid black;
   width: 40%;
   float: left;
 }
 
-#artikel {
-  border: 1px solid black;
-  width: 40%
-}
-
 #ordlista {
-  width: 20%;
+  width: 16%;
   float: right;
 }

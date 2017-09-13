@@ -33,9 +33,18 @@ class Data(models.Model):
     pos = models.SmallIntegerField()
     lemma = models.ForeignKey(Lemma)
     type = models.ForeignKey(Type)
+    webstyles = {
+      'SO': 'strong'
+    }
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.d
 
     def __unicode__(self):
         return self.type.__unicode__() + ' ' + self.d
+
+    def webstyle(self):
+        self.webstyles[self.type.__unicode__()]
+
+    def printstyle(self):
+        self.printstyles[self.type.__unicode__()]

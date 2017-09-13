@@ -1,18 +1,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 {% load static %}
-<link rel="stylesheet" href="{% static "talgoxe.css" %}">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&subset=latin">
+<link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
 <div id="inmatning">
+<h2>Inmatning</h2>
 <ul>
+<li>SO : {{ lemma }}</li>
 {% for d in data %}
     <li>{{ d }}</li>
 {% endfor %}
 </ul>
 </div>
 <div id="artikel">
+<h2>Artikel</h2>
+<strong>{{ lemma }}</strong>
+{% for d in data %}
+    {{ d.d }}
+{% endfor %}
 </div>
 </div>
 <div id="ordlista">
-Lista över alla aktuella ord:
+<h2>Lista över alla aktuella ord:</h2>
 <ul>
 {% for lemma in lemmata %}
     <li>{{ lemma.lemma }}</li>
