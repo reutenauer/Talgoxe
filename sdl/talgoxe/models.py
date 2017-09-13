@@ -12,13 +12,21 @@ from django.db import models
 class Lemma(models.Model):
     lemma = models.CharField(max_length = 100)
 
+    def __str__(self):
+        return self.lemma
+
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
 
+    def __str__(self):
+        return self.abbrev.upper()
+
 class Data(models.Model):
     d = models.CharField(max_length = 2000)
-    pos = models.SmallIntegerField
+    pos = models.SmallIntegerField()
     lemma = models.ForeignKey(Lemma)
     type = models.ForeignKey(Type)
-    ord = models.SmallIntegerField
+
+    def __str__(self):
+        return self.type.__str__() + ' ' + self.d
