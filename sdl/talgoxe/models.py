@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
+from tempfile import mkdtemp
 
 from django.db import models
 
@@ -78,6 +79,24 @@ class Lemma(models.Model):
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
 
+    def process(self, outfile):
+        self.resolve_pilcrow()
+        for m1 in range(len(self.segments)):
+            moment1 = self.segments[m1]
+            if m1 > 0 and len(self.segments) > 1:
+                outfile.write(m1.__str__())
+                outfile.write(' ')
+            for m2 in range(len(moment1)):
+                moment2 = moment1[m2]
+                if m2 > 0 and len(moment1) > 1:
+                    outfile.write(chr(96 + m2))
+                    outfile.write(' ')
+                for seg in moment2:
+                    outfile.write(seg.text.encode('UTF-8'))
+                    outfile.write(' ')
+        outfile.write(self.lemma.encode('UTF-8'))
+        outfile.write("\n")
+
 class Segment():
     def __init__(self, type, text):
         self.type = type
@@ -136,7 +155,10 @@ class Landskap():
     ]
 
     def cmp(self, other):
-        return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
+        if self.abbrev in self.ordning and other.abbrev in self.ordning:
+            return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
+        else:
+            return 0
 
     def __init__(self, abbrev):
         self.abbrev = abbrev.capitalize()
@@ -146,3 +168,18 @@ class Landskap():
 
     def __unicode__(self):
         return self.abbrev
+
+class Lexicon():
+    def process(self):
+        tempdir = mkdtemp('', 'SDL')
+        source = file(tempdir + '/sdl.tex', 'w')
+        source.write("""
+            \starttext
+            {\\tfc\\hfill Sveriges dialektlexikon\\hfill}
+
+            {\\tfb\\hfill utgiven av Institutet för språk och folkminnen\\hfill}
+        """.encode('UTF-8'))
+        for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
+            print(lemma.lemma)
+            lemma.process(source)
+        source.close()
