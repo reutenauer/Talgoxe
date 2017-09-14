@@ -22,7 +22,6 @@ class Lemma(models.Model):
 
     def resolve_pilcrow(self):
         i = 0
-        self.segments = []
         self.raw_data_set = self.data_set.filter(id__gt = 0).order_by('pos')
         while i < len(self.raw_data_set.count()):
             currseg = self.raw_data_set.all()[i]
@@ -35,9 +34,6 @@ class Lemma(models.Model):
                     i += 1
                     seginprogress += self.raw_data_set.all()[i] + subsegs[j]
                 self.segments.append(seginprogress)
-
-    def segs(self):
-        return self.segments
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
