@@ -15,11 +15,7 @@
 <h2>Artikel</h2>
 <strong>{{ lemma }}</strong>
 {% for d in data %}
-    {% if d.type.abbrev == 'm1' %}
-        <li>
-    {% else %}
-        <span class="{{ d.type }}">{{ d.d }}</span>
-    {% endif %}
+    <span class="{{ d.type }}">{{ d.d }}</span>
 {% endfor %}
 </div>
 </div>

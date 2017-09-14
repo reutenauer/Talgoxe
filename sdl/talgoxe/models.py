@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import re
 
 from django.db import models
 
@@ -17,6 +18,17 @@ class Lemma(models.Model):
 
     def __unicode__(self):
         return self.lemma
+
+    def resolve_pilcrow(self):
+        i = 0
+        while i < len(self.data_set.count()):
+            currd = self.data_set.all()[i]
+            localds = re.split(ur'¶', currd)
+            if len(maind) == 1:
+                mainds.append(maind[0])
+            else:
+                locald = localds[0]
+                for j in range(1, len(maind)):
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
