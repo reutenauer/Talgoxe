@@ -82,7 +82,7 @@ class Lemma(models.Model):
 
     def process(self, outfile):
         self.resolve_pilcrow()
-        outfile.write(('\\hskip-1em\\SDL:SO{%s} ' % self.lemma))
+        outfile.write(('\\hskip-1em\\SDL:SO{%s} ' % self.lemma).encode('UTF-8'))
         for m1 in range(len(self.segments)):
             moment1 = self.segments[m1]
             if m1 > 0 and len(self.segments) > 1:

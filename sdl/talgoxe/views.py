@@ -50,7 +50,7 @@ def print_stuff(request, stickord = None):
     system("context sdl.tex")
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '%s.pdf' % lemma.lemma)
     print("Copying sdl.pdf to %s" % ordpdfpath)
-    system("cp sdl.pdf %s" % ordpdfpath)
+    system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
     return HttpResponse("<p><a href='/static/ord/%s.pdf'>Click here</a></p>" % lemma.lemma)
 
 def print_stickord(request, stickord):
