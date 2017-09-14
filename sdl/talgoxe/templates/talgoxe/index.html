@@ -5,17 +5,27 @@
 <div id="inmatning">
 <h2>Inmatning</h2>
 <ul>
-<li>SO : {{ lemma }}</li>
+<li>SO&nbsp;&nbsp;: {{ lemma }}</li>
 {% for d in input %}
-    <li>{{ d }}</li>
+    <li>{{ d.type.format }}: {{ d.d }}</li>
 {% endfor %}
 </ul>
 </div>
 <div id="artikel">
 <h2>Artikel</h2>
 <strong>{{ lemma }}</strong>
-{% for seg in segments %}
-    <span class="{{ seg.type }}">{{ seg.text }}</span>
+{% for moment1 in segments %}
+    {% if forloop.counter0 != 0 and segments|length > 1 %}
+        <span class="M1">{{ forloop.counter0 }}</span>
+    {% endif %}
+    {% for moment2 in moment1 %}
+        {% if forloop.counter0 != 0 and moment1|length > 1 %}
+            <span class="M2">{{ forloop.counter0 }}</span>
+        {% endif %}
+        {% for seg in moment2 %}
+            <span class="{{ seg.type }}">{{ seg.text.format }}</span>
+        {% endfor %}
+    {% endfor %}
 {% endfor %}
 </div>
 </div>

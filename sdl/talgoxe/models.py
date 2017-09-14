@@ -25,28 +25,46 @@ class Lemma(models.Model):
 
     def resolve_pilcrow(self):
         i = 0
+        currmoment1 = []
+        currmoment2 = []
         while i < self.raw_data_set().count():
             currseg = self.raw_data_set().all()[i]
-            subsegs = re.split(ur'¶', currseg.d)
-            if len(subsegs) == 1:
-                self.segments.append(Segment(currseg.type, subsegs[0]))
+            if currseg.type.__unicode__() == u'M1':
+                currmoment1.append(currmoment2)
+                self.segments.append(currmoment1)
+                currmoment1 = []
+                currmoment2 = []
+            elif currseg.type.__unicode__() == u'M2':
+                currmoment1.append(currmoment2)
+                currmoment2 = []
+            elif currseg.type.__unicode__() == u'G':
+                currmoment2.append(Segment(currseg.type, currseg.d.capitalize()))
             else:
-                maintype = currseg.type
-                self.segments.append(Segment(maintype, subsegs[0]))
-                for j in range(1, len(subsegs)):
-                    i += 1
-                    subseg = self.raw_data_set().all()[i]
-                    self.segments.append(Segment(subseg.type, subseg.d))
-                    self.segments.append(Segment(maintype, subsegs[j]))
+                subsegs = re.split(ur'¶', currseg.d)
+                if len(subsegs) == 1:
+                    currmoment2.append(Segment(currseg.type, subsegs[0]))
+                else:
+                    maintype = currseg.type
+                    currmoment2.append(Segment(maintype, subsegs[0]))
+                    for j in range(1, len(subsegs)):
+                        i += 1
+                        subseg = self.raw_data_set().all()[i]
+                        currmoment2.append(Segment(subseg.type, subseg.d))
+                        currmoment2.append(Segment(maintype, subsegs[j]))
             i += 1
+        currmoment1.append(currmoment2)
+        self.segments.append(currmoment1)
 
 class Segment():
-    type = ''
-    text = ''
-
     def __init__(self, type, text):
         self.type = type
         self.text = text
+
+    def __str__(self):
+        return self.type.__str__() + ' ' + self.text
+
+    def __unicode__(self):
+        return self.type.__unicode__() + ' ' + self.text
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
@@ -57,6 +75,11 @@ class Type(models.Model):
 
     def __unicode__(self):
         return self.abbrev.upper()
+
+    def format(self):
+        out = self.__unicode__()
+        out += (4 - len(out)) * '\xa0'
+        return out
 
 class Data(models.Model):
     d = models.CharField(max_length = 2000)
@@ -75,3 +98,6 @@ class Data(models.Model):
 
     def printstyle(self):
         self.printstyles[self.type.__unicode__()]
+
+    def format(self):
+        return d.strip()

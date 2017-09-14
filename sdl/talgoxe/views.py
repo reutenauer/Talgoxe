@@ -15,6 +15,7 @@ def index(request):
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.get(lemma = 'dagom')
     lemma.resolve_pilcrow()
+    print len(lemma.segments)
     context = {
         'input': lemma.raw_data_set(),
         'segments': lemma.segments,

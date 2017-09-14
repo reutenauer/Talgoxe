@@ -11,6 +11,7 @@ body {
   width: 40%;
   float: left;
   margin-right: 2%;
+  font-family: 'Courier';
 }
 
 #inmatning li {
@@ -56,4 +57,12 @@ body {
 .TIP {
   font-style: italic;
   font-size: smaller;
+}
+
+.IP {
+  margin-left: -0.3em;
+}
+
+.M1 {
+  font-weight: bold;
 }
