@@ -31,11 +31,13 @@ class Lemma(models.Model):
             if len(subsegs) == 1:
                 self.segments.append(Segment(currseg.type, subsegs[0]))
             else:
-                seginprogress = subsegs[0]
+                maintype = currseg.type
+                self.segments.append(Segment(maintype, subsegs[0]))
                 for j in range(1, len(subsegs)):
                     i += 1
-                    seginprogress += self.raw_data_set().all()[i].d + subsegs[j]
-                self.segments.append(Segment(currseg.type,seginprogress))
+                    subseg = self.raw_data_set().all()[i]
+                    self.segments.append(Segment(subseg.type, subseg.d))
+                    self.segments.append(Segment(maintype, subsegs[j]))
             i += 1
 
 class Segment():
