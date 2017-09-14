@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name = 'index'),
-    url(ur'^stickord/(?P<stickord>[ TSOHF2a-zåäö-]+)', views.stickord, name = 'stickord'),
+    url(ur'^stickord/(?P<stickord>[ TSOHF2a-zåäö()-]+)', views.stickord, name = 'stickord'),
 ]
