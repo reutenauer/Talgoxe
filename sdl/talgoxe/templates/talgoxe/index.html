@@ -1,5 +1,7 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 {% load static %}
+{% load talgoxe_style %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&subset=latin">
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
 <div id="inmatning">
@@ -20,7 +22,7 @@
     {% endif %}
     {% for moment2 in moment1 %}
         {% if forloop.counter0 != 0 and moment1|length > 1 %}
-            <span class="M2">{{ forloop.counter0 }}</span>
+            <span class="M2">{{ forloop.counter0 + 96 }}</span>
         {% endif %}
         {% for seg in moment2 %}
             <span class="{{ seg.type }}">{{ seg.text.format }}</span>
