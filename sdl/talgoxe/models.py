@@ -27,6 +27,7 @@ class Lemma(models.Model):
         i = 0
         currmoment1 = []
         currmoment2 = []
+        self.segments = []
         while i < self.raw_data_set().count():
             currseg = self.raw_data_set().all()[i]
             if currseg.type.__unicode__() == u'M1':
