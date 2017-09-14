@@ -35,7 +35,7 @@
 <h2>Alla ord:</h2>
 <ul>
 {% for lemma in lemmata %}
-    <li>{{ lemma.lemma }}</li>
+    <li><a href="{% url 'stickord' lemma.lemma %}">{{ lemma.lemma }}</a></li>
 {% endfor %}
 </ul>
 </div>
