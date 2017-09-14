@@ -48,7 +48,10 @@ def print_stuff(request, stickord = None):
     source.close()
     chdir(tempdir)
     system("context sdl.tex")
-    return HttpResponse("<p><a href='file://%s'>Click here</a></p>" % sourcename.replace(r'.tex', '.pdf'))
+    ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '%s.pdf' % lemma.lemma)
+    print("Copying sdl.pdf to %s" % ordpdfpath)
+    system("cp sdl.pdf %s" % ordpdfpath)
+    return HttpResponse("<p><a href='/static/ord/%s.pdf'>Click here</a></p>" % lemma.lemma)
 
 def print_stickord(request, stickord):
     return print_stuff(request, stickord)
