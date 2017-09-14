@@ -104,3 +104,14 @@ body {
   font-weight: bold;
   font-size: smaller;
 }
+
+.ÖVP {
+}
+
+.ÖVP:before {
+  content: '('
+}
+
+.ÖVP:after {
+  content: ')'
+}
