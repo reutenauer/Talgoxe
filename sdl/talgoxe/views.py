@@ -20,8 +20,6 @@ def index(request):
 def stickord(request, stickord):
     return common(request, stickord)
 
-def doprint(request, stickord):
-
 def print_stuff(request, stickord = None):
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
@@ -52,8 +50,10 @@ def print_stuff(request, stickord = None):
     return HttpResponse("<p><a href='file://%s'>Click here</a></p>" % sourcename.replace(r'.tex', '.pdf'))
 
 def print_stickord(request, stickord):
+    return print_stuff(request, stickord)
 
 def print_lexicon(request):
+    return print_stuff(request)
 
 def common(request, stickord):
     template = loader.get_template('talgoxe/index.html')

@@ -41,6 +41,7 @@ class Lemma(models.Model):
                     landskap = []
                     for ls in sorted_landskap:
                         currmoment2.append(Segment(gtype, ls.abbrev))
+                    currmoment2.append(Segment(currseg.type, currseg.d))
                     state = 'INITIAL'
             else:
                 if currseg.type.__unicode__() == u'M1':
