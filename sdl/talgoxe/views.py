@@ -10,9 +10,10 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.http import HttpResponse
-from django.template import loader
+from django.template import loader, Context
 
 from talgoxe.models import Lemma, Lexicon
+from django import VERSION
 
 def index(request):
     return common(request, 'dagom')
@@ -69,7 +70,10 @@ def common(request, stickord):
         'lemmata': lemmata
     }
 
-    return HttpResponse(template.render(context, request))
+    if VERSION[1] == 7:
+        return HttpResponse(template.render(Context(context))) # Django 1.7
+    else:
+        return HttpResponse(template.render(context, request)) # Django 1.11
 
 def printing(request):
     lexicon = Lexicon()
