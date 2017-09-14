@@ -58,7 +58,10 @@ def print_stickord(request, stickord):
     source.close()
     chdir(tempdir)
     system("context sdl-artikel.tex")
-    return HttpResponse("<p><a href='file://%s</a></p>" % sourcename.replace(r'.tex', '.pdf'))
+    # return HttpResponse("ConTeXt has run!")
+    # return HttpResponse(sourcename)
+    return HttpResponse("<p><a href='file://%s'>Click here</a></p>" % sourcename.replace(r'.tex', '.pdf'))
+    # return HttpResponse("<p><a href='file://%s</a></p>" % sourcename.replace(r'.tex', '.pdf'))
 
 def common(request, stickord):
     template = loader.get_template('talgoxe/index.html')
