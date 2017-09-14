@@ -15,7 +15,7 @@ def index(request):
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.get(lemma = 'dagom')
     context = {
-        'data': lemma.data_set.filter(id__gt = 0).order_by('pos'),
+        'data': lemma.segs(),
         'lemma': lemma,
         'lemmata': lemmata
     }

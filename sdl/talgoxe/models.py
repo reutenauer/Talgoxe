@@ -12,6 +12,7 @@ from django.db import models
 # Foreign keys fails otherwise!
 class Lemma(models.Model):
     lemma = models.CharField(max_length = 100)
+    segments = []
 
     def __str__(self):
         return self.lemma
@@ -21,14 +22,22 @@ class Lemma(models.Model):
 
     def resolve_pilcrow(self):
         i = 0
-        while i < len(self.data_set.count()):
-            currd = self.data_set.all()[i]
-            localds = re.split(ur'¶', currd)
-            if len(maind) == 1:
-                mainds.append(maind[0])
+        self.segments = []
+        self.raw_data_set = self.data_set.filter(id__gt = 0).order_by('pos')
+        while i < len(self.raw_data_set.count()):
+            currseg = self.raw_data_set.all()[i]
+            subsegs = re.split(ur'¶', currseg)
+            if len(subsegs) == 1:
+                self.segments.append(subsegs[0])
             else:
-                locald = localds[0]
-                for j in range(1, len(maind)):
+                seginprogress = subsegs[0]
+                for j in range(1, len(subsegs)):
+                    i += 1
+                    seginprogress += self.raw_data_set.all()[i] + subsegs[j]
+                self.segments.append(seginprogress)
+
+    def segs(self):
+        return self.segments
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
