@@ -28,38 +28,52 @@ class Lemma(models.Model):
         currmoment1 = []
         currmoment2 = []
         self.segments = []
+        state = 'INITIAL'
+        gtype = None
         while i < self.raw_data_set().count():
             currseg = self.raw_data_set().all()[i]
-            if currseg.type.__unicode__() == u'M1':
-                currmoment1.append(currmoment2)
-                self.segments.append(currmoment1)
-                currmoment1 = []
-                currmoment2 = []
-            elif currseg.type.__unicode__() == u'M2':
-                currmoment1.append(currmoment2)
-                currmoment2 = []
-            elif currseg.type.__unicode__() == u'G':
-                currmoment2.append(Segment(currseg.type, currseg.d.capitalize()))
-            elif currseg.type.__unicode__() == u'VH':
-                currmoment2.append(Segment(currseg.type, '['))
-            elif currseg.type.__unicode__() == u'HH':
-                currmoment2.append(Segment(currseg.type, ']'))
-            elif currseg.type.__unicode__() == u'VR':
-                currmoment2.append(Segment(currseg.type, '('))
-            elif currseg.type.__unicode__() == u'HR':
-                currmoment2.append(Segment(currseg.type, ')'))
+            if state == 'GEOGRAFI':
+                if currseg.type.__unicode__() == u'G':
+                    landskap.append(Landskap(currseg.d))
+                else: # Sort and flush
+                    sorted_landskap = sorted(landskap, Landskap.cmp)
+                    landskap = []
+                    for ls in sorted_landskap:
+                        currmoment2.append(Segment(gtype, ls.abbrev))
+                    state = 'INITIAL'
             else:
-                subsegs = re.split(ur'¶', currseg.d)
-                if len(subsegs) == 1:
-                    currmoment2.append(Segment(currseg.type, subsegs[0]))
+                if currseg.type.__unicode__() == u'M1':
+                    currmoment1.append(currmoment2)
+                    self.segments.append(currmoment1)
+                    currmoment1 = []
+                    currmoment2 = []
+                elif currseg.type.__unicode__() == u'M2':
+                    currmoment1.append(currmoment2)
+                    currmoment2 = []
+                elif currseg.type.__unicode__() == u'G':
+                    gtype = currseg.type
+                    state = 'GEOGRAFI'
+                    landskap = [Landskap(currseg.d)]
+                elif currseg.type.__unicode__() == u'VH':
+                    currmoment2.append(Segment(currseg.type, '['))
+                elif currseg.type.__unicode__() == u'HH':
+                    currmoment2.append(Segment(currseg.type, ']'))
+                elif currseg.type.__unicode__() == u'VR':
+                    currmoment2.append(Segment(currseg.type, '('))
+                elif currseg.type.__unicode__() == u'HR':
+                    currmoment2.append(Segment(currseg.type, ')'))
                 else:
-                    maintype = currseg.type
-                    currmoment2.append(Segment(maintype, subsegs[0]))
-                    for j in range(1, len(subsegs)):
-                        i += 1
-                        subseg = self.raw_data_set().all()[i]
-                        currmoment2.append(Segment(subseg.type, subseg.d))
-                        currmoment2.append(Segment(maintype, subsegs[j]))
+                    subsegs = re.split(ur'¶', currseg.d)
+                    if len(subsegs) == 1:
+                        currmoment2.append(Segment(currseg.type, subsegs[0]))
+                    else:
+                        maintype = currseg.type
+                        currmoment2.append(Segment(maintype, subsegs[0]))
+                        for j in range(1, len(subsegs)):
+                            i += 1
+                            subseg = self.raw_data_set().all()[i]
+                            currmoment2.append(Segment(subseg.type, subseg.d))
+                            currmoment2.append(Segment(maintype, subsegs[j]))
             i += 1
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
@@ -110,3 +124,25 @@ class Data(models.Model):
 
     def format(self):
         return d.strip()
+
+class Landskap():
+    ordning = [
+        u'Skåne', u'Blek', u'Öland', u'Smål', u'Hall', u'Västg', u'Boh', u'Dalsl', u'Gotl', u'Östg', # 0-9
+        u'Götal', # 10
+        u'Sörml', u'Närke', u'Värml', u'Uppl', u'Västm', u'Dal', # 11 - 16
+        u'Sveal', # 17
+        u'Gästr', u'Häls', u'Härj', u'Med', u'Jämtl', u'Ång', u'Västb', u'Lappl', u'Norrb', # 18 - 26
+        u'Norrl', # 27
+    ]
+
+    def cmp(self, other):
+        return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
+
+    def __init__(self, abbrev):
+        self.abbrev = abbrev.capitalize()
+
+    def __str__(self):
+        return self.abbrev
+
+    def __unicode__(self):
+        return self.abbrev
