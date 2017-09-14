@@ -44,7 +44,7 @@ def print_stickord(request, stickord):
         \\def\\SDL:VR#1{{#1\\kern-0.3em}}
         \\def\\SDL:HR#1{{\\kern-0.3em #1}}
         \\def\\SDL:REF#1{{\\bfx #1}}
-        \\def\SDL:FO#1{{\\it #1}}
+        \\def\\SDL:FO#1{{\\it #1}}
         \\def\\SDL:TIK#1{{\\tfx\\it #1}}
         \\def\\SDL:FLV#1{{\\bfx #1}}
         \\def\\SDL:ÖVP#1{{(#1)}}
