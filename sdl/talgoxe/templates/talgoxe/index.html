@@ -22,7 +22,7 @@
     {% endif %}
     {% for moment2 in moment1 %}
         {% if forloop.counter0 != 0 and moment1|length > 1 %}
-            <span class="M2">{{ forloop.counter0 + 96 }}</span>
+            <span class="M2">{{ forloop.counter0|romanlower }}</span>
         {% endif %}
         {% for seg in moment2 %}
             <span class="{{ seg.type }}">{{ seg.text.format }}</span>
