@@ -14,8 +14,10 @@ def index(request):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.get(lemma = 'dagom')
+    lemma.resolve_pilcrow()
     context = {
-        'data': lemma.segments,
+        'input': lemma.raw_data_set(),
+        'segments': lemma.segments,
         'lemma': lemma,
         'lemmata': lemmata
     }

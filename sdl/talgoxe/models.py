@@ -20,20 +20,31 @@ class Lemma(models.Model):
     def __unicode__(self):
         return self.lemma
 
+    def raw_data_set(self):
+        return self.data_set.filter(id__gt = 0).order_by('pos')
+
     def resolve_pilcrow(self):
         i = 0
-        self.raw_data_set = self.data_set.filter(id__gt = 0).order_by('pos')
-        while i < len(self.raw_data_set.count()):
-            currseg = self.raw_data_set.all()[i]
-            subsegs = re.split(ur'¶', currseg)
+        while i < self.raw_data_set().count():
+            currseg = self.raw_data_set().all()[i]
+            subsegs = re.split(ur'¶', currseg.d)
             if len(subsegs) == 1:
-                self.segments.append(subsegs[0])
+                self.segments.append(Segment(currseg.type, subsegs[0]))
             else:
                 seginprogress = subsegs[0]
                 for j in range(1, len(subsegs)):
                     i += 1
-                    seginprogress += self.raw_data_set.all()[i] + subsegs[j]
-                self.segments.append(seginprogress)
+                    seginprogress += self.raw_data_set().all()[i].d + subsegs[j]
+                self.segments.append(Segment(currseg.type,seginprogress))
+            i += 1
+
+class Segment():
+    type = ''
+    text = ''
+
+    def __init__(self, type, text):
+        self.type = type
+        self.text = text
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)

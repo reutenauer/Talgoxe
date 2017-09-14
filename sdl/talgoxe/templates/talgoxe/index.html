@@ -6,7 +6,7 @@
 <h2>Inmatning</h2>
 <ul>
 <li>SO : {{ lemma }}</li>
-{% for d in data %}
+{% for d in input %}
     <li>{{ d }}</li>
 {% endfor %}
 </ul>
@@ -14,8 +14,8 @@
 <div id="artikel">
 <h2>Artikel</h2>
 <strong>{{ lemma }}</strong>
-{% for d in data %}
-    <span class="{{ d.type }}">{{ d.d }}</span>
+{% for seg in segments %}
+    <span class="{{ seg.type }}">{{ seg.text }}</span>
 {% endfor %}
 </div>
 </div>
