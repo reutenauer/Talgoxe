@@ -40,6 +40,14 @@ class Lemma(models.Model):
                 currmoment2 = []
             elif currseg.type.__unicode__() == u'G':
                 currmoment2.append(Segment(currseg.type, currseg.d.capitalize()))
+            elif currseg.type.__unicode__() == u'VH':
+                currmoment2.append(Segment(currseg.type, '['))
+            elif currseg.type.__unicode__() == u'HH':
+                currmoment2.append(Segment(currseg.type, ']'))
+            elif currseg.type.__unicode__() == u'VR':
+                currmoment2.append(Segment(currseg.type, '('))
+            elif currseg.type.__unicode__() == u'HR':
+                currmoment2.append(Segment(currseg.type, ')'))
             else:
                 subsegs = re.split(ur'¶', currseg.d)
                 if len(subsegs) == 1:

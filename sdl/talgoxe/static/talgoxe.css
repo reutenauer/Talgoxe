@@ -55,7 +55,6 @@ body {
 }
 
 .TIP {
-  font-style: italic;
   font-size: smaller;
 }
 
@@ -69,4 +68,39 @@ body {
 
 .M2 {
   font-weight: bold;
+}
+
+.VH {
+  margin-right: -0.3em;
+}
+
+.HH {
+  margin-left: -0.3em;
+}
+
+.VR {
+  margin-right: -0.3em;
+}
+
+.HR {
+  margin-left: -0.3em;
+}
+
+.REF {
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.FO {
+  font-style: italic;
+}
+
+.TIK {
+  font-style: italic;
+  font-size: smaller;
+}
+
+.FLV {
+  font-weight: bold;
+  font-size: smaller;
 }
