@@ -10,7 +10,11 @@ body {
   border: 1px solid black;
   width: 40%;
   float: left;
-  padding-right: 2%;
+  margin-right: 2%;
+}
+
+#inmatning li {
+  list-style-type: none;
 }
 
 #artikel {
@@ -22,4 +26,34 @@ body {
 #ordlista {
   width: 16%;
   float: right;
+}
+
+.SO {
+  font-style: bold;
+}
+
+.OK {
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.KO {
+  display: none;
+}
+
+.G {
+  font-size: smaller;
+}
+
+.DSP {
+  font-style: italic;
+}
+
+.SP {
+  font-style: italic;
+}
+
+.TIP {
+  font-style: italic;
+  font-size: smaller;
 }
