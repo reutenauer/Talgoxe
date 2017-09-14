@@ -27,8 +27,32 @@ def print_stickord(request, stickord):
         \\setupbodyfont[pagella, 12pt]
         \\setuppagenumbering[state=stop]
 
+        \\catcode`\\:=11
+        \\catcode`\\Ö=11
+        \\def\\SDL:SO#1{{\\bf #1}}
+        \\def\\SDL:OK#1{{\\bfx #1}}
+        \\def\\SDL:KO#1{}
+        \\def\\SDL:G#1{{\\tfx #1}}
+        \\def\\SDL:DSP#1{{\\it #1}}
+        \\def\\SDL:SP#1{{\\it #1}}
+        \\def\\SDL:TIP#1{{\\tfx #1}}
+        \\def\\SDL:IP#1{{\\kern-0.3em #1}}
+        \\def\\SDL:M#1#2{{\\bf #2}}
+        \\def\\SDL:M#1#2{{\\bf #2}}
+        \\def\\SDL:VH#1{{#1\\kern-0.3em}}
+        \\def\SDL:HH#1{{\\kern-0.3em #1}}
+        \\def\\SDL:VR#1{{#1\\kern-0.3em}}
+        \\def\\SDL:HR#1{{\\kern-0.3em #1}}
+        \\def\\SDL:REF#1{{\\bfx #1}}
+        \\def\SDL:FO#1{{\\it #1}}
+        \\def\\SDL:TIK#1{{\\tfx\\it #1}}
+        \\def\\SDL:FLV#1{{\\bfx #1}}
+        \\def\\SDL:ÖVP#1{{(#1)}}
+        \\def\\SDL:BE#1{#1}
+        \\def\SDL:ÖV#1{#1}
+
         \\starttext
-        """)
+        """.encode('UTF-8'))
     lemma.process(source)
     source.write("\\stoptext\n")
     source.close()
