@@ -25,7 +25,11 @@
             <span class="M2">{{ forloop.counter0|romanlower }}</span>
         {% endif %}
         {% for seg in moment2 %}
-            <span class="{{ seg.type }}">{{ seg.text.format }}</span>
+            {% if seg.type.abbrev == 'ref' %}
+                <span class="{{ seg.type }}"><a href="{% url 'stickord' seg.text %}">{{ seg.text.format }}</a></span>
+            {% else %}
+                <span class="{{ seg.type }}">{{ seg.text.format }}</span>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 {% endfor %}
