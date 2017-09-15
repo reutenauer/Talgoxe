@@ -25,11 +25,9 @@ def print_stuff(request, stickord = None):
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
     source = open(sourcename, 'w')
-    source.write("""
-        \\setupbodyfont[pagella, 12pt]
-        \\setuppagenumbering[state=stop]
-
-        """)
+    source.write("\\setupbodyfont[pagella, 12pt]\n")
+    if stickord:
+        source.write("\\setuppagenumbering[state=stop]\n")
     with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex')) as file:
         source.write(file.read().encode('UTF-8'))
 
@@ -42,13 +40,19 @@ def print_stuff(request, stickord = None):
         lemma.process(source)
     else:
         for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
+              source.write("\\startparagraph\n")
               lemma.process(source)
+              source.write("\\stopparagraph\n")
 
     source.write("\\stoptext\n")
     source.close()
     chdir(tempdir)
     system("context sdl.tex")
-    ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '%s.pdf' % lemma.lemma)
+    if stickord:
+        basename = lemma.lemma
+    else:
+        basename = 'sdl'
+    ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '%s.pdf' % basename)
     print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
     return HttpResponse("<p><a href='/static/ord/%s.pdf'>Click here</a></p>" % lemma.lemma)
