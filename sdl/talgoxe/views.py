@@ -51,7 +51,7 @@ def print_stuff(request, stickord = None):
     source.write("\\stoptext\n")
     source.close()
     chdir(tempdir)
-    system("context sdl.tex")
+    system("context --batchmode sdl.tex")
     if stickord:
         basename = lemma.lemma
     else:
