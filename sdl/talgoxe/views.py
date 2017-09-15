@@ -43,9 +43,9 @@ def print_stuff(request, stickord = None):
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
         for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
-              source.write("\\startparagraph\n")
-              lemma.process(source)
-              source.write("\\stopparagraph\n")
+            source.write("\\startparagraph\n")
+            lemma.process(source)
+            source.write("\\stopparagraph\n")
         source.write("\\stopcolumns")
 
     source.write("\\stoptext\n")
