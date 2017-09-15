@@ -95,7 +95,6 @@ class Lemma(models.Model):
                     outfile.write(('\SDL:%s{' % seg.type.__unicode__()).encode('UTF-8'))
                     outfile.write(seg.text.encode('UTF-8'))
                     outfile.write('} ')
-        outfile.write(self.lemma.encode('UTF-8'))
         outfile.write("\n")
 
 class Segment():
