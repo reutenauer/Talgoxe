@@ -93,7 +93,7 @@ class Lemma(models.Model):
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
                 for seg in moment2:
                     outfile.write(('\SDL:%s{' % seg.type.__unicode__()).encode('UTF-8'))
-                    outfile.write(seg.text.replace(ur'\\', '\\backslash '))encode('UTF-8'))
+                    outfile.write(seg.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
                     outfile.write('} ')
         outfile.write("\n")
 
