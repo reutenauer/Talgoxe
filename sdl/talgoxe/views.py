@@ -37,12 +37,16 @@ def print_stuff(request, stickord = None):
 
     if stickord:
         lemma = Lemma.objects.filter(lemma = stickord).first()
+        source.write("\\startcolumns[n=2,balance=no]\n")
         lemma.process(source)
+        source.write("\\stopcolumns\n")
     else:
+        source.write("\\startcolumns[n=2,balance=yes]\n")
         for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
               source.write("\\startparagraph\n")
               lemma.process(source)
               source.write("\\stopparagraph\n")
+        source.write("\\stopcolumns")
 
     source.write("\\stoptext\n")
     source.close()
