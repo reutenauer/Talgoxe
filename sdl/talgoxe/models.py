@@ -92,7 +92,7 @@ class Lemma(models.Model):
                 if m2 > 0 and len(moment1) > 1:
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
                 for seg in moment2:
-                    outfile.write(('\SDL:%s{' % seg.type.__unicode__()).encode('UTF-8'))
+                    outfile.write(('\SDL:%s{' % seg.type.__unicode__()).replace(ur'\\', '\\\\').encode('UTF-8'))
                     outfile.write(seg.text.encode('UTF-8'))
                     outfile.write('} ')
         outfile.write("\n")
