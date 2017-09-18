@@ -93,7 +93,6 @@ class Lemma(models.Model):
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
                 prevseg = moment2[0]
                 for s in range(1, len(moment2)): # TODO Handle case when first() is None!
-                    print(s)
                     seg = moment2[s]
                     prevseg.output(outfile, seg)
                     prevseg = seg
@@ -115,14 +114,11 @@ class Segment():
         return self.type.__unicode__() == 'HH' or self.type.__unicode__() == 'HR' or self.type.__unicode__() == 'IP'
 
     def output(self, outfile, next):
-        print('foo')
         outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
         outfile.write(self.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
         outfile.write('}')
-        print('bar')
         if not next.isrightdelim:
             outfile.write(' ')
-        print('quux')
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
