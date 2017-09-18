@@ -87,7 +87,7 @@ class Lemma(models.Model):
             moment1 = self.segments[m1]
             if m1 > 0 and len(self.segments) > 1:
                 outfile.write('\SDL:M1{%d} ' % m1)
-            for m2 in range(len(moment1) - 1):
+            for m2 in range(len(moment1)):
                 moment2 = moment1[m2]
                 if m2 > 0 and len(moment1) > 1:
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
