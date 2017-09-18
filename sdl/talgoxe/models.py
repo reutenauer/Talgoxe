@@ -117,7 +117,7 @@ class Segment():
         outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
         outfile.write(self.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
         outfile.write('}')
-        if not next.isrightdelim:
+        if not next.isrightdelim():
             outfile.write(' ')
 
 class Type(models.Model):
