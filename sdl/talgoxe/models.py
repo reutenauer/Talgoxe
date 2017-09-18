@@ -87,14 +87,17 @@ class Lemma(models.Model):
             moment1 = self.segments[m1]
             if m1 > 0 and len(self.segments) > 1:
                 outfile.write('\SDL:M1{%d} ' % m1)
-            for m2 in range(len(moment1)):
+            for m2 in range(len(moment1) - 1):
                 moment2 = moment1[m2]
                 if m2 > 0 and len(moment1) > 1:
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
-                for seg in moment2:
-                    outfile.write(('\SDL:%s{' % seg.type.__unicode__()).encode('UTF-8'))
-                    outfile.write(seg.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
-                    outfile.write('} ')
+                prevseg = moment2[0]
+                for s in range(1, len(moment2)): # TODO Handle case when first() is None!
+                    print(s)
+                    seg = moment2[s]
+                    prevseg.output(outfile, seg)
+                    seg = prevseg
+                prevseg.output(outfile, prevseg) # FIXME Remove potential final space
         outfile.write("\n")
 
 class Segment():
@@ -107,6 +110,19 @@ class Segment():
 
     def __unicode__(self):
         return self.type.__unicode__() + ' ' + self.text
+
+    def isrightdelim(self):
+        return self.type.__unicode__() == 'HH' or self.type.__unicode__() == 'HR' or self.type.__unicode__() == 'IP'
+
+    def output(self, outfile, next):
+        print('foo')
+        outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
+        outfile.write(self.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
+        outfile.write('}')
+        print('bar')
+        if not next.isrightdelim:
+            outfile.write(' ')
+        print('quux')
 
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
