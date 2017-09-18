@@ -120,6 +120,8 @@ class Segment():
         if not next.isrightdelim():
             outfile.write(' ')
 
+    # TODO Method hyphornot()
+
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
