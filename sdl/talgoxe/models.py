@@ -96,7 +96,7 @@ class Lemma(models.Model):
                     print(s)
                     seg = moment2[s]
                     prevseg.output(outfile, seg)
-                    seg = prevseg
+                    prevseg = seg
                 prevseg.output(outfile, prevseg) # FIXME Remove potential final space
         outfile.write("\n")
 
