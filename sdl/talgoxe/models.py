@@ -75,6 +75,7 @@ class Lemma(models.Model):
                             i += 1
                             subseg = self.raw_data_set().all()[i]
                             currmoment2.append(Segment(subseg.type, subseg.d))
+                            print j
                             currmoment2.append(Segment(maintype, subsegs[j]))
             i += 1
         currmoment1.append(currmoment2)
@@ -143,13 +144,13 @@ class Lemma(models.Model):
         outfile.write("\n")
 
 class Segment():
-    def __init__(self, type, text == None):
+    def __init__(self, type, text = None):
         if text:
             self.type = type
             self.text = text
         else: # type is actually a Data object
             self.type = type.type
-            self.text = type.text
+            self.text = type.d
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.text
