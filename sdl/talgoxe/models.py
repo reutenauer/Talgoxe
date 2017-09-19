@@ -85,26 +85,26 @@ class Lemma(models.Model):
         i = 0
         state = 'INITIAL'
         while i < self.raw_data_set().count():
-            currseg = self.raw_data_set().all()[i]
+            currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
-                if currseg.type.isgeo():
-                    landskap.append(currseg.d)
+                if currdat.isgeo():
+                    landskap.append(currdat.d)
                 else:
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    self.new_segments.append(currseg) # FIXME What if it’s a moment?
+                    self.new_segments.append(currdat) # FIXME What if it’s a moment?
                     state = 'INITIAL'
             else:
-                if currseg.type.isgeo():
-                    landskap = [currseg.d]
-                    geotype = currseg.type
+                if currdat.isgeo():
+                    landskap = [currdat.d]
+                    geotype = currdat.type
                 else:
-                    bits = re.split(ur'¶', currseg.d)
+                    bits = re.split(ur'¶', currdat.d)
                     if len(bits) == 1:
-                        self.new_segments.append(currseg)
+                        self.new_segments.append(currdat)
                     else:
-                        maintype = currseg.type
+                        maintype = currdat.type
                         self.new_segments.append(Segment(maintype, bits[0]))
                         print(i)
                         for bit in bits:
@@ -209,6 +209,9 @@ class Data(models.Model):
 
     def format(self):
         return d.strip()
+
+    def isgeo(self):
+        return self.type.isgeo()
 
 class Landskap():
     ordning = [
