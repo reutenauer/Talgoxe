@@ -80,6 +80,27 @@ class Lemma(models.Model):
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
 
+    def collect(self):
+        self.new_segments = []
+        i = 0
+        while i < self.raw_data_set().count():
+            currseg = self.raw_data_set().all()[i]
+            bits = re.split(ur'¶', currseg.d)
+            if len(bits) == 1:
+                self.new_segments.append(currseg)
+            else:
+                maintype = currseg.type
+                self.new_segments.append(Segment(maintype, bits[0]))
+                print(i)
+                for bit in bits:
+                    print(bit)
+                    print(bits.index(bit))
+                    if bits.index(bit) > 0:
+                        i += 1
+                        self.new_segments.append(self.raw_data_set().all()[i])
+                    self.new_segments.append(Segment(maintype, bit))
+            i += 1
+
     def process(self, outfile):
         self.resolve_pilcrow()
         outfile.write(('\\hskip-1em\\SDL:SO{%s} ' % self.lemma).encode('UTF-8'))

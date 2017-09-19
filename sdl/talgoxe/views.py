@@ -74,6 +74,7 @@ def common(request, stickord):
     print stickord
     print lemma.lemma
     lemma.resolve_pilcrow()
+    lemma.collect()
     context = {
         'input': lemma.raw_data_set(),
         'segments': lemma.segments,
