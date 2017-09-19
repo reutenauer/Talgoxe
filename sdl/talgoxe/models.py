@@ -81,11 +81,24 @@ class Lemma(models.Model):
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
 
+    def resolve_moments(segment):
+        if segment.ism1():
+            for m2 in range(1, len(self.moments['M2'])):
+                self.moments['M2'][m2].display = True
+            self.moments['M2'] = []
+            self.moments['M1'].append(segment)
+        elif segment.ism2():
+            self.moments['M2'].append(segment)
+
+    def append_segment(self, segment):
+        resolve_moments(segment)
+        self.new_segments.append(segment)
+
     def collect(self):
         self.new_segments = []
         i = 0
         state = 'INITIAL'
-        moments = { }
+        self.moments = { 'M1' = [], 'M2' = [] }
         while i < self.raw_data_set().count():
             currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
@@ -95,8 +108,7 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    currdat.resolve_moments()
-                    self.new_segments.append(Segment(currdat)) # FIXME What if it’s a moment?
+                    append_segment(Segment(currdat))
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
@@ -119,6 +131,10 @@ class Lemma(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
+        for m1 in range(1, len(self.moments['M1'])):
+            self.moments['M1'][m1].display = True
+        for m2 in range(1, len(self.moments['M2'])):
+            self.moments['M2'][m2].display = True
 
     def process(self, outfile):
         self.resolve_pilcrow()
@@ -192,6 +208,15 @@ class Type(models.Model):
     def isrightdelim(self):
         return abbrev in ['hh', 'hr', 'ip']
 
+    def ismoment(self):
+        return self.ism1() or self.ism2()
+
+    def ism1(self):
+        return abbrev == 'm1'
+
+    def ism2(self):
+        return abbrev == 'm2'
+
     def format(self):
         out = self.__unicode__()
         out += (4 - len(out)) * '\xa0'
@@ -208,6 +233,15 @@ class Data(models.Model):
 
     def __unicode__(self):
         return self.type.__unicode__() + ' ' + self.d
+
+    def ismoment(self):
+        return self.ism1() |or self.ism2()
+
+    def ism1(self):
+        return self.type.ism1()
+
+    def ism2(self):
+        return sel.type.ism2()
 
     def webstyle(self):
         self.webstyles[self.type.__unicode__()]
