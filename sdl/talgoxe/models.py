@@ -83,18 +83,18 @@ class Lemma(models.Model):
     def process(self, outfile):
         self.resolve_pilcrow()
         outfile.write(('\\hskip-1em\\SDL:SO{%s} ' % self.lemma).encode('UTF-8'))
+        prevseg = self.segments[0][0][0]
         for m1 in range(len(self.segments)):
             moment1 = self.segments[m1]
             if m1 > 0 and len(self.segments) > 1:
-                outfile.write('\SDL:M1{%d} ' % m1)
+                outfile.write('\SDL:M1{%d} ' % m1) # FIXME Now this and the M2’s make no sense; fix
             for m2 in range(len(moment1)):
                 moment2 = moment1[m2]
                 if m2 > 0 and len(moment1) > 1:
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
-                prevseg = moment2[0]
-                for s in range(1, len(moment2)): # TODO Handle case when first() is None!
-                    seg = moment2[s]
-                    prevseg.output(outfile, seg)
+                for seg in moment2: # TODO Handle case when first() is None!
+                    if prevseg:
+                        prevseg.output(outfile, seg)
                     prevseg = seg
                 prevseg.output(outfile, prevseg) # FIXME Remove potential final space
         outfile.write("\n")
