@@ -181,7 +181,10 @@ class Segment():
         return self.type.isgeo()
 
     def isrightdelim(self):
-        return self.type.isrightdelim()
+        if type(self.type) == 'unicode':
+            return self.type in ['vh', 'hh', 'vr', 'hr']
+        else:
+            return self.type.isrightdelim()
 
     def ismoment(self):
         return self.ism1() or self.ism2()
@@ -215,7 +218,7 @@ class Type(models.Model):
         return self.abbrev == 'g'
 
     def isrightdelim(self):
-        return abbrev in ['hh', 'hr', 'ip']
+        return self.abbrev in ['hh', 'hr', 'ip']
 
     def ismoment(self):
         return self.ism1() or self.ism2()
@@ -250,7 +253,16 @@ class Data(models.Model):
         self.printstyles[self.type.__unicode__()]
 
     def format(self):
-        return d.strip()
+        if type.__unicode__() == 'VH':
+            return '['
+        elif type.__unicode__() == 'HH':
+            return ']'
+        elif type.__unicode__() == 'VR':
+            return '('
+        elif type.__unicode__() == 'HR':
+            return ')'
+        else:
+            return d.strip()
 
     def isgeo(self):
         return self.type.isgeo()

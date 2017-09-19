@@ -79,7 +79,8 @@ def common(request, stickord):
         'input': lemma.raw_data_set(),
         'segments': lemma.segments,
         'lemma': lemma,
-        'lemmata': lemmata
+        'lemmata': lemmata,
+        'new_segments': lemma.new_segments
     }
 
     if VERSION[1] == 7:
