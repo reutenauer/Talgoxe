@@ -87,12 +87,19 @@ class Lemma(models.Model):
         for m1 in range(len(self.segments)):
             moment1 = self.segments[m1]
             if m1 > 0 and len(self.segments) > 1:
-                outfile.write('\SDL:M1{%d} ' % m1) # FIXME Now this and the M2’s make no sense; fix
+                sec = Segment('M1', '%d' % m1)
+                if prevseg:
+                    prevseg.output(outfile, sec)
+                prevseg = sec
             for m2 in range(len(moment1)):
                 moment2 = moment1[m2]
                 if m2 > 0 and len(moment1) > 1:
                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
-                for seg in moment2: # TODO Handle case when first() is None!
+                    sec = Segment('M2', '%c' % (96 + m2))
+                    if prevseg:
+                        prevseg.output(outfile, sec)
+                    prevseg = sec
+                for seg in moment2:
                     if prevseg:
                         prevseg.output(outfile, seg)
                     prevseg = seg
@@ -125,6 +132,11 @@ class Segment():
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.abbrev = kwargs['abbrev']
+        self.name = kwargs['name']
 
     def __str__(self):
         return self.abbrev.upper()
