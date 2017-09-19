@@ -85,6 +85,7 @@ class Lemma(models.Model):
         self.new_segments = []
         i = 0
         state = 'INITIAL'
+        moments = { }
         while i < self.raw_data_set().count():
             currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
@@ -94,6 +95,7 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
+                    currdat.resolve_moments()
                     self.new_segments.append(Segment(currdat)) # FIXME What if it’s a moment?
                     state = 'INITIAL'
             else:
