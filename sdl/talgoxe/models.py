@@ -83,22 +83,37 @@ class Lemma(models.Model):
     def collect(self):
         self.new_segments = []
         i = 0
+        state = 'INITIAL'
         while i < self.raw_data_set().count():
             currseg = self.raw_data_set().all()[i]
-            bits = re.split(ur'¶', currseg.d)
-            if len(bits) == 1:
-                self.new_segments.append(currseg)
+            if state == 'GEOGRAFI':
+                if currseg.type.isgeo():
+                    landskap.append(currseg.d)
+                else:
+                    sorted_landskap = sorted(landskap, Landskap.cmp)
+                    for ls in sorted_landskap:
+                       self.new_segments.append(Segment(geotype, ls.abbrev))
+                    self.new_segments.append(currseg) # FIXME What if it’s a moment?
+                    state = 'INITIAL'
             else:
-                maintype = currseg.type
-                self.new_segments.append(Segment(maintype, bits[0]))
-                print(i)
-                for bit in bits:
-                    print(bit)
-                    print(bits.index(bit))
-                    if bits.index(bit) > 0:
-                        i += 1
-                        self.new_segments.append(self.raw_data_set().all()[i])
-                    self.new_segments.append(Segment(maintype, bit))
+                if currseg.type.isgeo():
+                    landskap = [currseg.d]
+                    geotype = currseg.type
+                else:
+                    bits = re.split(ur'¶', currseg.d)
+                    if len(bits) == 1:
+                        self.new_segments.append(currseg)
+                    else:
+                        maintype = currseg.type
+                        self.new_segments.append(Segment(maintype, bits[0]))
+                        print(i)
+                        for bit in bits:
+                            print(bit)
+                            print(bits.index(bit))
+                            if bits.index(bit) > 0:
+                                i += 1
+                                self.new_segments.append(self.raw_data_set().all()[i])
+                            self.new_segments.append(Segment(maintype, bit))
             i += 1
 
     def process(self, outfile):
@@ -138,8 +153,11 @@ class Segment():
     def __unicode__(self):
         return self.type.__unicode__() + ' ' + self.text
 
+    def isgeo(self):
+        return self.type.isgeo()
+
     def isrightdelim(self):
-        return self.type.__unicode__() == 'HH' or self.type.__unicode__() == 'HR' or self.type.__unicode__() == 'IP'
+        return self.type.isrightdelim()
 
     def output(self, outfile, next):
         outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
@@ -159,6 +177,12 @@ class Type(models.Model):
 
     def __unicode__(self):
         return self.abbrev.upper()
+
+    def isgeo(self):
+        return self.abbrev == 'g'
+
+    def isrightdelim(self):
+        return abbrev in ['hh', 'hr', 'ip']
 
     def format(self):
         out = self.__unicode__()
