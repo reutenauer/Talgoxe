@@ -75,8 +75,8 @@ class Lemma(models.Model):
                             i += 1
                             subseg = self.raw_data_set().all()[i]
                             currmoment2.append(Segment(subseg.type, subseg.d))
-                            print j
-                            currmoment2.append(Segment(maintype, subsegs[j]))
+                            if subsegs[j]:
+                                currmoment2.append(Segment(maintype, subsegs[j]))
             i += 1
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
@@ -114,7 +114,8 @@ class Lemma(models.Model):
                             if bits.index(bit) > 0:
                                 i += 1
                                 self.new_segments.append(Segment(self.raw_data_set().all()[i]))
-                            self.new_segments.append(Segment(maintype, bit))
+                            if bit:
+                                self.new_segments.append(Segment(maintype, bit))
             i += 1
 
     def process(self, outfile):
