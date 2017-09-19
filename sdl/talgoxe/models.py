@@ -93,7 +93,7 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    self.new_segments.append(currdat) # FIXME What if it’s a moment?
+                    self.new_segments.append(Segment(currdat)) # FIXME What if it’s a moment?
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
@@ -102,7 +102,7 @@ class Lemma(models.Model):
                 else:
                     bits = re.split(ur'¶', currdat.d)
                     if len(bits) == 1:
-                        self.new_segments.append(currdat)
+                        self.new_segments.append(Segment(currdat))
                     else:
                         maintype = currdat.type
                         self.new_segments.append(Segment(maintype, bits[0]))
@@ -112,7 +112,7 @@ class Lemma(models.Model):
                             print(bits.index(bit))
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(self.raw_data_set().all()[i])
+                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
                             self.new_segments.append(Segment(maintype, bit))
             i += 1
 
@@ -143,9 +143,13 @@ class Lemma(models.Model):
         outfile.write("\n")
 
 class Segment():
-    def __init__(self, type, text):
-        self.type = type
-        self.text = text
+    def __init__(self, type, text == None):
+        if text:
+            self.type = type
+            self.text = text
+        else: # type is actually a Data object
+            self.type = type.type
+            self.text = type.text
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.text
