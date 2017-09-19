@@ -83,8 +83,10 @@ class Lemma(models.Model):
 
     def resolve_moments(self, segment):
         if segment.ism1():
-            for m2 in range(1, len(self.moments['M2'])):
-                self.moments['M2'][m2].display = True
+            if len(self.moments['M2']) > 1:
+                for m2 in range(len(self.moments['M2'])):
+                    self.moments['M2'][m2].text = '%c' % (97 + m2)
+                    self.moments['M2'][m2].display = True
             self.moments['M2'] = []
             self.moments['M1'].append(segment)
         elif segment.ism2():
@@ -130,10 +132,14 @@ class Lemma(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
-        for m1 in range(1, len(self.moments['M1'])):
-            self.moments['M1'][m1].display = True
-        for m2 in range(1, len(self.moments['M2'])):
-            self.moments['M2'][m2].display = True
+        if len(self.moments['M1']) > 1:
+            for m1 in range(len(self.moments['M1'])):
+                self.moments['M1'][m1].text = '%d' % (m1 + 1)
+                self.moments['M1'][m1].display = True
+        if len(self.moments['M2']) > 1:
+            for m2 in range(len(self.moments['M2'])):
+                self.moments['M2'][m2].text = '%c' % (96 + m2)
+                self.moments['M2'][m2].display = True
 
     def process(self, outfile):
         self.resolve_pilcrow()
@@ -204,6 +210,18 @@ class Segment():
 
     # TODO Method hyphornot()
 
+    def format(self):
+        if self.type.__unicode__() == 'VH':
+            return '['
+        elif self.type.__unicode__() == 'HH':
+            return ']'
+        elif self.type.__unicode__() == 'VR':
+            return '('
+        elif self.type.__unicode__() == 'HR':
+            return ')'
+        else:
+            return self.text.strip()
+
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
@@ -251,18 +269,6 @@ class Data(models.Model):
 
     def printstyle(self):
         self.printstyles[self.type.__unicode__()]
-
-    def format(self):
-        if type.__unicode__() == 'VH':
-            return '['
-        elif type.__unicode__() == 'HH':
-            return ']'
-        elif type.__unicode__() == 'VR':
-            return '('
-        elif type.__unicode__() == 'HR':
-            return ')'
-        else:
-            return d.strip()
 
     def isgeo(self):
         return self.type.isgeo()

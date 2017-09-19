@@ -36,20 +36,21 @@
 {% endfor %}
 </p>
 <p>
-<strong>{{ lemma }}</strong>&nbsp;
-{% spaceless %}
-{% for segment in new_segments %}
-    {% if segment.ismoment and segment.display %}
-        <span class="{{ segment.type }}">M</span>
-    {% else %}
-        {% if segment.type.abbrev == 'ref' %}
-            <span class="{{ segment.type }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
-        {% else %}
+<strong>{{ lemma }}</strong>
+{% with previous=new_segments.first %}
+    {% for segment in new_segments %}
+        {% if not segments.isrightdelim %} {% endif %}
+        {% if segment.ismoment and segment.display %}
             <span class="{{ segment.type }}">{{ segment.text.format }}</span>
+        {% else %}
+            {% if segment.type.abbrev == 'ref' %}
+                <span class="{{ segment.type }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
+            {% else %}
+                <span class="{{ segment.type }}">{{ segment.format }}</span>
+            {% endif %}
         {% endif %}
-    {% endif %}
-{% endfor %}
-{% endspaceless %}
+    {% endfor %}
+{% endwith %}
 </p>
 <a href="{% url 'print_stickord' lemma.lemma %}">PDF version</a>
 </div>
