@@ -81,7 +81,7 @@ class Lemma(models.Model):
         currmoment1.append(currmoment2)
         self.segments.append(currmoment1)
 
-    def resolve_moments(segment):
+    def resolve_moments(self, segment):
         if segment.ism1():
             for m2 in range(1, len(self.moments['M2'])):
                 self.moments['M2'][m2].display = True
@@ -90,7 +90,8 @@ class Lemma(models.Model):
         elif segment.ism2():
             self.moments['M2'].append(segment)
 
-    def append_segment(self, segment):
+    def append_segment(self, data):
+        segment = Segment(data)
         resolve_moments(segment)
         self.new_segments.append(segment)
 
@@ -108,16 +109,17 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    append_segment(Segment(currdat))
+                    append_segment(currdat)
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
                     landskap = [currdat.d]
                     geotype = currdat.type
+                    state = 'GEOGRAFI'
                 else:
                     bits = re.split(ur'¶', currdat.d)
                     if len(bits) == 1:
-                        self.new_segments.append(Segment(currdat))
+                        append_segment(currdat)
                     else:
                         maintype = currdat.type
                         self.new_segments.append(Segment(maintype, bits[0]))
@@ -164,6 +166,7 @@ class Lemma(models.Model):
 
 class Segment():
     def __init__(self, type, text = None):
+        self.display = None
         if text:
             self.type = type
             self.text = text
@@ -182,6 +185,15 @@ class Segment():
 
     def isrightdelim(self):
         return self.type.isrightdelim()
+
+    def ismoment(self):
+        return self.ism1() |or self.ism2()
+
+    def ism1(self):
+        return self.type.ism1()
+
+    def ism2(self):
+        return sel.type.ism2()
 
     def output(self, outfile, next):
         outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
@@ -233,15 +245,6 @@ class Data(models.Model):
 
     def __unicode__(self):
         return self.type.__unicode__() + ' ' + self.d
-
-    def ismoment(self):
-        return self.ism1() |or self.ism2()
-
-    def ism1(self):
-        return self.type.ism1()
-
-    def ism2(self):
-        return sel.type.ism2()
 
     def webstyle(self):
         self.webstyles[self.type.__unicode__()]
