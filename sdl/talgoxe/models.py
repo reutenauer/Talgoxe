@@ -92,34 +92,34 @@ class Lemma(models.Model):
 
     def append_segment(self, data):
         segment = Segment(data)
-        resolve_moments(segment)
+        self.resolve_moments(segment)
         self.new_segments.append(segment)
 
     def collect(self):
         self.new_segments = []
         i = 0
         state = 'INITIAL'
-        self.moments = { 'M1' = [], 'M2' = [] }
+        self.moments = { 'M1': [], 'M2': [] }
         while i < self.raw_data_set().count():
             currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
-                    landskap.append(currdat.d)
+                    landskap.append(Landskap(currdat.d))
                 else:
                     sorted_landskap = sorted(landskap, Landskap.cmp)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    append_segment(currdat)
+                    self.append_segment(currdat)
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
-                    landskap = [currdat.d]
+                    landskap = [Landskap(currdat.d)]
                     geotype = currdat.type
                     state = 'GEOGRAFI'
                 else:
                     bits = re.split(ur'¶', currdat.d)
                     if len(bits) == 1:
-                        append_segment(currdat)
+                        self.append_segment(currdat)
                     else:
                         maintype = currdat.type
                         self.new_segments.append(Segment(maintype, bits[0]))
@@ -193,7 +193,7 @@ class Segment():
         return self.type.ism1()
 
     def ism2(self):
-        return sel.type.ism2()
+        return self.type.ism2()
 
     def output(self, outfile, next):
         outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
@@ -224,10 +224,10 @@ class Type(models.Model):
         return self.ism1() or self.ism2()
 
     def ism1(self):
-        return abbrev == 'm1'
+        return self.abbrev == 'm1'
 
     def ism2(self):
-        return abbrev == 'm2'
+        return self.abbrev == 'm2'
 
     def format(self):
         out = self.__unicode__()
