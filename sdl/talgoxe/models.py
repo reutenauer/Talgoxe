@@ -187,7 +187,7 @@ class Segment():
         return self.type.isrightdelim()
 
     def ismoment(self):
-        return self.ism1() |or self.ism2()
+        return self.ism1() or self.ism2()
 
     def ism1(self):
         return self.type.ism1()
