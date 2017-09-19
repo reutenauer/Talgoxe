@@ -123,10 +123,7 @@ class Lemma(models.Model):
                     else:
                         maintype = currdat.type
                         self.new_segments.append(Segment(maintype, bits[0]))
-                        print(i)
                         for bit in bits:
-                            print(bit)
-                            print(bits.index(bit))
                             if bits.index(bit) > 0:
                                 i += 1
                                 self.new_segments.append(Segment(self.raw_data_set().all()[i]))
