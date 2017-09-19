@@ -133,11 +133,6 @@ class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.abbrev = kwargs['abbrev']
-        self.name = kwargs['name']
-
     def __str__(self):
         return self.abbrev.upper()
 
