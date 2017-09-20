@@ -140,6 +140,7 @@ class Lemma(models.Model):
             for m2 in range(len(self.moments['M2'])):
                 self.moments['M2'][m2].text = '%c' % (96 + m2)
                 self.moments['M2'][m2].display = True
+        self.moments = { 'M1': [], 'M2': [] }
 
     def process(self, outfile):
         self.resolve_pilcrow()
