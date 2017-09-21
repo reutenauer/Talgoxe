@@ -174,14 +174,15 @@ class Lemma(models.Model):
         outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma).encode('UTF-8'))
         setspace = True
         for segment in self.new_segments:
-            if not setspace:
-                setspace = True
-            if segment.isleftdelim():
-                setspace = False
+            print segment.type.__unicode(), segment.text.encode('UTF-8')
             if setspace and not segment.isrightdelim():
                 outfile.write(' ') # FIXME But not if previous segment is left delim!
+            if segment.isleftdelim():
+                setspace = False
+            else:
+                setspace = True
             type = segment.type.__unicode__()
-            text = segment.text.replace(u'\\', '\\backslash ')
+            text = segment.text.format().replace(u'\\', '\\backslash ')
             outfile.write(('\\SDL:%s{%s}' % (type, text)).encode('UTF-8'))
 
 class Segment():
@@ -202,6 +203,12 @@ class Segment():
 
     def isgeo(self):
         return self.type.isgeo()
+
+    def isleftdelim(self):
+        if type(self.type) == 'unicode':
+            return self.type in ['vh', 'vr']
+        else:
+            return self.type.isleftdelim()
 
     def isrightdelim(self):
         if type(self.type) == 'unicode':
@@ -228,13 +235,13 @@ class Segment():
     # TODO Method hyphornot()
 
     def format(self):
-        if self.type.__unicode__() == 'VH':
+        if self.type.__unicode__().upper() == 'VH':
             return '['
-        elif self.type.__unicode__() == 'HH':
+        elif self.type.__unicode__().upper() == 'HH':
             return ']'
-        elif self.type.__unicode__() == 'VR':
+        elif self.type.__unicode__().upper() == 'VR':
             return '('
-        elif self.type.__unicode__() == 'HR':
+        elif self.type.__unicode__().upper() == 'HR':
             return ')'
         else:
             return self.text.strip()
@@ -251,6 +258,9 @@ class Type(models.Model):
 
     def isgeo(self):
         return self.abbrev == 'g'
+
+    def isleftdelim(self):
+        return self.abbrev in ['vh', 'vr']
 
     def isrightdelim(self):
         return self.abbrev in ['hh', 'hr', 'ip', 'ko']
