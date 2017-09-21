@@ -173,7 +173,7 @@ class Lemma(models.Model):
         self.collect()
         outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma).encode('UTF-8'))
         setspace = True
-        for segment in self.new_segments:
+        for segment in self.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
             print segment.type.__unicode(), segment.text.encode('UTF-8')
             if setspace and not segment.isrightdelim():
                 outfile.write(' ') # FIXME But not if previous segment is left delim!
