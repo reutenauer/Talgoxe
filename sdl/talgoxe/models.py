@@ -172,8 +172,13 @@ class Lemma(models.Model):
 
         self.collect()
         outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma).encode('UTF-8'))
+        setspace = True
         for segment in self.new_segments:
-            if not segment.isrightdelim():
+            if not setspace:
+                setspace = True
+            if segment.isleftdelim():
+                setspace = False
+            if setspace and not segment.isrightdelim():
                 outfile.write(' ') # FIXME But not if previous segment is left delim!
             type = segment.type.__unicode__()
             text = segment.text.replace(u'\\', '\\backslash ')
