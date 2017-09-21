@@ -70,6 +70,7 @@ class Lemma(models.Model):
                         currmoment2.append(Segment(currseg.type, subsegs[0]))
                     else:
                         maintype = currseg.type
+                        print(subsegs)
                         currmoment2.append(Segment(maintype, subsegs[0]))
                         for j in range(1, len(subsegs)):
                             i += 1
@@ -167,10 +168,21 @@ class Lemma(models.Model):
                 prevseg.output(outfile, prevseg) # FIXME Remove potential final space
         outfile.write("\n")
 
+        outfile.write("\n")
+
+        self.collect()
+        outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma).encode('UTF-8'))
+        for segment in self.new_segments:
+            if not segment.isrightdelim():
+                outfile.write(' ') # FIXME But not if previous segment is left delim!
+            type = segment.type.__unicode__()
+            text = segment.text.replace(u'\\', '\\backslash ')
+            outfile.write(('\\SDL:%s{%s}' % (type, text)).encode('UTF-8'))
+
 class Segment():
     def __init__(self, type, text = None):
         self.display = None
-        if text:
+        if text != None:
             self.type = type
             self.text = text
         else: # type is actually a Data object
@@ -188,7 +200,7 @@ class Segment():
 
     def isrightdelim(self):
         if type(self.type) == 'unicode':
-            return self.type in ['vh', 'hh', 'vr', 'hr']
+            return self.type in ['hh', 'hr', 'ip', 'ko'] # KO is convenient
         else:
             return self.type.isrightdelim()
 
@@ -236,7 +248,7 @@ class Type(models.Model):
         return self.abbrev == 'g'
 
     def isrightdelim(self):
-        return self.abbrev in ['hh', 'hr', 'ip']
+        return self.abbrev in ['hh', 'hr', 'ip', 'ko']
 
     def ismoment(self):
         return self.ism1() or self.ism2()
