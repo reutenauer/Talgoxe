@@ -124,7 +124,6 @@ class Lemma(models.Model):
                         self.append_segment(currdat)
                     else:
                         maintype = currdat.type
-                        self.new_segments.append(Segment(maintype, bits[0]))
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
