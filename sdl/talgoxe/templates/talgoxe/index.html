@@ -40,7 +40,7 @@
 <strong>{{ lemma }}</strong>
 {% for segment in new_segments %}
     {% if not segment.isrightdelim %}
-        <span> foo </span>
+        <span>⁠ ⁠</span>
     {% endif %}
     {% if segment.ismoment and segment.display %}
         <span class="{{ segment.type }}">{{ segment.text.format }}</span>
