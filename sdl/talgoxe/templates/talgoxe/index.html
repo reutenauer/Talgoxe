@@ -40,14 +40,17 @@
 <strong>{{ lemma }}</strong>
 {% with setspace as True %}
     {% for segment in new_segments %}
+        {% if not segment.isrightdelim %}
+        {% comment %}
         {% if setspace and not segment.isrightdelim %}
+        {% endcomment %}
             <span>⁠ ⁠</span>
         {% endif %}
         {% comment %}
         {% if segment.isleftdelim %}
             [set setspace to False!]
         {% else %}
-            [ comment set setspace to True]
+            [comment set setspace to True]
         {% endif %}
         {% endcomment %}
         {% if segment.ismoment and segment.display %}
