@@ -44,7 +44,7 @@
         {% comment %}
         {% if setspace and not segment.isrightdelim %}
         {% endcomment %}
-            <span>⁠ ⁠</span>
+            <span>⁠ ⁠</span> {% comment %} FIXME Funkar tydligen inte med LEFTDELIM {% endcomment %}
         {% endif %}
         {% comment %}
         {% if segment.isleftdelim %}
