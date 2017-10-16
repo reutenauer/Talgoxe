@@ -184,7 +184,7 @@ class Lemma(models.Model):
             text = segment.format().replace(u'\\', '\\backslash ')
             outfile.write(('\\SDL:%s{%s}' % (type, text)).encode('UTF-8'))
 
-class Segment():
+class Segment(): # Fäder!
     def __init__(self, type, text = None):
         self.display = None
         if text != None:
