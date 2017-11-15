@@ -16,26 +16,6 @@
 <div id="artikel">
 <h2>Artikel</h2>
 <p>
-<strong>{{ lemma }}</strong>
-{% for moment1 in segments %}
-    {% if forloop.counter0 != 0 and segments|length > 1 %}
-        <span class="M1">{{ forloop.counter0 }}</span>
-    {% endif %}
-    {% for moment2 in moment1 %}
-        {% if forloop.counter0 != 0 and moment1|length > 1 %}
-            <span class="M2">{{ forloop.counter0|romanlower }}</span>
-        {% endif %}
-        {% for seg in moment2 %}
-            {% if seg.type.abbrev == 'ref' %}
-                <span class="{{ seg.type }}"><a href="{% url 'stickord' seg.text %}">{{ seg.text.format }}</a></span>
-            {% else %}
-                <span class="{{ seg.type }}">{{ seg.text.format }}</span>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-{% endfor %}
-</p>
-<p>
 {% spaceless %}
 <strong>{{ lemma }}</strong>
 {% with setspace as True %}
