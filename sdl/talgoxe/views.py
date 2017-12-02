@@ -22,6 +22,8 @@ def stickord(request, stickord):
     return common(request, stickord)
 
 def print_stuff(request, stickord = None):
+    return HttpResponse('<p>Please do not press this button again.</p>')
+
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
     source = open(sourcename, 'w')
