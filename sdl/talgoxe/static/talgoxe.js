@@ -7,6 +7,6 @@ function addRow(data) {
     console.log(data);
 }
 
-$('.button-*').each(function(data) {
+$('#button-*').each(function(data) {
     addRow(data);
 });
