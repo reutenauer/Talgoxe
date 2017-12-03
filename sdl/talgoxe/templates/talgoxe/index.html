@@ -12,7 +12,7 @@
 <li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara"></li>
 {% for d in input %}
     <li>
-      <input type="text" name="type-{{ d.pos }}" value="{{ d.type.format }}">
+      <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">
       <input type="text" name="value-{{ d.pos }}" value="{{ d.d }}">
     </li>
 {% endfor %}
