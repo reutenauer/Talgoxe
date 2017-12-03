@@ -6,12 +6,17 @@
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
 <div id="inmatning">
 <h2>Inmatning</h2>
+<form action="/talgoxe" method="POST">
 <ul>
 <li>SO&nbsp;&nbsp;: {{ lemma }}</li>
 {% for d in input %}
-    <li>{{ d.type.format }}: {{ d.d }}</li>
+    <li>
+      <input type="text" id="type-{{ d.pos }}" value="{{ d.type.format }}">
+      <input type="text" id="value-{{ d.pos }}" value="{{ d.d }}">
+    </li>
 {% endfor %}
 </ul>
+</form>
 </div>
 <div id="artikel">
 <h2>Artikel</h2>
