@@ -6,6 +6,8 @@ function addRow(data) {
     console.log($.attr('id'));
     /* console.log($.id()); */
     console.log(data);
+    console.log(this.id);
+    console.log(this);
 }
 
 $('.addRow').click(function(data) {
