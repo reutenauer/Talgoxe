@@ -21,6 +21,9 @@ def index(request):
 def stickord(request, stickord):
     return common(request, stickord)
 
+def update_stickord(request, stickord):
+    return HttpResponse('<p>Request object: ' + request.POST['type-1']  + "</p>")
+
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
 

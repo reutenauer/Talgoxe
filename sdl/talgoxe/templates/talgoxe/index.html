@@ -6,13 +6,14 @@
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
 <div id="inmatning">
 <h2>Inmatning</h2>
-<form action="/talgoxe" method="POST">
+<form action="{% url 'update_stickord' lemma %}" method="POST">
+{% csrf_token %}
 <ul>
-<li>SO&nbsp;&nbsp;: {{ lemma }}</li>
+<li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara"></li>
 {% for d in input %}
     <li>
-      <input type="text" id="type-{{ d.pos }}" value="{{ d.type.format }}">
-      <input type="text" id="value-{{ d.pos }}" value="{{ d.d }}">
+      <input type="text" name="type-{{ d.pos }}" value="{{ d.type.format }}">
+      <input type="text" name="value-{{ d.pos }}" value="{{ d.d }}">
     </li>
 {% endfor %}
 </ul>
