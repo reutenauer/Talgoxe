@@ -11,7 +11,7 @@ $(document).ready(function() {
         console.log(event.currentTarget);
         console.log(event.currentTarget.id);
         console.log(event.currentTarget.id.replace('button-', ''));
-        event.currentTarget.preventDefault();
+        event.currentTarget.preventDefault = true;
     }
 
     $('.addRow').click(function(event) {
