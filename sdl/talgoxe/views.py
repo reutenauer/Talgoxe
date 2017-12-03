@@ -25,7 +25,7 @@ def stickord(request, stickord):
 def update_stickord(request, stickord):
     template = loader.get_template('talgoxe/update-word.html')
     keys = []
-    for key in sorted(request.POST.keys()):
+    for key in request.POST.keys():
         if re.match(ur'type-', key):
             keys.append(key)
 
