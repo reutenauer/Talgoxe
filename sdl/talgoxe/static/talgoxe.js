@@ -6,7 +6,9 @@ $(document).ready(function() {
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('button-', '');
         if (!names[dpos]) { names[dpos] = 0 }
-        $('#data-' + dpos).after('<li><input type="text" size="3" name="type-' + dpos + '.' + names[dpos] + '> <input type="text" size="16"> <button><strong>+</strong></button></li>');
+        newRowId = 'type-' + dpos + '.' + names[dpos]
+        names[dpos]++
+        $('#data-' + dpos).after('<li><input type="text" size="3" name="' + newRowId + '> <input type="text" size="16"> <button><strong>+</strong></button></li>');
         console.log("Adding a row after d.pos " + dpos + " ...");
     }
 
