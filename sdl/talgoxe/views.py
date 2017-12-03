@@ -22,7 +22,17 @@ def stickord(request, stickord):
     return common(request, stickord)
 
 def update_stickord(request, stickord):
-    return HttpResponse('<p>Request object: ' + request.POST['type-1']  + "</p>")
+    template = loader.get_template('talgoxe/update-word.html')
+    keys = []
+    for key in sorted(request.POST.keys()):
+        if key =~ ur'type-':
+            keys.push(key)
+
+    context = {
+        'keys' : keys
+    }
+
+    return HttpResponse(template.render(context, request))
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
