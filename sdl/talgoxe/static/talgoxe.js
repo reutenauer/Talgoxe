@@ -14,7 +14,7 @@ $(document).ready(function() {
     }
 
     $('.addRow').click(function(event) {
-        event.currentTarget.preventDefault = true;
+        event.preventDefault();
         addRow(event);
     });
 });
