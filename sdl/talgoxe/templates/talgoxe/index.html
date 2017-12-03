@@ -15,7 +15,7 @@
 {% for d in input %}
     <li>
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">
-      <input type="text" name="value-{{ d.pos }}" value="{{ d.d }}">
+      <input type="text" size="16" name="value-{{ d.pos }}" value="{{ d.d }}">
       <button onClick="addRow()"><strong>+</strong></button>
     </li>
 {% endfor %}
