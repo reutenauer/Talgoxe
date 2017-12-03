@@ -6,12 +6,13 @@ $(document).ready(function() {
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('button-', '');
         if (!names[dpos]) { names[dpos] = 0 }
-        newRowId = dpos + '.' + names[dpos]
+        newRowId = dpos + '_' + names[dpos]
         names[dpos]++
         console.log("Adding a row after d.pos " + dpos + " ...");
         $('#data-' + dpos).after('<li id="data-' + newRowId + '"><input type="text" size="3" name="type-' + newRowId + '"> <input type="text" size="16" name="value-' + newRowId + '"> <button class="addRow" id="button-' + newRowId + '"><strong>+</strong></button></li>');
-        console.log("Registering the event");
-        $('#button-' + newRowId).click(function(event) { event.preventDefault(); addRow(event); });
+        buttonId = '#button-' + newRowId;
+        console.log("Registering the event on id " + buttonId);
+        $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
     }
 
     $('.addRow').click(function(event) {
