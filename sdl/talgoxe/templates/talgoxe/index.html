@@ -11,8 +11,7 @@
 <form action="{% url 'update_stickord' lemma %}" method="POST">
 {% csrf_token %}
 <ul>
-<a href="foo"><p id="test">foo</p></a>
-<li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara"></li>
+<li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara" id="spara"></li>
 {% for d in input %}
     <li id="data-{{ d.pos }}">
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">
@@ -68,3 +67,9 @@
 </ul>
 <a href="{% url 'printing' %}">Print!</a>
 </div>
+
+<script>
+    $('#spara').click(function() {
+        console.log("Submit button clicked.");
+    });
+</script>

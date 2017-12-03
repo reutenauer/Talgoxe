@@ -21,7 +21,3 @@ $('submit').click(function() {
   console.log('Submit was clicked.');
 });
 */
-
-$('#test').click(function() {
-    console.log('Test clicked!');
-});
