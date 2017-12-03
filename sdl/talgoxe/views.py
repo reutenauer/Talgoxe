@@ -4,6 +4,7 @@ from tempfile import mkdtemp
 from os import system, chdir
 import io
 import os
+import re
 
 from django.shortcuts import render
 
@@ -25,8 +26,8 @@ def update_stickord(request, stickord):
     template = loader.get_template('talgoxe/update-word.html')
     keys = []
     for key in sorted(request.POST.keys()):
-        if key =~ ur'type-':
-            keys.push(key)
+        if re.match(ur'type-', key):
+            keys.append(key)
 
     context = {
         'keys' : keys
