@@ -8,5 +8,14 @@ function addRow(data) {
 }
 
 $('.addRow').click(function(data) {
+    console.log('foo');
     addRow(data);
+});
+
+$('button').click(function() {
+    console.log("Hello, World!");
+});
+
+$('submit').click(function() {
+  console.log('Submit was clicked.');
 });
