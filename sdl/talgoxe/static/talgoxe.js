@@ -7,6 +7,6 @@ function addRow(data) {
     console.log(data);
 }
 
-$('.addRow').each(function(data) {
+$('.addRow').click(function(data) {
     addRow(data);
 });
