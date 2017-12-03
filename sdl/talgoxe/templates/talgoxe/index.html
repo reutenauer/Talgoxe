@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&subset=latin">
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
-<style src="{% static "jquery-3.2.1.min.js" %}" type="text/javascript"></style>
+<script src="{% static "jquery-3.2.1.min.js" %}" type="text/javascript"></script>
 <script src="{% static "talgoxe.js" %}" type="text/javascript"></script>
 <div id="inmatning">
 <h2>Inmatning</h2>
@@ -13,7 +13,7 @@
 <ul>
 <li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara"></li>
 {% for d in input %}
-    <li>
+    <li id="data-{{ d.pos }}">
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">
       <input type="text" size="16" name="value-{{ d.pos }}" value="{{ d.d }}">
       <button onClick="addRow()"><strong>+</strong></button>
