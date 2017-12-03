@@ -7,6 +7,7 @@ function addRow(data) {
     console.log(data);
 }
 
+/*
 $('.addRow').click(function(data) {
     console.log('foo');
     addRow(data);
@@ -18,4 +19,9 @@ $('button').click(function() {
 
 $('submit').click(function() {
   console.log('Submit was clicked.');
+});
+*/
+
+$('#test').click(function() {
+    console.log('Test clicked!');
 });
