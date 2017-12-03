@@ -5,8 +5,7 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&subset=latin">
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
 <style src="{% static "jquery-3.2.1.min.js" %}" type="text/javascript"></style>
-<!-- <style src="{% static "talgoxe.js" %}" type="text/javascript"></style> -->
-<style type="text/javascript">function addRow() { console.log("adding row ..."); }</style>
+<script src="{% static "talgoxe.js" %}" type="text/javascript"></script>
 <div id="inmatning">
 <h2>Inmatning</h2>
 <form action="{% url 'update_stickord' lemma %}" method="POST">
