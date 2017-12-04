@@ -31,8 +31,10 @@ def update_stickord(request, stickord):
             id = int(match.group(1))
             keys.append(id)
 
+    order = request.POST['order']
     context = {
-        'keys' : keys
+        'keys' : keys,
+        'order' : order
     }
 
     return HttpResponse(template.render(context, request))

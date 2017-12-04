@@ -16,7 +16,6 @@ $(document).ready(function() {
     }
 
     function submitOrder(event) {
-        event.preventDefault();
         ids = [];
         $('.addRow').each(function(event, data) {
             ids.push(data.id);
