@@ -31,7 +31,8 @@ def update_stickord(request, stickord):
             id = int(match.group(1))
             keys.append(id)
 
-    for value in request.POST['textbit']:
+    crash
+    values = request.POST['textbit']
     context = {
         'keys' : keys
     }

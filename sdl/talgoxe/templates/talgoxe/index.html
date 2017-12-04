@@ -15,7 +15,7 @@
 {% for d in input %}
     <li id="data-{{ d.pos }}">
       <input class="nosubmit" type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">
-      <input class="nosubmit" type="text" size="16" name="value-{{ d.pos }}" value="{{ d.d }}">
+      <input class="nosubmit" type="text" size="16" name="textbit" value="{{ d.d }}">
       <button class="addRow" id="button-{{ d.pos }}"><strong>+</strong></button>
     </li>
 {% endfor %}
