@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    names = {
+    nastId = $('.addRow').last().id mes = {
     }
 
     function addRow(event) {
