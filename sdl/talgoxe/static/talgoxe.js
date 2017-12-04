@@ -15,6 +15,12 @@ $(document).ready(function() {
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
     }
 
+    function submitOrder() {
+        $('.addRow').each(function(data) {
+            console.log(data);
+        });
+    }
+
     $('.addRow').click(function(event) {
         event.preventDefault();
         addRow(event);
@@ -24,4 +30,6 @@ $(document).ready(function() {
         if (event.originalEvent.key == 'Enter') event.preventDefault();
         /* TODO Något med piltangenter? */
     });
+
+    $('submit').click(submitOrder);
 });
