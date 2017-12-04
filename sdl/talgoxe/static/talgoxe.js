@@ -1,12 +1,14 @@
 $(document).ready(function() {
     lastId = $('.addRow').last().id
+    counter = int(lastId.replace('button-', ''))
+    console.log(lastId);
+    console.log(counter);
 
     function addRow(event) {
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('button-', '');
-        if (!names[dpos]) { names[dpos] = 0 }
-        newRowId = dpos + '_' + names[dpos]
-        names[dpos]++
+        counter++
+        newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " ...");
         $('#data-' + dpos).after('<li id="data-' + newRowId + '"><input type="text" size="3" name="type-' + newRowId + '"> <input type="text" size="16" name="value-' + newRowId + '"> <button class="addRow" id="button-' + newRowId + '"><strong>+</strong></button></li>');
         buttonId = '#button-' + newRowId;
