@@ -1,6 +1,6 @@
 $(document).ready(function() {
     lastId = $('.addRow').last().id
-    counter = int(lastId.replace('button-', ''))
+    counter = Number(lastId.replace('button-', ''))
     console.log(lastId);
     console.log(counter);
 
