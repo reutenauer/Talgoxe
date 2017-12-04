@@ -22,5 +22,6 @@ $(document).ready(function() {
 
     $('.nosubmit').on('keydown', function(event) {
         if (event.originalEvent.key == 'Enter') event.preventDefault();
+        /* TODO Något med piltangentar? */
     });
 });
