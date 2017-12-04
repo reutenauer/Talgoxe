@@ -15,7 +15,7 @@ $(document).ready(function() {
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
     }
 
-    function submitOrder() {
+    function submitOrder(event) {
         event.preventDefault();
         $('.addRow').each(function(event, data) {
             $('form').add('<input type="hidden" name="order" value="foo foo foo">');
