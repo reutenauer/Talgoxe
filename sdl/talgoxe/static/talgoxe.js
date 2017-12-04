@@ -23,7 +23,7 @@ $(document).ready(function() {
             console.log(data.id);
         });
         console.log(ids.join());
-        $('form').after('<h2>' + ids.join() + '</h2>');
+        $('#spara').after('<input type="hidden" name="order" value="' + ids.join() + '">');
     }
 
     $('.addRow').click(function(event) {
