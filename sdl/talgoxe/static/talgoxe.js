@@ -17,6 +17,8 @@ $(document).ready(function() {
 
     function submitOrder() {
         $('.addRow').each(function(event, data) {
+            event.preventDefault();
+            $('form').add('<input type="hidden" name="order" value="foo foo foo">');
             console.log(data.id);
         });
     }
