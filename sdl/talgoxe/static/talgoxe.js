@@ -31,5 +31,5 @@ $(document).ready(function() {
         /* TODO Något med piltangenter? */
     });
 
-    $('submit').click(submitOrder);
+    $('input[@type=submit]').click(submitOrder);
 });
