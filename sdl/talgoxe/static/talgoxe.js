@@ -21,6 +21,6 @@ $(document).ready(function() {
     });
 
     $('.nosubmit').on('keydown', function(event) {
-        event.preventDefault();
+        if (event.originalEvent.key == 'Enter') event.preventDefault();
     });
 });
