@@ -16,14 +16,14 @@ $(document).ready(function() {
     }
 
     function submitOrder(event) {
-        // event.preventDefault();
+        event.preventDefault();
         ids = [];
         $('.addRow').each(function(event, data) {
             ids.push(data.id);
             console.log(data.id);
         });
         console.log(ids.join());
-        $('form').add('<h2>' + ids.join() + '</h2>');
+        $('form').after('<h2>' + ids.join() + '</h2>');
     }
 
     $('.addRow').click(function(event) {
