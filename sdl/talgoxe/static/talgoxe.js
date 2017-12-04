@@ -1,6 +1,5 @@
 $(document).ready(function() {
-    nastId = $('.addRow').last().id mes = {
-    }
+    lastId = $('.addRow').last().id
 
     function addRow(event) {
         console.log(event.currentTarget.id);
