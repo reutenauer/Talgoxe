@@ -17,7 +17,7 @@ $(document).ready(function() {
 
     function submitOrder() {
         $('.addRow').each(function(data, data1, data2) {
-            console.log(data, data1, data2);
+            console.log(data1);
         });
     }
 
