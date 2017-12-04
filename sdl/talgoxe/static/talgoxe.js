@@ -16,8 +16,8 @@ $(document).ready(function() {
     }
 
     function submitOrder() {
-        $('.addRow').each(function(data, data1, data2) {
-            console.log(data1);
+        $('.addRow').each(function(event, data) {
+            console.log(data.id);
         });
     }
 
