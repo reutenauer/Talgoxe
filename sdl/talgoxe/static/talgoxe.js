@@ -19,4 +19,8 @@ $(document).ready(function() {
         event.preventDefault();
         addRow(event);
     });
+
+    $('.nosubmit').on('keydown', function(event) {
+        event.preventDefault();
+    });
 });
