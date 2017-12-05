@@ -5,6 +5,7 @@ from os import system, chdir
 import io
 import os
 import re
+from string import split, join, strip
 
 from django.shortcuts import render
 
@@ -30,11 +31,13 @@ def update_stickord(request, stickord):
         if match:
             id = int(match.group(1))
             keys.append(id)
+    order = split(request.POST['order'], ',')
+    d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
 
-    order = request.POST['order']
     context = {
         'keys' : keys,
-        'order' : order
+        'order' : join(order, ','),
+        'd' : d
     }
 
     return HttpResponse(template.render(context, request))
