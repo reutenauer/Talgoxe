@@ -18,8 +18,8 @@ $(document).ready(function() {
     function submitOrder(event) {
         ids = [];
         $('.addRow').each(function(event, data) {
-            ids.push(data.id);
-            console.log(data.id);
+            ids.push(data.id.replace('button-', ''));
+            console.log(data.id.replace('button-', ''));
         });
         console.log(ids.join());
         $('#spara').after('<input type="hidden" name="order" value="' + ids.join() + '">');
