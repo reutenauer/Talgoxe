@@ -9,7 +9,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '"> <input type="text" size="16" name="value-' + counter + '"> <button class="addRow" id="add-row-' + counter + '"><strong>+</strong></button></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '"> <input type="text" size="16" name="value-' + counter + '"> <button class="addRow" id="add-row-' + counter + '"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '"><strong>-</strong></button></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
@@ -28,6 +28,11 @@ $(document).ready(function() {
     $('.addRow').click(function(event) {
         event.preventDefault();
         addRow(event);
+    });
+
+    $('.removeRow').click(function(event) {
+        event.prevenDefault();
+        event.currentTarget.parent().remove();
     });
 
     $('.nosubmit').on('keydown', function(event) {
