@@ -31,7 +31,7 @@ $(document).ready(function() {
     });
 
     $('.removeRow').click(function(event) {
-        event.prevenDefault();
+        event.preventDefault();
         event.currentTarget.parent().remove();
     });
 
