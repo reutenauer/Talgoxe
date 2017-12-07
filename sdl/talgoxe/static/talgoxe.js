@@ -31,8 +31,9 @@ $(document).ready(function() {
     });
 
     $('.removeRow').click(function(event) {
+        console.log("Trying to remove a row ...");
         event.preventDefault();
-        event.currentTarget.parent().remove();
+        $(event.currentTarget).parent().remove();
     });
 
     $('.nosubmit').on('keydown', function(event) {
