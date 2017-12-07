@@ -14,7 +14,7 @@ $(document).ready(function() {
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
         removeButtonId = '#remove-row-' + counter;
-        $(removeButtonId).click(function(ev) { ev.preventDefault(); console.log('Trying to remove ' + $(ev.currentTarget).id); $(ev.currentTarget).parent().remove() });
+        $(removeButtonId).click(function(ev) { ev.preventDefault(); console.log('Trying to remove ' + ev.currentTarget.id); $(ev.currentTarget).parent().remove() });
     }
 
     function submitOrder(event) {
