@@ -37,7 +37,9 @@ def update_stickord(request, stickord):
     context = {
         'keys' : keys,
         'order' : join(order, ','),
-        'd' : d
+        'd' : d,
+        'method' : os.getenv('REQUEST_METHOD'),
+        'request_dict' : request.__dict__
     }
 
     return HttpResponse(template.render(context, request))
