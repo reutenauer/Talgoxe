@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader, Context
 
-from talgoxe.models import Lemma, Lexicon
+from talgoxe.models import Data, Lemma, Lexicon, Type
 from django import VERSION
 
 def index(request):
@@ -103,6 +103,12 @@ def common(request, stickord):
     print lemma.lemma
     lemma.resolve_pilcrow()
     lemma.collect()
+    if len(lemma.new_segments) == 0:
+        ok = Type.objects.get(abbrev = 'OK')
+        d = Data(type_id = ok.id, d = '')
+        new_segments = [d]
+    else:
+        new_segments = lemma.new_segments
     context = {
         'input': lemma.raw_data_set(),
         'segments': lemma.segments,
