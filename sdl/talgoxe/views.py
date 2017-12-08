@@ -5,7 +5,6 @@ from os import system, chdir
 import io
 import os
 import re
-from string import join
 
 from django.shortcuts import render
 
