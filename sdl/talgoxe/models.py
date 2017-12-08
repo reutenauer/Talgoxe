@@ -186,7 +186,10 @@ class Lemma(models.Model):
 
     def update(self, post_data):
         order = post_data['order'].split(',')
-        return [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
+        d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
+        for bit in d:
+            type = Type.objects.get(abbrev = d[2])
+        return d
 
 class Segment(): # Fjäder!
     def __init__(self, type, text = None):
