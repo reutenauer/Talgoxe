@@ -29,15 +29,6 @@ def stickord(request, stickord):
 
     return common(request, stickord, d)
 
-def update_stickord(request, stickord):
-    template = loader.get_template('talgoxe/update-word.html')
-
-    context = {
-        'd' : d
-    }
-
-    return HttpResponse(template.render(context, request))
-
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
 
