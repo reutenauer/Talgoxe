@@ -103,6 +103,7 @@ def common(request, stickord):
     print lemma.lemma
     lemma.resolve_pilcrow()
     lemma.collect()
+    crash
     if len(lemma.new_segments) == 0:
         ok = Type.objects.get(abbrev = 'OK')
         d = Data(type_id = ok.id, d = '')
@@ -114,7 +115,7 @@ def common(request, stickord):
         'segments': lemma.segments,
         'lemma': lemma,
         'lemmata': lemmata,
-        'new_segments': lemma.new_segments
+        'new_segments': new_segments
     }
 
     if VERSION[1] == 7:
