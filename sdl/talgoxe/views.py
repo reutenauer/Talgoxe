@@ -29,12 +29,6 @@ def stickord(request, stickord):
 
 def update_stickord(request, stickord):
     template = loader.get_template('talgoxe/update-word.html')
-    keys = []
-    for key in request.POST.keys():
-        match = re.match(ur'type-(\d+)', key)
-        if match:
-            id = int(match.group(1))
-            keys.append(id)
     order = split(request.POST['order'], ',')
     d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
 
