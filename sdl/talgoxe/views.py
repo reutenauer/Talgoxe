@@ -21,7 +21,10 @@ def index(request):
     return common(request, 'dagom')
 
 def stickord(request, stickord):
-    return common(request, stickord)
+    if request.META['REQUEST_METHOD'] == 'POST':
+        return update_stickord(request, stickord)
+    else:
+        return common(request, stickord)
 
 def update_stickord(request, stickord):
     template = loader.get_template('talgoxe/update-word.html')
