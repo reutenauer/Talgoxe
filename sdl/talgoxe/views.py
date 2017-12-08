@@ -39,10 +39,7 @@ def update_stickord(request, stickord):
     d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
 
     context = {
-        'keys' : keys,
-        'order' : join(order, ','),
-        'd' : d,
-        'method' : request.META['REQUEST_METHOD'],
+        'd' : d
     }
 
     return HttpResponse(template.render(context, request))
