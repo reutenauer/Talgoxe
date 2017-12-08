@@ -22,15 +22,15 @@ def index(request):
 
 def stickord(request, stickord):
     method = request.META['REQUEST_METHOD']
+    d = None
     if method == 'POST':
-        return update_stickord(request, stickord)
-    elif method == 'GET':
-        return common(request, stickord)
+        order = split(request.POST['order'], ',')
+        d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
+
+    return common(request, stickord, d)
 
 def update_stickord(request, stickord):
     template = loader.get_template('talgoxe/update-word.html')
-    order = split(request.POST['order'], ',')
-    d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
 
     context = {
         'd' : d
@@ -86,7 +86,7 @@ def print_stickord(request, stickord):
 def print_lexicon(request):
     return print_stuff(request)
 
-def common(request, stickord):
+def common(request, stickord, d = None):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.filter(lemma = stickord).first()
@@ -101,6 +101,7 @@ def common(request, stickord):
     else:
         input = lemma.raw_data_set()
     context = {
+        'd': d,
         'input': input,
         'segments': lemma.segments,
         'lemma': lemma,
