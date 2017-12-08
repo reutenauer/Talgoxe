@@ -188,7 +188,8 @@ class Lemma(models.Model):
         order = post_data['order'].split(',')
         d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
         for bit in d:
-            type = Type.objects.get(abbrev = d[2])
+            type = Type.objects.get(abbrev = bit[0])
+            text = bit[1]
         return d
 
 class Segment(): # Fjäder!
