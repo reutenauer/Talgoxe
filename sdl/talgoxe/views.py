@@ -38,7 +38,7 @@ def update_stickord(request, stickord):
         'keys' : keys,
         'order' : join(order, ','),
         'd' : d,
-        'method' : request['META']['REQUEST_METHOD'],
+        'method' : request.META['REQUEST_METHOD'],
         'request_dict' : request.__dict__
     }
 
