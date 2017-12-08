@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
+from string import split, strip
 from tempfile import mkdtemp
 
 from django.db import models
@@ -183,6 +184,10 @@ class Lemma(models.Model):
             type = segment.type.__unicode__()
             text = segment.format().replace(u'\\', '\\backslash ')
             outfile.write(('\\SDL:%s{%s}' % (type, text)).encode('UTF-8'))
+
+    def update(self, post_data):
+        order = split(post_data['order'], ',')
+        return [[strip(post_data['type-' + key]), strip(post_data['value-' + key])] for key in order]
 
 class Segment(): # Fjäder!
     def __init__(self, type, text = None):

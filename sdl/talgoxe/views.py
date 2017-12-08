@@ -5,7 +5,7 @@ from os import system, chdir
 import io
 import os
 import re
-from string import split, join, strip
+from string import join
 
 from django.shortcuts import render
 
@@ -24,8 +24,8 @@ def stickord(request, stickord):
     method = request.META['REQUEST_METHOD']
     d = None
     if method == 'POST':
-        order = split(request.POST['order'], ',')
-        d = [[strip(request.POST['type-' + key]), strip(request.POST['value-' + key])] for key in order]
+        lemma = Lemma.objects.get(lemma = stickord)
+        d = lemma.update(request.POST)
 
     return common(request, stickord, d)
 
