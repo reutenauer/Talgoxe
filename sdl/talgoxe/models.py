@@ -200,7 +200,7 @@ class Lemma(models.Model):
                         data2.delete()
             else:
                 Data.objects.create(lemma = self, type = type, pos = i, d = text)
-        Data.objects.filter(lemma = self, pos__gte = len(d)).delete()
+        self.raw_data_set().filter(pos__gte = len(d)).delete()
 
         return d
 
