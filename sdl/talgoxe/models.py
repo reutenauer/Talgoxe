@@ -191,11 +191,11 @@ class Lemma(models.Model):
             bit = d[i]
             type = Type.objects.get(abbrev = bit[0])
             text = bit[1]
-            data = lemma.raw_data_set().filter(pos = i).first()
+            data = self.raw_data_set().filter(pos = i).first()
             if data:
                 data.d = text
                 data.save()
-                for data2 in lemma.raw_data_set().filter(pos = i):
+                for data2 in self.raw_data_set().filter(pos = i):
                     if data2 != data:
                         data2.delete()
             else:
