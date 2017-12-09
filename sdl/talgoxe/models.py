@@ -196,7 +196,7 @@ class Lemma(models.Model):
                 data.update(d = text)
             else:
                 Data.objects.create(lemma = self, type = type, pos = i, d = text)
-        for data in Data.objects.filter(lemma = self, pos__ge len(d)):
+        for data in Data.objects.filter(lemma = self, pos__ge = len(d)):
             data.remove()
         return d
 
