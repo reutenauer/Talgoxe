@@ -9,5 +9,5 @@ IP är inte nödvändigtvis en punkt!
 No longer bugs: 1. text field for content of “bits”
 2. Better search interface
 3. Create article
-4. Overstrike bits with invalid type?
+4. Type.objects.get(abbrev = 'GO') gets GÖ!
 5. Proper Swedish sorting order
