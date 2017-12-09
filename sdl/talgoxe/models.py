@@ -193,10 +193,11 @@ class Lemma(models.Model):
             text = bit[1]
             data = Data.objects.filter(lemma = self, type = type, pos = i).first()
             if data:
-                data.update(d = text)
+                data.d = text
+                data.save()
             else:
                 Data.objects.create(lemma = self, type = type, pos = i, d = text)
-        for data in Data.objects.filter(lemma = self, pos__ge = len(d)):
+        for data in Data.objects.filter(lemma = self, pos__gte = len(d)):
             data.remove()
         return d
 
