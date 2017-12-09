@@ -17,16 +17,16 @@ from talgoxe.models import Data, Lemma, Lexicon, Type
 from django import VERSION
 
 def index(request):
-    return common(request, 'dagom')
+    return common(request, 2040117) # Stickord ”dagom”
 
-def stickord(request, stickord):
+def stickord(request, id):
     method = request.META['REQUEST_METHOD']
     d = None
     if method == 'POST':
-        lemma = Lemma.objects.get(lemma = stickord)
+        lemma = Lemma.objects.get(id = id)
         d = lemma.update(request.POST)
 
-    return common(request, stickord, d)
+    return common(request, id, d)
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
@@ -76,11 +76,11 @@ def print_stickord(request, stickord):
 def print_lexicon(request):
     return print_stuff(request)
 
-def common(request, stickord, d = None):
+def common(request, id, d = None):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
-    lemma = Lemma.objects.filter(lemma = stickord).first()
-    print stickord
+    lemma = Lemma.objects.filter(id = id).first()
+    print id
     print lemma.lemma
     lemma.resolve_pilcrow()
     lemma.collect()
