@@ -11,3 +11,5 @@ No longer bugs:
 3. Create article
 4. Type.objects.get(abbrev = 'GO') gets GÖ!
 5. Proper Swedish sorting order
+6. Offer possibility to edit entry word.
+7. Endpoint for that action.
