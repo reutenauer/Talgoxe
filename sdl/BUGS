@@ -7,9 +7,9 @@ SO tunn-ös TIP \'huvudskål\'
 IP är inte nödvändigtvis en punkt!
 
 No longer bugs:
-1. Better search interface
-2. Type.objects.get(abbrev = 'GO') gets GÖ!
-3. Proper Swedish sorting order
-4. Delete word
-5. Reset start of increment?
-6. Add list of words to index.
+  * Better search interface
+  * Type.objects.get(abbrev = 'GO') gets GÖ!
+  * Proper Swedish sorting order
+  * Delete word
+  * Reset start of increment?
+  * Add list of words to index.
