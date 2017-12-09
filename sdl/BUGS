@@ -8,9 +8,9 @@ IP är inte nödvändigtvis en punkt!
 
 No longer bugs:
 1. Better search interface
-3. Type.objects.get(abbrev = 'GO') gets GÖ!
-4. Proper Swedish sorting order
-5. Offer possibility to edit entry word, endpoint for that action.
-6. Delete word
-7. Reset start of increment?
-8. Log POST data?
+2. Type.objects.get(abbrev = 'GO') gets GÖ!
+3. Proper Swedish sorting order
+4. Offer possibility to edit entry word, endpoint for that action.
+5. Delete word
+6. Reset start of increment?
+7. Log POST data?
