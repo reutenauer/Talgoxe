@@ -8,7 +8,6 @@ IP är inte nödvändigtvis en punkt!
 
 No longer bugs:
 1. Better search interface
-2. Create article
 3. Type.objects.get(abbrev = 'GO') gets GÖ!
 4. Proper Swedish sorting order
 5. Offer possibility to edit entry word, endpoint for that action.
