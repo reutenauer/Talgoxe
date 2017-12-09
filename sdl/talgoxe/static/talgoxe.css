@@ -12,6 +12,11 @@ body {
   float: left;
   margin-right: 2%;
   font-family: 'Courier';
+  margin-left: -40px;
+}
+
+#inmatning h2 {
+  margin-left: 40px;
 }
 
 #inmatning li {
@@ -26,7 +31,7 @@ body {
 
 #ordlista {
   width: 16%;
-  float: right;
+  float: left;
 }
 
 .SO {
