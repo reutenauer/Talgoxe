@@ -4,6 +4,7 @@ import re
 from tempfile import mkdtemp
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 
@@ -189,7 +190,10 @@ class Lemma(models.Model):
         d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
         for i in range(len(d)):
             bit = d[i]
-            type = Type.objects.get(abbrev = bit[0])
+            try:
+                type = Type.objects.get(abbrev = bit[0])
+            except ObjectDoesNotExist:
+                return [[bit[0]], 'does not exist']
             text = bit[1]
             data = self.raw_data_set().filter(pos = i).first()
             if data:
