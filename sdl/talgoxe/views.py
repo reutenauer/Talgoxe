@@ -77,7 +77,7 @@ def print_lexicon(request):
     return print_stuff(request)
 
 def common(request, id, d = None):
-    template = loader.get_template('talgoxe/index.html')
+    template = loader.get_template('talgoxe/stickord.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.filter(id = id).first()
     print id
