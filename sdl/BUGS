@@ -14,3 +14,4 @@ No longer bugs:
 5. Offer possibility to edit entry word, endpoint for that action.
 6. Delete word
 7. Reset start of increment?
+8. Log POST data?
