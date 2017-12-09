@@ -17,14 +17,16 @@ from django.urls import reverse
 from talgoxe.models import Data, Lemma, Lexicon, Type
 from django import VERSION
 
+def render_template(request, template, context):
+    if VERSION[1] == 7:
+        return HttpResponse(template.render(Context(context))) # Django version 1.7
+    else:
+        return HttpResponse(template.render(context, request))
+
 def index(request):
     template = loader.get_template('talgoxe/index.html')
     context = { }
-
-    if VERSION[1] == 7:
-        return HttpResponse(template.render(Context(context)))
-    else:
-        return HttpResponse(template.render(context, request))
+    return render_template(request, template, context)
 
 def create(request):
     lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
@@ -57,11 +59,7 @@ def stickord(request, id):
         'new_segments': lemma.new_segments
     }
 
-    if VERSION[1] == 7:
-        return HttpResponse(template.render(Context(context))) # Django 1.7
-    else:
-        return HttpResponse(template.render(context, request)) # Django 1.11
-
+    return render_template(request, template, context)
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
