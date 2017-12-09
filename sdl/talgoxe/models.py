@@ -200,8 +200,8 @@ class Lemma(models.Model):
                         data2.delete()
             else:
                 Data.objects.create(lemma = self, type = type, pos = i, d = text)
-        for data in Data.objects.filter(lemma = self, pos__gte = len(d)):
-            data.remove()
+        Data.objects.filter(lemma = self, pos__gte = len(d)).delete()
+
         return d
 
 class Segment(): # Fjäder!
