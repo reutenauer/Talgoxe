@@ -21,7 +21,7 @@ def render_template(request, template, context):
     if VERSION[1] == 7:
         return HttpResponse(template.render(Context(context))) # Django version 1.7
     else:
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(template.render(context, request)) # Django version 1.11
 
 def index(request):
     template = loader.get_template('talgoxe/index.html')
