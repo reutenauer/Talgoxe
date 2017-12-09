@@ -15,7 +15,7 @@
 <form action="{% url 'stickord' lemma.id %}" method="POST">
 {% csrf_token %}
 <ul>
-<li>SO&nbsp;&nbsp;: {{ lemma }} <input type="submit" value="Spara" id="spara"></li>
+<li>SO&nbsp;&nbsp;: <input type="text" name="stickord" value="{{ lemma }}" size="16"> <input type="submit" value="Spara" id="spara"></li>
 {% for d in input %}
     <li id="data-{{ d.pos }}">
       <input class="nosubmit" type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}">

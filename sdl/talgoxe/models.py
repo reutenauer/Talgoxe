@@ -187,6 +187,10 @@ class Lemma(models.Model):
 
     def update(self, post_data):
         order = post_data['order'].split(',')
+        stickord = post_data['stickord']
+        if self.lemma != stickord:
+            self.lemma = stickord
+            self.save()
         d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
         for i in range(len(d)):
             bit = d[i]
