@@ -10,7 +10,6 @@ No longer bugs:
 1. Better search interface
 2. Type.objects.get(abbrev = 'GO') gets GÖ!
 3. Proper Swedish sorting order
-4. Offer possibility to edit entry word, endpoint for that action.
 5. Delete word
 6. Reset start of increment?
 7. Log POST data?
