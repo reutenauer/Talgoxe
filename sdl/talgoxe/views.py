@@ -32,12 +32,11 @@ def create(request):
 
 def stickord(request, id):
     method = request.META['REQUEST_METHOD']
-    d = None
     if method == 'POST':
         lemma = Lemma.objects.get(id = id)
-        d = lemma.update(request.POST)
+        lemma.update(request.POST)
 
-    return common(request, id, d)
+    return common(request, id)
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
@@ -87,7 +86,7 @@ def print_stickord(request, stickord):
 def print_lexicon(request):
     return print_stuff(request)
 
-def common(request, id, d = None):
+def common(request, id):
     template = loader.get_template('talgoxe/stickord.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.filter(id = id).first()
@@ -102,7 +101,6 @@ def common(request, id, d = None):
     else:
         input = lemma.raw_data_set()
     context = {
-        'd': d,
         'input': input,
         'segments': lemma.segments,
         'lemma': lemma,

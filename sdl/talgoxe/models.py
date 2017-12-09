@@ -213,7 +213,6 @@ class Lemma(models.Model):
         self.raw_data_set().filter(pos__gte = len(d)).delete()
 
         print d
-        return d
 
 class Segment(): # Fjäder!
     def __init__(self, type, text = None):
