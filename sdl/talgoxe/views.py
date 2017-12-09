@@ -10,8 +10,9 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, Context
+from django.urls import reverse
 
 from talgoxe.models import Data, Lemma, Lexicon, Type
 from django import VERSION
@@ -24,6 +25,10 @@ def index(request):
         return HttpResponse(template.render(Context(context)))
     else:
         return HttpResponse(template.render(context, request))
+
+def create(request):
+    lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
+    return HttpResponseRedirect(reverse('stickord', args = (lemma.id)))
 
 def stickord(request, id):
     method = request.META['REQUEST_METHOD']
