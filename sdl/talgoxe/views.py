@@ -35,6 +35,7 @@ def create(request):
 def stickord(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
+        print request.POST
         lemma = Lemma.objects.get(id = id)
         lemma.update(request.POST)
 
