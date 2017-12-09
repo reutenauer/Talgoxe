@@ -36,7 +36,32 @@ def stickord(request, id):
         lemma = Lemma.objects.get(id = id)
         lemma.update(request.POST)
 
-    return common(request, id)
+    template = loader.get_template('talgoxe/stickord.html')
+    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
+    lemma = Lemma.objects.filter(id = id).first()
+    print id
+    print lemma.lemma
+    lemma.resolve_pilcrow()
+    lemma.collect()
+    if len(lemma.raw_data_set()) == 0:
+        ok = Type.objects.get(abbrev = 'OK')
+        d = Data(type_id = ok.id, d = '')
+        input = [d]
+    else:
+        input = lemma.raw_data_set()
+    context = {
+        'input': input,
+        'segments': lemma.segments,
+        'lemma': lemma,
+        'lemmata': lemmata,
+        'new_segments': lemma.new_segments
+    }
+
+    if VERSION[1] == 7:
+        return HttpResponse(template.render(Context(context))) # Django 1.7
+    else:
+        return HttpResponse(template.render(context, request)) # Django 1.11
+
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
@@ -85,33 +110,6 @@ def print_stickord(request, stickord):
 
 def print_lexicon(request):
     return print_stuff(request)
-
-def common(request, id):
-    template = loader.get_template('talgoxe/stickord.html')
-    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
-    lemma = Lemma.objects.filter(id = id).first()
-    print id
-    print lemma.lemma
-    lemma.resolve_pilcrow()
-    lemma.collect()
-    if len(lemma.raw_data_set()) == 0:
-        ok = Type.objects.get(abbrev = 'OK')
-        d = Data(type_id = ok.id, d = '')
-        input = [d]
-    else:
-        input = lemma.raw_data_set()
-    context = {
-        'input': input,
-        'segments': lemma.segments,
-        'lemma': lemma,
-        'lemmata': lemmata,
-        'new_segments': lemma.new_segments
-    }
-
-    if VERSION[1] == 7:
-        return HttpResponse(template.render(Context(context))) # Django 1.7
-    else:
-        return HttpResponse(template.render(context, request)) # Django 1.11
 
 def printing(request):
     lexicon = Lexicon()
