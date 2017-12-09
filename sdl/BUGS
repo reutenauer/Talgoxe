@@ -11,6 +11,6 @@ No longer bugs:
 2. Create article
 3. Type.objects.get(abbrev = 'GO') gets GÖ!
 4. Proper Swedish sorting order
-5. Offer possibility to edit entry word.
-6. Endpoint for that action.
+5. Offer possibility to edit entry word, endpoint for that action.
+6. Delete word
 7. Reset start of increment?
