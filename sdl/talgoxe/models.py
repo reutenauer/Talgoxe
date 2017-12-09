@@ -198,6 +198,7 @@ class Lemma(models.Model):
             text = bit[1]
             data = self.raw_data_set().filter(pos = i).first()
             if data:
+                data.type = type
                 data.d = text
                 data.save()
                 for data2 in self.raw_data_set().filter(pos = i):
