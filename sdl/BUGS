@@ -6,7 +6,7 @@ SO tunn-ös TIP \'huvudskål\'
 
 IP är inte nödvändigtvis en punkt!
 
-No longer bugs: 1. text field for content of “bits”
+No longer bugs:
 2. Better search interface
 3. Create article
 4. Type.objects.get(abbrev = 'GO') gets GÖ!
