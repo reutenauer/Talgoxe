@@ -115,3 +115,7 @@ body {
 .ÖVP:after {
   content: ')'
 }
+
+.OG {
+  text-decoration: line-through;
+}
