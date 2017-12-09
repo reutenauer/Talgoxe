@@ -28,7 +28,7 @@ def index(request):
 
 def create(request):
     lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
-    return HttpResponseRedirect(reverse('stickord', args = (lemma.id)))
+    return HttpResponseRedirect(reverse('stickord', args = (lemma.id,)))
 
 def stickord(request, id):
     method = request.META['REQUEST_METHOD']
