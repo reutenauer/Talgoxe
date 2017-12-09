@@ -6,6 +6,8 @@ SO tunn-ös TIP \'huvudskål\'
 
 IP är inte nödvändigtvis en punkt!
 
+Empty ÄV for abergap, both bluddra’s.  Should the two latter be merged?
+
 No longer bugs:
   * Better search interface
   * Type.objects.get(abbrev = 'GO') gets GÖ!
