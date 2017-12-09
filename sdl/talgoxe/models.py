@@ -193,7 +193,8 @@ class Lemma(models.Model):
             try:
                 type = Type.objects.get(abbrev = bit[0])
             except ObjectDoesNotExist: # FIXME Do something useful!
-                return [[bit[0]], 'på rad %d är inte en valid typ.' % i]
+# TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
+                type = Type.objects.get(abbrev = 'OG')
             text = bit[1]
             data = self.raw_data_set().filter(pos = i).first()
             if data:
