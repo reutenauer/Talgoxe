@@ -17,7 +17,13 @@ from talgoxe.models import Data, Lemma, Lexicon, Type
 from django import VERSION
 
 def index(request):
-    return common(request, 2040117) # Stickord ”dagom”
+    template = loader.get_template('talgoxe/index.html')
+    context = { }
+
+    if VERSION[1] == 7:
+        return HttpResponse(template.render(Context(context)))
+    else:
+        return HttpResponse(template.render(context, request))
 
 def stickord(request, id):
     method = request.META['REQUEST_METHOD']
