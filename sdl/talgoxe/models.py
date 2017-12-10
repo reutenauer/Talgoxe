@@ -240,9 +240,13 @@ class Segment(): # Fjäder!
             return self.type.isleftdelim()
 
     def isrightdelim(self):
-        if type(self.type) == 'unicode':
+        print("isrightdelim()")
+        # print(self.type)
+        if type(self.type) == 'unicode' or str(type(self.type)) == "<type 'unicode'>":
             return self.type in ['hh', 'hr', 'ip', 'ko'] # KO is convenient
         else:
+            print("isrightdelim() if/else:")
+            print(type(self.type))
             return self.type.isrightdelim()
 
     def ismoment(self):
@@ -255,7 +259,7 @@ class Segment(): # Fjäder!
         return self.type.ism2()
 
     def output(self, outfile, next):
-        outfile.write(('\SDL:%s{' % self.type.__unicode__()).encode('UTF-8'))
+        outfile.write(('\SDL:%s{' % self.type).encode('UTF-8'))
         outfile.write(self.text.replace(u'\\', '\\backslash ').encode('UTF-8'))
         outfile.write('}')
         if not next.isrightdelim():

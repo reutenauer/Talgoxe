@@ -65,9 +65,11 @@ def artikel(request, id):
 def artikel_efter_stickord(request, stickord):
     pass
 
-def print_stuff(request, stickord = None):
-    return HttpResponse('<p>Please do not press this button again.</p>')
-
+def print_stuff(request, id = None):
+    if id:
+        stickord = Lemma.objects.get(id = id)
+    else:
+        stickord = None
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
     source = open(sourcename, 'w')
@@ -107,8 +109,8 @@ def print_stuff(request, stickord = None):
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
     return HttpResponse("<p><a href='/static/ord/%s.pdf'>Click here</a></p>" % lemma.lemma)
 
-def print_stickord(request, stickord):
-    return print_stuff(request, stickord)
+def print_stickord(request, id):
+    return print_stuff(request, id)
 
 def print_lexicon(request):
     return print_stuff(request)
