@@ -8,7 +8,7 @@
 <script src="{% static "talgoxe.js" %}" type="text/javascript"></script>
 <div id="inmatning">
 <h2>Inmatning</h2>
-<form action="{% url 'stickord' lemma.id %}" method="POST">
+<form action="{% url 'artikel' lemma.id %}" method="POST">
 {% csrf_token %}
 <ul>
 <li>SO&nbsp;&nbsp;: <input type="text" name="stickord" value="{{ lemma }}" size="16"> <input type="submit" value="Spara" id="spara"></li>
@@ -63,7 +63,7 @@
 <h2>Alla ord:</h2>
 <ul>
 {% for lemma in lemmata %}
-    <li><a href="{% url 'stickord' lemma.id %}">{{ lemma.lemma }}</a></li>
+    <li><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }}</a></li>
 {% endfor %}
 </ul>
 <a href="{% url 'printing' %}">Print!</a>

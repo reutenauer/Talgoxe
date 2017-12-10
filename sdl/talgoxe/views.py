@@ -30,16 +30,16 @@ def index(request):
 
 def create(request):
     lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
-    return HttpResponseRedirect(reverse('stickord', args = (lemma.id,)))
+    return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
-def stickord(request, id):
+def artikel(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         print request.POST
         lemma = Lemma.objects.get(id = id)
         lemma.update(request.POST)
 
-    template = loader.get_template('talgoxe/stickord.html')
+    template = loader.get_template('talgoxe/artikel.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.filter(id = id).first()
     print id
@@ -61,6 +61,9 @@ def stickord(request, id):
     }
 
     return render_template(request, template, context)
+
+def artikel_efter_stickord(request, stickord):
+    pass
 
 def print_stuff(request, stickord = None):
     return HttpResponse('<p>Please do not press this button again.</p>')
