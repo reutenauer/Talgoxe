@@ -26,12 +26,16 @@ body {
 #artikel {
   border: 1px solid black;
   width: 40%;
-  float: left;
+  /* float: left; */
+  left: 40%;
+  position: fixed;
 }
 
 #ordlista {
   width: 16%;
   float: left;
+  position: absolute;
+  left: 80%;
 }
 
 .SO {
