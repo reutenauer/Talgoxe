@@ -10,6 +10,6 @@ urlpatterns = [
     url('create', views.create, name = 'create'),
     url(ur'^(?P<id>\d+)$', views.artikel, name = 'artikel'),
     url(stickord_regexp, views.artikel_efter_stickord, name = 'stickord'),
-    url(ur'^(?P<id>\d+)/print', views.print_stickord, name = 'print_stickord'),
+    url(ur'^(?P<id>\d+)/print', views.print_artikel, name = 'print_artikel'),
     url(r'^print$', views.print_lexicon, name = 'printing'),
 ]
