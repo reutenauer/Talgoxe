@@ -25,7 +25,7 @@ def render_template(request, template, context):
 
 def index(request):
     template = loader.get_template('talgoxe/index.html')
-    lemmata = Lemma.objects.all().order_by('lemma')
+    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     context = { 'lemmata' : lemmata }
     return render_template(request, template, context)
 
