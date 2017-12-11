@@ -65,11 +65,15 @@ def artikel(request, id):
 
 def artikel_efter_stickord(request, stickord):
     lemmata = Lemma.objects.filter(id__gt = 0, lemma = stickord)
-    template = loader.get_template('talgoxe/stickord.html')
-    context = {
-        'lemmata' : lemmata
-    }
-    return render_template(request, template, context)
+    # TODO: 0!
+    if len(lemmata) == 1:
+        return HttpResponseRedirect(reverse('artikel', args = (lemmata.first().id,)))
+    else:
+        template = loader.get_template('talgoxe/stickord.html')
+        context = {
+            'lemmata' : lemmata
+        }
+        return render_template(request, template, context)
 
 def print_stuff(request, id = None):
     if id:
