@@ -59,7 +59,7 @@
 <a href="{% url 'print_stickord' lemma.id %}">PDF version</a>
 </div>
 </div>
-{% block 'ordlista' %}{% endblock %}
+{% include 'talgoxe/ordlista.html' %}
 
 <script>
     $('#spara').click(function() {
