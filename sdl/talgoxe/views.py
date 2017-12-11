@@ -81,6 +81,7 @@ def print_stuff(request, id = None):
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
     source = open(sourcename, 'w')
+    source.write("\\mainlanguage[sv]")
     source.write("\\setupbodyfont[pagella, 12pt]\n")
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
