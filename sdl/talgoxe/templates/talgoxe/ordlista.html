@@ -1,0 +1,11 @@
+{% block 'ordlista %}
+<div id="ordlista">
+<h2>Alla ord:</h2>
+<ul>
+{% for lemma in lemmata %}
+    <li><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }}</a></li>
+{% endfor %}
+</ul>
+<a href="{% url 'printing' %}">Print!</a>
+</div>
+{% endblock %}
