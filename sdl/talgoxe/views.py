@@ -12,9 +12,11 @@ from django.shortcuts import render
 
 from django import VERSION
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template import loader, Context
+from django.template import loader, Context, RequestContext
 if VERSION[1] == 7:
     from django.core.urlresolvers import reverse
+    from django.template import RequestContext
+    from django.views.decorators.csrf import csrf_protect
 else:
     from django.urls import reverse
 
@@ -22,7 +24,7 @@ from talgoxe.models import Data, Lemma, Lexicon, Type
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
-        return HttpResponse(template.render(Context(context))) # Django version 1.7
+        return HttpResponse(template.render(RequestContext(request, context))) # Django version 1.7
     else:
         return HttpResponse(template.render(context, request)) # Django version 1.11
 
