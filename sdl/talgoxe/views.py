@@ -14,7 +14,7 @@ from django import VERSION
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, Context
 if VERSION[1] == 7:
-    from django.conf.urls import reverse
+    from django.core.urlresolvers import reverse
 else:
     from django.urls import reverse
 
