@@ -10,12 +10,15 @@ from django.shortcuts import render
 
 # Create your views here.
 
+from django import VERSION
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, Context
-from django.urls import reverse
+if VERSION[1] == 7:
+    from django.conf.urls import reverse
+else:
+    from django.urls import reverse
 
 from talgoxe.models import Data, Lemma, Lexicon, Type
-from django import VERSION
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
