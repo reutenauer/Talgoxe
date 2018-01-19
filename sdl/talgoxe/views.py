@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django import VERSION
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, Context, RequestContext
-if VERSION[1] == 7:
+if VERSION[1] == 7 or VERSION[1] == 8:
     from django.core.urlresolvers import reverse
     from django.template import RequestContext
     from django.views.decorators.csrf import csrf_protect
