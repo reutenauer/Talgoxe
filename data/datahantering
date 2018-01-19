@@ -1,0 +1,10 @@
+mysql> CREATE TABLE talgoxe_lemma (id INTEGER PRIMARY KEY, lemma VARCHAR(100));
+Query OK, 0 rows affected (0,11 sec)
+
+mysql> CREATE TABLE talgoxe_type (id INTEGER PRIMARY KEY, abbrev VARCHAR(5), name VARCHAR(30));
+Query OK, 0 rows affected (0,10 sec)
+
+mysql> CREATE talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER, lemma_id INTEGER, type_id INTEGER, CONSTRAINT FOREIGN KEY (lemma_id) REFERENCES talgoxe_lemma (id), CONSTRAINT FOREIGN KEY (type_id) REFERENCES talgoxe_type (id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER, lemma_id INT' at line 1
+mysql> CREATE TABLE talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER, lemma_id INTEGER, type_id INTEGER, CONSTRAINT FOREIGN KEY (lemma_id) REFERENCES talgoxe_lemma (id), CONSTRAINT FOREIGN KEY (type_id) REFERENCES talgoxe_type (id));
+Query OK, 0 rows affected (0,14 sec)
