@@ -8,3 +8,17 @@ mysql> CREATE talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER, lemma_id INT' at line 1
 mysql> CREATE TABLE talgoxe_data (id INTEGER PRIMARY KEY, d VARCHAR(2000), pos INTEGER, lemma_id INTEGER, type_id INTEGER, CONSTRAINT FOREIGN KEY (lemma_id) REFERENCES talgoxe_lemma (id), CONSTRAINT FOREIGN KEY (type_id) REFERENCES talgoxe_type (id));
 Query OK, 0 rows affected (0,14 sec)
+
+mysql> INSERT INTO talgoxe_lemma (id, lemma) SELECT l_id, lemma FROM lemma;
+Query OK, 9783 rows affected (0,34 sec)
+Records: 9783  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO talgoxe_type (id, abbrev, name) SELECT nr, fork, namn FROM typer;
+Query OK, 52 rows affected (0,04 sec)
+Records: 52  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO talgoxe_data (id, d, pos, lemma_id, type_id) SELECT d_id, d, pos, l_id, typ FROM fdata WHERE typ IN (SELECT nr FROM typer) AND l_id IN (SELECT l_id FROM lemma);
+Query OK, 217655 rows affected (8,55 sec)
+Records: 217655  Duplicates: 0  Warnings: 0
+
+mysql> 
