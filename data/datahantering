@@ -1,6 +1,8 @@
 #!/bin/sh
 
-datadump=shift
+datadump=$1; shift
+echo "a${datadump}Z"
+if [ z"$datadump" = z ]; then echo "Please give the name of the database file on the command line!"; exit 1; fi
 
 echo "MySQL root password?"
 read <$password
