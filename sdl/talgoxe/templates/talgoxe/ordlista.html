@@ -1,5 +1,6 @@
 <div>
 <h2>Alla ord:</h2>
+<p>Sök: <input type="text" id="sok-artikel" /></p>
 <ul>
 {% for lemma in lemmata %}
     <li><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }}</a></li>

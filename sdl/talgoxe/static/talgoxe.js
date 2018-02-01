@@ -61,4 +61,9 @@ $(document).ready(function() {
     });
 
     $('#spara').click(submitOrder);
+
+    $('#sok-artikel').on('keyup', function(event) {
+	string = event.originalEvent.key
+	console.log(string);
+    });
 });
