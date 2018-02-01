@@ -29,7 +29,7 @@ $(document).ready(function() {
         if (event.originalEvent.key == 'ArrowDown') {
             id = Number((event.currentTarget.id).replace(/(value|type)-/, ''));
             console.log(id);
-            ('#value-' + String((id + 1))).focus();
+            $('#value-' + String((id + 1))).focus();
         }
     }
 
