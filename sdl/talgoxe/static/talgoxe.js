@@ -26,6 +26,11 @@ $(document).ready(function() {
         console.log($(event.currentTarget).parent());
         if (event.originalEvent.key == 'Enter') event.preventDefault();
         /* TODO Något med piltangenter? */
+        if (event.originalEvent.key == 'ArrowDown') {
+            id = Number((event.currentTarget.id).replace(/(value|type)-/, ''));
+            console.log(id);
+            ('#value-' + id + 1).focus();
+        }
     }
 
     function submitOrder(event) {
