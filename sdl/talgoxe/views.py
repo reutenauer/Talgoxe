@@ -54,7 +54,7 @@ def artikel(request, id):
     lemma.collect()
     if len(lemma.raw_data_set()) == 0:
         ok = Type.objects.get(abbrev = 'OK')
-        d = Data(type_id = ok.id, d = '')
+        d = Data(type_id = ok.id, d = '', pos = 0)
         input = [d]
     else:
         input = lemma.raw_data_set()
