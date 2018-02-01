@@ -62,8 +62,9 @@ $(document).ready(function() {
 
     $('#spara').click(submitOrder);
 
-    $('#sok-artikel').on('keyup', function(event) {
-	string = event.originalEvent.key
+    $('#sok-artikel').on('keydown', function(event) {
+	console.log('Hello!');
+	string = event.currentTarget.html();
 	console.log(string);
     });
 });
