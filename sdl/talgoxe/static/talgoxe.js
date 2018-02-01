@@ -9,7 +9,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" cols="16" name="value-' + counter + '" id="value-' + counter + '" /> <button class="addRow" id="add-row-' + counter + '"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '"><strong>-</strong></button></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" cols="16" name="value-' + counter + '" id="value-' + counter + '" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });

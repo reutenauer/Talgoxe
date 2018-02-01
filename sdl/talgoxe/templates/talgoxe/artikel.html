@@ -16,8 +16,8 @@
     <li id="data-{{ d.pos }}">
       <input class="nosubmit" type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}" id="type-{{ d.pos }}">
       <textarea class="nosubmit" rows="1" cols="16" name="value-{{ d.pos }}" id="value-{{ d.pos }}">{{ d.d }}</textarea>
-      <button class="addRow" id="add-row-{{ d.pos }}"><strong>+</strong></button>
-      <button class="removeRow" id="remove-row-{{ d.pos }}"><strong>-</strong></button>
+      <button class="addRow" id="add-row-{{ d.pos }}" tabindex="-1"><strong>+</strong></button>
+      <button class="removeRow" id="remove-row-{{ d.pos }}" tabindex="-1"><strong>-</strong></button>
     </li>
 {% endfor %}
 </ul>
