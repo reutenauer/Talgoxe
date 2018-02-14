@@ -13,26 +13,8 @@ $(document).ready(function() {
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
-        // Inte .keyDown!
-        $('#type-' + counter).on('keydown', function(eve) { keyDown(eve); });
         removeButtonId = '#remove-row-' + counter;
         $(removeButtonId).click(function(ev) { ev.preventDefault(); console.log('Trying to remove ' + ev.currentTarget.id); $(ev.currentTarget).parent().remove() });
-        $('#value-' + counter).on('keydown', function(event) { keyDown(event); });
-    }
-
-    function keyDown(event) {
-        console.log("key pressed");
-        console.log(event.originalEvent.key);
-        console.log($(event.currentTarget).parent());
-        // if (event.originalEvent.key == 'Enter') event.preventDefault();
-        /* TODO Något med piltangenter? */
-        if (event.originalEvent.key == 'ArrowDown') {
-            id = Number((event.currentTarget.id).replace(/(value|type)-/, ''));
-            console.log(id);
-            selector = '#value-' + String((id + 1));
-            console.log("Selector is " + selector);
-            $(selector).focus();
-        }
     }
 
     function submitOrder(event) {
@@ -54,10 +36,6 @@ $(document).ready(function() {
         console.log("Trying to remove a row ...");
         event.preventDefault();
         $(event.currentTarget).parent().remove();
-    });
-
-    $('.nosubmit').on('keydown', function(event) {
-        keyDown(event);
     });
 
     $('#spara').click(submitOrder);
