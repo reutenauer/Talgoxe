@@ -3,6 +3,10 @@ $(document).ready(function() {
     console.log(lastId);
     counter = Number(lastId.replace('add-row-', ''))
 
+    $(".ordlistelement").each(function(i, element) {
+        $(element).parent().hide();
+    });
+
     function addRow(event) {
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('add-row-', '');
@@ -42,7 +46,7 @@ $(document).ready(function() {
 
     $('#sok-artikel').on('keydown', function(event) {
 	console.log('Hello!');
-	string = event.currentTarget.html();
+	string = $(event.currentTarget)[0].value;
 	console.log(string);
     });
 });
