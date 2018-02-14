@@ -56,7 +56,7 @@ $(document).ready(function() {
             element = $(childElement).parent();
             if ($(childElement).html().match(regexp)) {
                 element.show();
-            }
+            } else element.hide();
         });
     }
 });
