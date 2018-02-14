@@ -51,12 +51,18 @@ $(document).ready(function() {
 
     function searchArticles(string) {
         console.log("Got search string: " + string);
+        if (string == "") {
+            $(".ordlistelement").each(function(i, childElement) {
+                $(childElement).parent().hide();
+            });
+            return;
+        }
+
         regexp = new RegExp('^' + string);
         $(".ordlistelement").each(function(i, childElement) {
             element = $(childElement).parent();
-            if ($(childElement).html().match(regexp)) {
-                element.show();
-            } else element.hide();
+            if ($(childElement).html().match(regexp)) element.show();
+            else element.hide();
         });
     }
 });

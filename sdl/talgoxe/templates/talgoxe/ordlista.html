@@ -1,7 +1,6 @@
 <div>
-<h2>Alla ord:</h2>
 {% include "talgoxe/ny_stickord.html" %}
-<p>Sök: <input type="text" id="sok-artikel" /></p>
+<p>Sök bland artiklarna: <input type="text" id="sok-artikel" /></p>
 <ul>
 {% for lemma in lemmata %}
     <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a></li>
