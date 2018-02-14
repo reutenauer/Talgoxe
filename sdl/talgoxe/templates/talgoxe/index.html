@@ -4,10 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}" />
 
-<form action="create" method="POST">
-{% csrf_token %}
-<label>Skapa artikel:</label>
-<input type="text" name="ny_stickord" />
-</form>
+{% include "talgoxe/ny_stickord.html" %}
 
 {% include "talgoxe/ordlista.html" %}
