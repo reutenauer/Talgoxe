@@ -52,9 +52,7 @@ $(document).ready(function() {
     function searchArticles(string) {
         console.log("Got search string: " + string);
         if (string == "") {
-            $(".ordlistelement").each(function(i, childElement) {
-                $(childElement).parent().hide();
-            });
+            hideEverything();
             return;
         }
 
@@ -63,6 +61,12 @@ $(document).ready(function() {
             element = $(childElement).parent();
             if ($(childElement).html().match(regexp)) element.show();
             else element.hide();
+        });
+    }
+
+    function hideEverything() {
+        $(".ordlistelement").each(function(i, childElement) {
+            $(childElement).parent().hide();
         });
     }
 });
