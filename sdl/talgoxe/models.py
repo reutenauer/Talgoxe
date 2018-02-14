@@ -201,7 +201,7 @@ class Lemma(models.Model):
 # TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
                 type = Type.objects.get(abbrev = 'OG')
             text = bit[1]
-	    if type == gtype and text in Landskap.short_abbrev.values():
+	    if type == gtype and text in Landskap.short_abbrev.keys():
 	      print("Got " + text + "! Normalising ...")
 	      text = Landskap.short_abbrev[text]
 	      print("  ... to " + text)
@@ -349,10 +349,10 @@ class Landskap():
       u'Sk' : u'Skåne',
       u'Bl' : u'Blek',
       u'Öl' : u'Öland',
-      u'Sm' : u'Småland',
+      u'Sm' : u'Smål',
       u'Ha' : u'Hall',
       u'Vg' : u'Västg',
-      u'Bo' : u'Bohuslän',
+      u'Bo' : u'Boh',
       u'Dsl': u'Dalsl',
       u'Gl' : u'Gotl',
       u'Ög' : u'Östg',
