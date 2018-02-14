@@ -365,7 +365,7 @@ class Landskap():
       u'Gst': u'Gästr',
       u'Hsl': u'Häls',
       u'Hrj': u'Härj',
-      u'Md' : u'
+      u'Mp' : u'
     }
 
     def cmp(self, other):
