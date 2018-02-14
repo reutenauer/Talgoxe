@@ -343,6 +343,31 @@ class Landskap():
         u'Norrl', # 27
     ]
 
+    short_abbrev = {
+      u'Sk' : u'Skåne',
+      u'Bl' : u'Blek',
+      u'Öl' : u'Öland',
+      u'Sm' : u'Småland',
+      u'Ha' : u'Hall',
+      u'Vg' : u'Västg',
+      u'Bo' : u'Bohuslän',
+      u'Dsl': u'Dalsl',
+      u'Gl' : u'Gotl',
+      u'Ög' : u'Östg',
+      u'Götal' : u'Götal',
+      u'Sdm': u'Sörml',
+      u'Nk' : u'Närke',
+      u'Vrm': u'Värml',
+      u'Ul' : u'Uppl',
+      u'Vstm' : u'Västm',
+      u'Dal': u'Dal',
+      u'Sveal' : u'Sveal',
+      u'Gst': u'Gästr',
+      u'Hsl': u'Häls',
+      u'Hrj': u'Härj',
+      u'Md' : u'
+    }
+
     def cmp(self, other):
         if self.abbrev in self.ordning and other.abbrev in self.ordning:
             return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
