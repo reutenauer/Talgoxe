@@ -44,7 +44,7 @@ $(document).ready(function() {
 
     $('#spara').click(submitOrder);
 
-    $('#sok-artikel').on('keydown', function(event) {
+    $('#sok-artikel').on('keyup', function(event) {
 	console.log('Hello!');
 	string = $(event.currentTarget)[0].value;
 	console.log(string);
