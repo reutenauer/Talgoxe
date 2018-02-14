@@ -192,6 +192,7 @@ class Lemma(models.Model):
             self.lemma = stickord
             self.save()
         d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
+	gtype = Type.objects.get(abbrev = 'g')
         for i in range(len(d)):
             bit = d[i]
             try:
@@ -200,6 +201,9 @@ class Lemma(models.Model):
 # TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
                 type = Type.objects.get(abbrev = 'OG')
             text = bit[1]
+	    if type == gtype and text == 'Ög':
+	      print("Got Ög! Normalising to Östg")
+	      text = 'Östg'
             data = self.raw_data_set().filter(pos = i).first()
             if data:
                 data.type = type
