@@ -6,5 +6,6 @@
     <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a></li>
 {% endfor %}
 </ul>
-<a href="{% url 'printing' %}">Print!</a>
+<button id="sok-artikel-button">Sök</button>
+<a href="{% url 'printing' %}">Skriv ut hela ordboken</a> (funkar inte bra ännu).
 </div>
