@@ -201,9 +201,10 @@ class Lemma(models.Model):
 # TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
                 type = Type.objects.get(abbrev = 'OG')
             text = bit[1]
-	    if type == gtype and text == 'Ög':
-	      print("Got Ög! Normalising to Östg")
-	      text = 'Östg'
+	    if type == gtype and text in Landskap.short_abbrev.values():
+	      print("Got " + text + "! Normalising ...")
+	      text = Landskap.short_abbrev[text]
+	      print("  ... to " + text)
             data = self.raw_data_set().filter(pos = i).first()
             if data:
                 data.type = type
@@ -343,6 +344,7 @@ class Landskap():
         u'Norrl', # 27
     ]
 
+    # TODO: Something more object-oriented (methods short, long, rank)
     short_abbrev = {
       u'Sk' : u'Skåne',
       u'Bl' : u'Blek',
@@ -365,7 +367,13 @@ class Landskap():
       u'Gst': u'Gästr',
       u'Hsl': u'Häls',
       u'Hrj': u'Härj',
-      u'Mp' : u'
+      u'Mp' : u'Med',
+      u'Jl' : u'Jämtl',
+      u'Åm' : u'Ång',
+      u'Vb' : u'Västb',
+      u'Lpl': u'Lappl',
+      u'Nb' : u'Norrb',
+      u'Norrl' : u'Norrl',
     }
 
     def cmp(self, other):
