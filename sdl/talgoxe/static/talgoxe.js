@@ -49,6 +49,10 @@ $(document).ready(function() {
         searchString = newSearchString;
     });
 
+    $('#sok-artikel-button').click(function() {
+        searchArticles($("#sok-artikel")[0].value);
+    });
+
     function searchArticles(string) {
         console.log("Got search string: " + string);
         if (string == "") {
