@@ -1,11 +1,15 @@
+var searchString = "";
+
 $(document).ready(function() {
     lastId = $('.addRow').last()[0].id;
     console.log(lastId);
     counter = Number(lastId.replace('add-row-', ''))
 
+    /*
     $(".ordlistelement").each(function(i, element) {
         $(element).parent().hide();
     });
+    */
 
     function addRow(event) {
         console.log(event.currentTarget.id);
@@ -45,8 +49,16 @@ $(document).ready(function() {
     $('#spara').click(submitOrder);
 
     $('#sok-artikel').on('keyup', function(event) {
-	console.log('Hello!');
-	string = $(event.currentTarget)[0].value;
-	console.log(string);
+	newSearchString = $(event.currentTarget)[0].value;
+	console.log(newSearchString);
+        if (newSearchString != searchString) searchArticles(newSearchString);
+        searchString = newSearchString;
     });
+
+    function searchArticles(string) {
+        console.log("Got search string: " + string);
+        $(".ordlistelement").each(function(i, childElement) {
+            element = $(childElement).parent();
+        });
+    }
 });

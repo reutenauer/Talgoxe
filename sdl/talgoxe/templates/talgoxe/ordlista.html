@@ -4,7 +4,7 @@
 <p>Sök: <input type="text" id="sok-artikel" /></p>
 <ul>
 {% for lemma in lemmata %}
-    <li><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a></li>
+    <li><a href="{% url 'artikel' lemma.id %}" class="ordlistelement" style="display: hide;">{{ lemma.lemma }}</a></li>
 {% endfor %}
 </ul>
 <a href="{% url 'printing' %}">Print!</a>
