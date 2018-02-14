@@ -5,12 +5,6 @@ $(document).ready(function() {
     console.log(lastId);
     counter = Number(lastId.replace('add-row-', ''))
 
-    /*
-    $(".ordlistelement").each(function(i, element) {
-        $(element).parent().hide();
-    });
-    */
-
     function addRow(event) {
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('add-row-', '');
@@ -57,8 +51,12 @@ $(document).ready(function() {
 
     function searchArticles(string) {
         console.log("Got search string: " + string);
+        regexp = new RegExp('^' + string);
         $(".ordlistelement").each(function(i, childElement) {
             element = $(childElement).parent();
+            if ($(childElement).html().match(regexp)) {
+                element.show();
+            }
         });
     }
 });
