@@ -1,9 +1,13 @@
 var searchString = "";
 
 $(document).ready(function() {
-    lastId = $('.addRow').last()[0].id;
-    console.log(lastId);
-    counter = Number(lastId.replace('add-row-', ''))
+    if ($('.addRow').length > 0) {
+        lastId = $('.addRow').last()[0].id;
+        console.log(lastId);
+        counter = Number(lastId.replace('add-row-', ''))
+    } else {
+        counter = 0;
+    }
 
     function addRow(event) {
         console.log(event.currentTarget.id);
