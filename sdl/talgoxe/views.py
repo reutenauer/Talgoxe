@@ -41,15 +41,15 @@ def create(request):
 def artikel(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
-        print request.POST
+        print(request.POST)
         lemma = Lemma.objects.get(id = id)
         lemma.update(request.POST)
 
     template = loader.get_template('talgoxe/artikel.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
     lemma = Lemma.objects.filter(id = id).first()
-    print id
-    print lemma.lemma
+    print(id)
+    print(lemma.lemma)
     lemma.resolve_pilcrow()
     lemma.collect()
     if len(lemma.raw_data_set()) == 0:
