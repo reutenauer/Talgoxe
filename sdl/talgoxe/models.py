@@ -66,7 +66,7 @@ class Lemma(models.Model):
                 elif currseg.type.__unicode__() == u'HR':
                     currmoment2.append(Segment(currseg.type, ')'))
                 else:
-                    subsegs = re.split(ur'¶', currseg.d)
+                    subsegs = re.split(ur"¶", currseg.d)
                     if len(subsegs) == 1:
                         currmoment2.append(Segment(currseg.type, subsegs[0]))
                     else:
