@@ -121,7 +121,7 @@ class Lemma(models.Model):
                     geotype = currdat.type
                     state = 'GEOGRAFI'
                 else:
-                    bits = re.split(ur'¶', currdat.d)
+                    bits = re.split(u'¶', currdat.d)
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
