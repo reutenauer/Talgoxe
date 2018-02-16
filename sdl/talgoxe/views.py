@@ -85,12 +85,12 @@ def print_stuff(request, id = None):
         lemma = Lemma.objects.get(id = id)
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = tempdir + '/sdl.tex'
-    source = open(sourcename, 'w')
-    source.write("\\mainlanguage[sv]")
-    source.write("\\setupbodyfont[pagella, 12pt]\n")
     import locale
     locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
     loc = locale.getpreferredencoding('False')
+    source = open(sourcename, 'w')
+    source.write("\\mainlanguage[sv]")
+    source.write("\\setupbodyfont[pagella, 12pt]\n")
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
     with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
