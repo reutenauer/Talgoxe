@@ -123,7 +123,9 @@ def print_stuff(request, id = None):
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
-    return HttpResponse("<p><a href='/static/ord/%s-%s.pdf'>Klicka här</a></p>" % (id, lemma.lemma))
+    template = loader.get_template('talgoxe/download_pdf.html')
+    context = { 'filepath' : 'ord/%s-%s.pdf' % (id, lemma.lemma) }
+    return render_template(request, template, context)
 
 def print_artikel(request, id):
     return print_stuff(request, id)
