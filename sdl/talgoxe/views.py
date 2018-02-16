@@ -89,6 +89,7 @@ def print_stuff(request, id = None):
     source.write("\\mainlanguage[sv]")
     source.write("\\setupbodyfont[pagella, 12pt]\n")
     import locale
+    locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8'))
     loc = locale.getpreferredencoding('False')
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
