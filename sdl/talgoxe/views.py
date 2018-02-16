@@ -90,7 +90,7 @@ def print_stuff(request, id = None):
     source.write("\\setupbodyfont[pagella, 12pt]\n")
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
-    with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', -1, 'UTF-8') as file:
+    with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), encoding = 'UTF-8') as file:
         source.write(file.read())
 
     source.write("""
