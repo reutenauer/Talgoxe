@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     $('#spara').click(submitOrder);
 
-    $('#sok-artikel').on('keyup', function(event) {
+    $('#sok-artikel').on('change', function(event) {
 	newSearchString = $(event.currentTarget)[0].value;
 	console.log(newSearchString);
         if (newSearchString != searchString) searchArticles(newSearchString);
