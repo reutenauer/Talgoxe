@@ -38,7 +38,7 @@ class Lemma(models.Model):
                 if currseg.type.__unicode__() == u'G':
                     landskap.append(Landskap(currseg.d))
                 else: # Sort and flush
-                    sorted_landskap = sorted(landskap, Landskap.cmp)
+                    sorted_landskap = sorted(landskap, key = Landskap.key)
                     landskap = []
                     for ls in sorted_landskap:
                         currmoment2.append(Segment(gtype, ls.abbrev))
@@ -110,7 +110,7 @@ class Lemma(models.Model):
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.d))
                 else:
-                    sorted_landskap = sorted(landskap, Landskap.cmp)
+                    sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
                     self.append_segment(currdat)
