@@ -46,10 +46,17 @@ $(document).ready(function() {
 
     $('#spara').click(submitOrder);
 
-    $('#sok-artikel').on('change', function(event) {
+    $('#sok-artikel').on('keyup', function(event) {
 	newSearchString = $(event.currentTarget)[0].value;
 	console.log(newSearchString);
-        if (newSearchString != searchString) searchArticles(newSearchString);
+        if (newSearchString != searchString) {
+            searchingFeedback = $('#searching-feedback');
+            searchingFeedback.show();
+            searchingFeedback.html('Letar efter ' + newSearchString + '...');
+            searchArticles(newSearchString);
+            searchingFeedback.html('');
+            searchingFeedback.hide();
+        }
         searchString = newSearchString;
     });
 
