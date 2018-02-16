@@ -88,6 +88,8 @@ def print_stuff(request, id = None):
     source = open(sourcename, 'w')
     source.write("\\mainlanguage[sv]")
     source.write("\\setupbodyfont[pagella, 12pt]\n")
+    import locale
+    loc = locale.getpreferredencoding('False')
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
     with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
