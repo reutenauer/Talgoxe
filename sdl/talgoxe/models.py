@@ -172,7 +172,7 @@ class Lemma(models.Model):
 #         outfile.write("\n")
 
         self.collect()
-        outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma).encode('UTF-8'))
+        outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma))
         setspace = True
         for segment in self.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
             if setspace and not segment.isrightdelim():
@@ -183,7 +183,7 @@ class Lemma(models.Model):
                 setspace = True
             type = segment.type.__unicode__()
             text = segment.format().replace(u'\\', '\\backslash ')
-            outfile.write(('\\SDL:%s{%s}' % (type, text)).encode('UTF-8'))
+            outfile.write(('\\SDL:%s{%s}' % (type, text)))
 
     def update(self, post_data):
         order = post_data['order'].split(',')

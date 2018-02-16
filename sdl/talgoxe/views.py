@@ -91,11 +91,11 @@ def print_stuff(request, id = None):
     if id:
         source.write("\\setuppagenumbering[state=stop]\n")
     with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex')) as file:
-        source.write(file.read().encode('UTF-8'))
+        source.write(file.read())
 
     source.write("""
         \\starttext
-        """.encode('UTF-8'))
+        """)
 
     if id:
         source.write("\\startcolumns[n=2,balance=no]\n")
@@ -114,7 +114,7 @@ def print_stuff(request, id = None):
     chdir(tempdir)
     system("context --batchmode sdl.tex")
     if id:
-        basename = unicode(id) + '-' + lemma.lemma
+        basename = str(id) + '-' + lemma.lemma
     else:
         basename = 'sdl'
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
