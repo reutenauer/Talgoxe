@@ -382,6 +382,13 @@ class Landskap():
         else:
             return 0
 
+    @staticmethod
+    def key(self):
+        if self.abbrev in self.ordning:
+            return self.ordning.index(self.abbrev)
+        else:
+            return -1 # Så det är lättare att se dem
+
     def __init__(self, abbrev):
         self.abbrev = abbrev.capitalize()
 
