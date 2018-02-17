@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from . import views
 
-stickord_regexp = r'^stickord/(?P<stickord>[.M?, TSOHF2a-zåäö()-]+)'
+stickord_regexp = r'^stickord/(?P<stickord>[0-9.M?, TSOHF2a-zåäö()-]+)'
 urlpatterns = [
     url(r'^$', views.index, name = 'index'),
     url('create', views.create, name = 'create'),
