@@ -201,9 +201,9 @@ class Lemma(models.Model):
 # TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
                 type = Type.objects.get(abbrev = 'OG')
             text = bit[1]
-            if type == gtype and text in Landskap.short_abbrev.keys():
+            if type == gtype and text.title() in Landskap.short_abbrev.keys():
               print("Got " + text + "! Normalising ...")
-              text = Landskap.short_abbrev[text]
+              text = Landskap.short_abbrev[text.title()]
               print("  ... to " + text)
             data = self.raw_data_set().filter(pos = i).first()
             if data:
