@@ -136,7 +136,6 @@ def print_stuff(request, id = None):
     logfile = open(sourcename.replace('.tex', '.log'))
     log = logfile.read()
     logfile.close()
-    crash
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s-%s.pdf' % (id, lemma.lemma) }
     return render_template(request, template, context)
