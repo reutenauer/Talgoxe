@@ -121,7 +121,11 @@ def print_stuff(request, id = None):
     chdir(tempdir)
     os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
     path = os.environ['PATH']
-    system("context --batchmode sdl.tex")
+    from os import popen
+    output = popen("context --batchmode sdl.tex")
+    import logging
+    logger = logging.getLogger('django')
+    logger.log(logging.DEBUG, output.read())
     if id:
         basename = str(id) + '-' + lemma.lemma
     else:
