@@ -116,7 +116,7 @@ def print_stuff(request, id = None):
     source.write("\\stoptext\n")
     source.close()
     chdir(tempdir)
-    os.path.setenv('PATH', "%s:%s" % (settings.CONTEXT_PATH, os.path.getenv('PATH')))
+    os.setenv('PATH', "%s:%s" % (settings.CONTEXT_PATH, os.getenv('PATH')))
     system("context --batchmode sdl.tex")
     if id:
         basename = str(id) + '-' + lemma.lemma
