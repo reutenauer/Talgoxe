@@ -115,8 +115,12 @@ def print_stuff(request, id = None):
 
     source.write("\\stoptext\n")
     source.close()
+    resourcefile = open(sourcename)
+    resource = resourcefile.read()
+    resourcefile.close()
     chdir(tempdir)
-    os.setenv('PATH', "%s:%s" % (settings.CONTEXT_PATH, os.getenv('PATH')))
+    os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
+    path = os.environ['PATH']
     system("context --batchmode sdl.tex")
     if id:
         basename = str(id) + '-' + lemma.lemma
@@ -125,6 +129,10 @@ def print_stuff(request, id = None):
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
+    logfile = open(sourcename.replace('.tex', '.log'))
+    log = logfile.read()
+    logfile.close()
+    crash
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s-%s.pdf' % (id, lemma.lemma) }
     return render_template(request, template, context)
