@@ -120,6 +120,7 @@ def print_stuff(request, id = None):
     resourcefile.close()
     chdir(tempdir)
     os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
+    os.environ['TMPDIR'] = '/tmp'
     path = os.environ['PATH']
     from os import popen
     output = popen("context --batchmode sdl.tex")
