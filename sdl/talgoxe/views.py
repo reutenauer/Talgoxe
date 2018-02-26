@@ -5,6 +5,7 @@ from os import system, chdir
 import io
 import os
 import re
+from django.conf import settings
 
 from django.shortcuts import render
 
@@ -115,6 +116,7 @@ def print_stuff(request, id = None):
     source.write("\\stoptext\n")
     source.close()
     chdir(tempdir)
+    os.path.setenv('PATH', "%s:%s" % (settings.CONTEXT_PATH, os.path.getenv('PATH')))
     system("context --batchmode sdl.tex")
     if id:
         basename = str(id) + '-' + lemma.lemma
