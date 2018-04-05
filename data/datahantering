@@ -1,18 +1,20 @@
 #!/bin/sh
 
 datadump=$1
+database=$2
 if [ z"$datadump" = z ]; then echo "Please give the name of the database file on the command line!"; exit 1; fi
+if [ z"$database" = z ]; then echo "Please give the name of the database"; exit 1; fi
 
 echo "MySQL root password? "
 read password
 echo "Deleting and re-creating database just in case"
 mysql -u root -p$password <<EOSQL
-DROP DATABASE talgoxe;
-CREATE DATABASE talgoxe
+DROP DATABASE $database;
+CREATE DATABASE $database;
 EOSQL
 
 echo "Importing ..."
-mysql -u root -p$password talgoxe <$datadump
+mysql -u root -p$password $database <$datadump
 echo "Import done.  Now remunching data ..."
-mysql -u root -p$password talgoxe <remunch-data.sql
+mysql -u root -p$password $database <remunch-data.sql
 echo "Done!"
