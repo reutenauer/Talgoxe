@@ -1,4 +1,5 @@
 *.pyc
 sdl/settings.py
 talgoxe/static/ord/*.pdf
+talgoxe/static/ord/*.odt
 log

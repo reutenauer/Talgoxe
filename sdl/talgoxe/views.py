@@ -167,6 +167,6 @@ def export_to_odf(request, id):
     odt.body += Paragraph(article)
     odt.save()
     finalname = "%s-%s.odt" % (id, lemma.lemma)
-    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s"' % finalname)
-    system("mv %s %s/%s" % (tempfilename, staticpath, finalname))
+    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
+    system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
     return HttpResponse('Download <a href="/static/ord/%s">me</a>' % finalname)
