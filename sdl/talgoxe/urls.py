@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^(?P<id>\d+)$', views.artikel, name = 'artikel'),
     url(stickord_regexp, views.artikel_efter_stickord, name = 'stickord'),
     url(r'^(?P<id>\d+)/print', views.print_artikel, name = 'print_artikel'),
+    url(r'^(?P<id>\d+)/odf', views.export_to_odf, name = 'export_to_odf'),
     url(r'^print$', views.print_lexicon, name = 'printing'),
 ]

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from tempfile import mkdtemp
+from tempfile import mkdtemp, mktemp
 from os import system, chdir
 import io
 import os
 import re
+import ezodf
+from ezodf import newdoc, Heading, Paragraph
 from django.conf import settings
 
 from django.shortcuts import render
@@ -151,3 +153,20 @@ def printing(request):
     lexicon = Lexicon()
     lexicon.process()
     return HttpResponse('<p>Preparing to print!</p>');
+
+def export_to_odf(request, id):
+    lemma = Lemma.objects.get(id = id)
+    tempfilename = mktemp('.odt')
+    odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
+    odt.body += Heading(lemma.lemma)
+    lemma.resolve_pilcrow()
+    lemma.collect()
+    article = ''
+    for segment in lemma.new_segments:
+        article += ' ' + segment.format()
+    odt.body += Paragraph(article)
+    odt.save()
+    finalname = "%s-%s.odt" % (id, lemma.lemma)
+    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s"' % finalname)
+    system("mv %s %s/%s" % (tempfilename, staticpath, finalname))
+    return HttpResponse('Download <a href="/static/ord/%s">me</a>' % finalname)
