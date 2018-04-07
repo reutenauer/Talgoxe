@@ -169,4 +169,6 @@ def export_to_odf(request, id):
     finalname = "%s-%s.odt" % (id, lemma.lemma)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
-    return HttpResponse('Download <a href="/static/ord/%s">me</a>' % finalname)
+    template = loader.get_template('talgoxe/download_odf.html')
+    context = { 'filepath' : 'ord/%s-%s.odt' % (id, lemma.lemma) }
+    return render_template(request, template, context)
