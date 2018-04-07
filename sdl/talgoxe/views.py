@@ -6,7 +6,7 @@ import io
 import os
 import re
 import ezodf
-from ezodf import newdoc, Heading, Paragraph
+from ezodf import newdoc, Heading, Paragraph, Span
 from django.conf import settings
 
 from django.shortcuts import render
@@ -159,14 +159,19 @@ def export_to_odf(request, id):
     tempfilename = mktemp('.odt')
     odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
     odt.inject_style('<style:style style:name="OK" style:family="text"><style:text-properties fo:font-weight="bold" /></style:style>')
+    odt.inject_style('<style:style style:name="G" style:family="text"><style:text-properties fo:font-size="10pt" /></style:style>')
+    odt.inject_style('<style:style style:name="DSP" style:family="text"><style:text-properties fo:font-style="italic" /></style:style>')
     odt.body += Heading(lemma.lemma)
+    paragraph = Paragraph()
     lemma.resolve_pilcrow()
     lemma.collect()
     for segment in lemma.new_segments:
-        if segment.type.__str__() == 'OK':
-            odt.body += Paragraph(' ' + segment.format(), style_name = 'OK')
+        type = segment.type.__str__()
+        if type in ['OK', 'G', 'DSP']:
+            paragraph += Span(' ' + segment.format(), style_name = type)
         else:
-            odt.body += Paragraph(' ' + segment.format())
+            paragraph += Span(' ' + segment.format())
+    odt.body += paragraph
     odt.save()
     finalname = "%s-%s.odt" % (id, lemma.lemma)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
