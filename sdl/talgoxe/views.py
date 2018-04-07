@@ -158,13 +158,13 @@ def export_to_odf(request, id):
     lemma = Lemma.objects.get(id = id)
     tempfilename = mktemp('.odt')
     odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
-    odt.inject_style('<style:style style:name="SO" style:family="text"><style:text-properties fo:font-weight="bold" /></style:style>')
+    odt.inject_style('<style:style style:name="OK" style:family="text"><style:text-properties fo:font-weight="bold" /></style:style>')
     odt.body += Heading(lemma.lemma)
     lemma.resolve_pilcrow()
     lemma.collect()
     for segment in lemma.new_segments:
-        if segment.type.__str__() == 'SO':
-            odt.body += Paragraph(' ' + segment.format(), style_name = 'SO')
+        if segment.type.__str__() == 'OK':
+            odt.body += Paragraph(' ' + segment.format(), style_name = 'OK')
         else:
             odt.body += Paragraph(' ' + segment.format())
     odt.save()
