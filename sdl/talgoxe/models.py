@@ -209,12 +209,17 @@ class Lemma(models.Model):
         paragraph += Span(self.lemma, style_name = 'SO')
         self.resolve_pilcrow()
         self.collect()
+        spacebefore = True
         for segment in self.new_segments:
             type = segment.type.__str__()
             if not type == 'KO':
-                if not segment.isleftdelim():
+                if spacebefore and not segment.isrightdelim():
                     paragraph += Span(' ')
                 paragraph += Span(segment.format(), style_name = type)
+                if segment.isleftdelim():
+                    spacebefore = False
+                else:
+                    spacebefore = True
         odt.body += paragraph
         odt.save()
 
