@@ -205,6 +205,18 @@ class Lemma(models.Model):
         # IP
         self.add_style(odt, 'M1', 'fo:font-weight="bold"')
         self.add_style(odt, 'M2', 'fo:font-weight="bold"')
+        # VH, HH, VR, HR
+        self.add_style(odt, 'REF', 'fo:font-weight="bold"')
+        self.add_style(odt, 'FO', 'fo:font-style="italic"')
+        self.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="10pt"')
+        self.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="10pt"')
+        # ÖVP. Se nedan!
+        # BE, ÖV
+        # ÄV, ÄVK se nedan
+        # FOT, GT, SOV, TI
+        # HV, INT, OKT
+        # VS, GÖ, GP, UST, US, GÖP, GTP, NYR, VB
+        self.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
         paragraph = Paragraph()
         paragraph += Span(self.lemma, style_name = 'SO')
         self.resolve_pilcrow()
