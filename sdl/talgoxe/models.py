@@ -212,7 +212,9 @@ class Lemma(models.Model):
         for segment in self.new_segments:
             type = segment.type.__str__()
             if not type == 'KO':
-                paragraph += Span(' ' + segment.format(), style_name = type)
+                if not segment.isleftdelim():
+                    paragraph += Span(' ')
+                paragraph += Span(segment.format(), style_name = type)
         odt.body += paragraph
         odt.save()
 
