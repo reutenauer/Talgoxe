@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 import re
 from tempfile import mkdtemp
 
+import ezodf
+from ezodf import newdoc, Heading, Paragraph, Span
+
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -184,6 +187,33 @@ class Lemma(models.Model):
             type = segment.type.__unicode__()
             text = segment.format().replace(u'\\', '\\backslash ')
             outfile.write(('\\SDL:%s{%s}' % (type, text)))
+
+    def add_style(self, opendoc, type, xmlchunk):
+        opendoc.inject_style("""
+            <style:style style:name="%s" style:family="text">
+                <style:text-properties %s />
+            </style:style>
+            """ % (type, xmlchunk))
+
+    def process_odf(self, tempfilename):
+        odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
+        self.add_style(odt, 'OK', 'fo:font-weight="bold"')
+        self.add_style(odt, 'G', 'fo:font-size="10pt"')
+        self.add_style(odt, 'DSP', 'fo:font-style="italic"')
+        paragraph = Paragraph()
+        paragraph += Span(self.lemma, style_name = 'SO')
+        self.resolve_pilcrow()
+        self.collect()
+        for segment in self.new_segments:
+            type = segment.type.__str__()
+            if type in ['OK', 'G', 'DSP']:
+                paragraph += Span(' ' + segment.format(), style_name = type)
+            else:
+                paragraph += Span(' ' + segment.format())
+        odt.body += paragraph
+        odt.save()
+
+        return odt
 
     def update(self, post_data):
         order = post_data['order'].split(',')

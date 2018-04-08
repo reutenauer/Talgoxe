@@ -5,8 +5,6 @@ from os import system, chdir
 import io
 import os
 import re
-import ezodf
-from ezodf import newdoc, Heading, Paragraph, Span
 from django.conf import settings
 
 from django.shortcuts import render
@@ -157,22 +155,7 @@ def printing(request):
 def export_to_odf(request, id):
     lemma = Lemma.objects.get(id = id)
     tempfilename = mktemp('.odt')
-    odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
-    odt.inject_style('<style:style style:name="OK" style:family="text"><style:text-properties fo:font-weight="bold" /></style:style>')
-    odt.inject_style('<style:style style:name="G" style:family="text"><style:text-properties fo:font-size="10pt" /></style:style>')
-    odt.inject_style('<style:style style:name="DSP" style:family="text"><style:text-properties fo:font-style="italic" /></style:style>')
-    odt.body += Heading(lemma.lemma)
-    paragraph = Paragraph()
-    lemma.resolve_pilcrow()
-    lemma.collect()
-    for segment in lemma.new_segments:
-        type = segment.type.__str__()
-        if type in ['OK', 'G', 'DSP']:
-            paragraph += Span(' ' + segment.format(), style_name = type)
-        else:
-            paragraph += Span(' ' + segment.format())
-    odt.body += paragraph
-    odt.save()
+    odf = lemma.process_odf(tempfilename)
     finalname = "%s-%s.odt" % (id, lemma.lemma)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
