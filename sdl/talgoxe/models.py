@@ -198,16 +198,21 @@ class Lemma(models.Model):
     def process_odf(self, tempfilename):
         odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
         self.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        self.add_style(odt, 'OK', 'fo:font-weight="bold"')
+        self.add_style(odt, 'OK', 'fo:font-weight="bold" fo:font-size="10pt"')
         self.add_style(odt, 'G', 'fo:font-size="10pt"')
         self.add_style(odt, 'DSP', 'fo:font-style="italic"')
+        self.add_style(odt, 'TIP', 'fo:font-size="10pt"')
+        # IP
+        self.add_style(odt, 'M1', 'fo:font-weight="bold"')
+        self.add_style(odt, 'M2', 'fo:font-weight="bold"')
         paragraph = Paragraph()
         paragraph += Span(self.lemma, style_name = 'SO')
         self.resolve_pilcrow()
         self.collect()
         for segment in self.new_segments:
             type = segment.type.__str__()
-            paragraph += Span(' ' + segment.format(), style_name = type)
+            if not type == 'KO':
+                paragraph += Span(' ' + segment.format(), style_name = type)
         odt.body += paragraph
         odt.save()
 
