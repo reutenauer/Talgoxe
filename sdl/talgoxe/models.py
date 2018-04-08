@@ -197,6 +197,7 @@ class Lemma(models.Model):
 
     def process_odf(self, tempfilename):
         odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
+        self.add_style(odt, 'SO', 'fo:font-weight="bold"')
         self.add_style(odt, 'OK', 'fo:font-weight="bold"')
         self.add_style(odt, 'G', 'fo:font-size="10pt"')
         self.add_style(odt, 'DSP', 'fo:font-style="italic"')
@@ -206,10 +207,7 @@ class Lemma(models.Model):
         self.collect()
         for segment in self.new_segments:
             type = segment.type.__str__()
-            if type in ['OK', 'G', 'DSP']:
-                paragraph += Span(' ' + segment.format(), style_name = type)
-            else:
-                paragraph += Span(' ' + segment.format())
+            paragraph += Span(' ' + segment.format(), style_name = type)
         odt.body += paragraph
         odt.save()
 
