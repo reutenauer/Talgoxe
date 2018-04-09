@@ -116,6 +116,7 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
+                    landskap = []
                     bits = re.split(u'¶', currdat.d)
                     if len(bits) == 1:
                         self.append_segment(currdat)
