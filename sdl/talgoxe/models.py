@@ -315,7 +315,7 @@ class Segment(): # Fjäder!
         if type(self.type) == 'unicode' or str(type(self.type)) == "<type 'unicode'>":
             return self.type in ['hh', 'hr', 'ip', 'ko'] # KO is convenient
         else:
-            return self.type.isrightdelim()
+            return self.type.isrightdelim() or re.match('^,', self.text) # TODO Complete
 
     def ismoment(self):
         return self.ism1() or self.ism2()
