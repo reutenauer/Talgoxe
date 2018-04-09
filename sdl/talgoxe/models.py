@@ -109,6 +109,7 @@ class Lemma(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         while i < self.raw_data_set().count():
             currdat = self.raw_data_set().all()[i]
+            print(i, currdat, state, 'isgeo() ' + currdat.isgeo().__str__())
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.d))
@@ -116,7 +117,17 @@ class Lemma(models.Model):
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
-                    self.append_segment(currdat)
+                    bits = re.split(u'¶', currdat.d)
+                    if len(bits) == 1:
+                        self.append_segment(currdat)
+                    else:
+                        maintype = currdat.type
+                        for bit in bits:
+                            if bits.index(bit) > 0:
+                                i += 1
+                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
+                            if bit:
+                                self.new_segments.append(Segment(maintype, bit))
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
@@ -125,6 +136,7 @@ class Lemma(models.Model):
                     state = 'GEOGRAFI'
                 else:
                     bits = re.split(u'¶', currdat.d)
+                    print("  Found " + str(len(bits)) + " bits")
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
