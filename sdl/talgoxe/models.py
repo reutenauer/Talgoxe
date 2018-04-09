@@ -148,6 +148,10 @@ class Lemma(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
+        if landskap:
+            sorted_landskap = sorted(landskap, key = Landskap.key)
+            for ls in sorted_landskap:
+                self.new_segments.append(Segment(geotype, ls.abbrev))
         if len(self.moments['M1']) > 1:
             for m1 in range(len(self.moments['M1'])):
                 self.moments['M1'][m1].text = '%d' % (m1 + 1)
