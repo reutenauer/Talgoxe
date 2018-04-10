@@ -107,6 +107,7 @@ class Lemma(models.Model):
         i = 0
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
+        landskap = []
         while i < self.raw_data_set().count():
             currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
@@ -117,7 +118,7 @@ class Lemma(models.Model):
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
                     landskap = []
-                    bits = re.split(u'¶', currdat.d)
+                    bits = re.split(u'¶', currdat.d) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
@@ -147,7 +148,7 @@ class Lemma(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
-        if landskap:
+        if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
                 self.new_segments.append(Segment(geotype, ls.abbrev))
