@@ -21,7 +21,7 @@
 {% for d in input %}
     <li id="data-{{ d.pos }}">
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.type.format }}" id="type-{{ d.pos }}">
-      <textarea rows="1" style="width: 65%" name="value-{{ d.pos }}" id="value-{{ d.pos }}">{{ d.d }}</textarea>
+      <textarea rows="1" style="width: 55%" name="value-{{ d.pos }}" id="value-{{ d.pos }}">{{ d.d }}</textarea>
       <button class="addRow" id="add-row-{{ d.pos }}" tabindex="-1"><strong>+</strong></button>
       <button class="removeRow" id="remove-row-{{ d.pos }}" tabindex="-1"><strong>-</strong></button>
       <button class="moveRowUp" id="row-up-{{ d.pos }}" tabindex="-1"><strong>↑</strong></button>
