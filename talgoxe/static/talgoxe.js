@@ -59,7 +59,8 @@ $(document).ready(function() {
     }
 
     function moveDown(element) {
-      // TODO Something similar
+        console.log(element[0]);
+        console.log(element[0].id.replace('data-', ''));
     }
 
     $('#spara').click(submitOrder);
