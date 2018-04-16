@@ -55,12 +55,14 @@ $(document).ready(function() {
     });
 
     function moveUp(element) {
-      // TODO Something
+      prev = element.prev();
+      prev.first().before(element.first());
     }
 
     function moveDown(element) {
-        console.log(element[0]);
-        console.log(element[0].id.replace('data-', ''));
+        // id = element[0].id.replace('data-', '');
+        next = element.next();
+        next.first().after(element.first());
     }
 
     $('#spara').click(submitOrder);
