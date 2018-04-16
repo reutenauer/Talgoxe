@@ -46,12 +46,12 @@ $(document).ready(function() {
 
     $('.moveRowUp').click(function(event) {
       event.preventDefault();
-      moveUp($(event.currentTarget.parent()));
+      moveUp($(event.currentTarget).parent());
     });
 
     $('.moveRowDown').click(function(event) {
       event.preventDefault();
-      moveDown($(event.currentTarget.parent()));
+      moveDown($(event.currentTarget).parent());
     });
 
     function moveUp(element) {
