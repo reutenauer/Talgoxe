@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     $('.moveRowUp').click(function(event) {
       event.preventDefault();
-      $(event.currentTarget.parent().moveUp();
+      moveUp($(event.currentTarget.parent());
     });
 
     $('#spara').click(submitOrder);
