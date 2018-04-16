@@ -15,7 +15,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
@@ -45,18 +45,19 @@ $(document).ready(function() {
     });
 
     $('.moveRowUp').click(function(event) {
-      event.preventDefault();
-      moveUp($(event.currentTarget).parent());
+        console.log("Hej, här är jag.");
+        event.preventDefault();
+        moveUp($(event.currentTarget).parent());
     });
 
     $('.moveRowDown').click(function(event) {
-      event.preventDefault();
-      moveDown($(event.currentTarget).parent());
+        event.preventDefault();
+        moveDown($(event.currentTarget).parent());
     });
 
     function moveUp(element) {
-      prev = element.prev();
-      prev.first().before(element.first());
+        prev = element.prev();
+        prev.first().before(element.first());
     }
 
     function moveDown(element) {
