@@ -46,8 +46,21 @@ $(document).ready(function() {
 
     $('.moveRowUp').click(function(event) {
       event.preventDefault();
-      moveUp($(event.currentTarget.parent());
+      moveUp($(event.currentTarget.parent()));
     });
+
+    $('.moveRowDown').click(function(event) {
+      event.preventDefault();
+      moveDown($(event.currentTarget.parent()));
+    });
+
+    function moveUp(element) {
+      // TODO Something
+    }
+
+    function moveDown(element) {
+      // TODO Something similar
+    }
 
     $('#spara').click(submitOrder);
 
