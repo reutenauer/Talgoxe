@@ -44,6 +44,11 @@ $(document).ready(function() {
         $(event.currentTarget).parent().remove();
     });
 
+    $('.moveRowUp').click(function(event) {
+      event.preventDefault();
+      $(event.currentTarget.parent().moveUp();
+    });
+
     $('#spara').click(submitOrder);
 
     $('#sok-artikel').on('keyup', function(event) {
