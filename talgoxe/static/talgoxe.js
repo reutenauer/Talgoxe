@@ -88,6 +88,7 @@ $(document).ready(function() {
             if (valueValue in shortLandskap) {
                 console.log("Hittat kortare förkortning " + valueValue);
                 value[0].value = shortLandskap[valueValue];
+                value.removeClass("red");
             } else if ($.inArray(valueValue, landskap) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
                 console.log("värde " + valueValue + " är i listan");
