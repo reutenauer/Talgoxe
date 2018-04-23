@@ -76,6 +76,7 @@ $(document).ready(function() {
 
     landskap = ['gotl', 'häls', 'västb'];
     shortLandskap = { 'gl' : 'gotl', 'hsl' : 'häls', 'vb' : 'västb' };
+    shortLandskapValues = values(shortLandskap);
 
     function checkValue(event) {
         value = $(event.currentTarget);
@@ -89,7 +90,7 @@ $(document).ready(function() {
                 console.log("Hittat kortare förkortning " + valueValue);
                 value[0].value = shortLandskap[valueValue];
                 value.removeClass("red");
-            } else if ($.inArray(valueValue, landskap) >= 0) {
+            } else if ($.inArray(valueValue, shortLandskapValues) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
                 console.log("värde " + valueValue + " är i listan");
                 value.removeClass("red");
