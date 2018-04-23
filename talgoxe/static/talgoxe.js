@@ -74,7 +74,14 @@ $(document).ready(function() {
 
     $('.d-value').change(function(event) { console.log("focus out"); checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
-    landskap = { 'gl' : 'gotl', 'hsl' : 'häls', 'vb' : 'västb' };
+    landskap = {
+        'sk' : 'skåne', 'bl' : 'blek', 'öl' : 'öland', 'sm' : 'smål', 'ha' : 'hall',
+        'vg' : 'västg', 'bo' : 'boh', 'dsl' : 'dalsl', 'gl' : 'gotl', 'ög' : 'östg',
+        'götal' : 'götal', 'sdm' : 'sörml', 'nk' : 'närke', 'vrm' : 'värml', 'ul' : 'uppl',
+        'vstm' : 'västm', 'dal' : 'dal', 'sveal' : 'sveal', 'gst' : 'gästr', 'hsl' : 'häls',
+        'hrj' : 'härj' , 'mp' : 'med', 'jl' : 'jämtl', 'åm' : 'ång', 'vb' : 'västb',
+        'lpl' : 'lappl', 'nb' : 'norrb', 'norrl' : 'norrl'
+    };
     longLandskap = [];
     for (key in landskap) { longLandskap.push(landskap[key]); }
 
