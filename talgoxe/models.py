@@ -208,24 +208,28 @@ class Lemma(models.Model):
     def process_odf(self, tempfilename):
         odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
         self.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        self.add_style(odt, 'OK', 'fo:font-weight="bold" fo:font-size="10pt"')
-        self.add_style(odt, 'G', 'fo:font-size="10pt"')
+        self.add_style(odt, 'OK', 'fo:font-size="9pt"')
+        self.add_style(odt, 'G', 'fo:font-size="9pt"')
         self.add_style(odt, 'DSP', 'fo:font-style="italic"')
-        self.add_style(odt, 'TIP', 'fo:font-size="10pt"')
+        self.add_style(odt, 'TIP', 'fo:font-size="9pt"')
         # IP
         self.add_style(odt, 'M1', 'fo:font-weight="bold"')
         self.add_style(odt, 'M2', 'fo:font-weight="bold"')
         # VH, HH, VR, HR
         self.add_style(odt, 'REF', 'fo:font-weight="bold"')
         self.add_style(odt, 'FO', 'fo:font-style="italic"')
-        self.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="10pt"')
-        self.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="10pt"')
+        self.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
+        self.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
         # ÖVP. Se nedan!
         # BE, ÖV
         # ÄV, ÄVK se nedan
-        # FOT, GT, SOV, TI
+        # FOT
+        self.add_style(odt, 'GT', 'fo:font-size="9pt"')
+        # SOV, TI
         # HV, INT, OKT
-        # VS, GÖ, GP, UST, US, GÖP, GTP, NYR, VB
+        # VS, GÖ, GP, UST
+        self.add_style(odt, 'US', 'fo:font-style="italic"')
+        # GÖP, GTP, NYR, VB
         self.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
         paragraph = Paragraph()
         paragraph += Span(self.lemma, style_name = 'SO')

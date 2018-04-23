@@ -43,8 +43,7 @@ body {
 }
 
 .OK {
-  font-weight: bold;
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .KO {
@@ -52,7 +51,7 @@ body {
 }
 
 .G {
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .DSP {
@@ -64,7 +63,7 @@ body {
 }
 
 .TIP {
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .IP {
@@ -92,7 +91,7 @@ body {
 
 .REF {
   font-weight: bold;
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .FO {
@@ -101,12 +100,12 @@ body {
 
 .TIK {
   font-style: italic;
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .FLV {
   font-weight: bold;
-  font-size: smaller;
+  font-size: x-small;
 }
 
 .ÖVP {
@@ -126,4 +125,12 @@ body {
 
 .ÄV {
   content: 'äv.'
+}
+
+.GT {
+  font-size: x-small;
+}
+
+.US {
+  font-style: italic;
 }
