@@ -76,7 +76,14 @@ $(document).ready(function() {
 
     $('.d-type').change(function(event) { checkType(event); });
 
-    types = ['ok', 'ko', 'g'];
+    types = [
+        'srt', 'sov', 'fo', 'vk', 'vb', 'ssv', 'vr', 'ok', 'ust', 'm1',
+        'm2', 'g', 'gp', 'be', 'rbe', 'us', 'sp', 'ssg', 'hr', 'foa',
+        'm3', 'm0', 'vh', 'hh', 'okt', 'pcp', 'öv', 'hv', 'övp', 'ref',
+        'int', 'obj', 'ip', 'ko', 'kl', 'nyr', 'ti', 'dsp', 'vs', 'gt',
+        'gtp', 'bea', 'äv', 'ävk', 'fot', 'tip', 'tik', 'flv', 'lhv', 'gö',
+        'göp'
+    ];
 
     function checkType(event) {
         type = $(event.currentTarget)[0].value.trim().toLowerCase();
