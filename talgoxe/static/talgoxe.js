@@ -85,8 +85,9 @@ $(document).ready(function() {
         console.log(type);
         if (type == 'G') {
             console.log("Type är G");
-            if (valueValue in shortLandskap) >= 0) {
+            if (valueValue in shortLandskap) {
                 console.log("Hittat kortare förkortning " + valueValue);
+                value[0].value = shortLandskap[valueValue];
             } else if ($.inArray(valueValue, landskap) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
                 console.log("värde " + valueValue + " är i listan");
