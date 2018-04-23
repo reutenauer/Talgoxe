@@ -102,11 +102,11 @@ $(document).ready(function() {
 
     function checkValue(event) {
         value = $(event.currentTarget);
-        valueValue = value[0].value;
+        valueValue = value[0].value.trim().toLowerCase();
         row = value.parent();
-        type = row.children()[0].value.trim();
+        type = row.children()[0].value.trim().toLowerCase();
         console.log(type);
-        if (type == 'G') {
+        if (type == 'g') {
             console.log("Type är G");
             if (valueValue in landskap) {
                 console.log("Hittat kortare förkortning " + valueValue);
