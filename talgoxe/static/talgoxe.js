@@ -72,18 +72,24 @@ $(document).ready(function() {
         next.first().after(element.first());
     }
 
-    $('.d-value').change(function(event) { checkValue(event); });
+    $('.d-value').change(function(event) { console.log("focus out"); checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
     function checkValue(event) {
         value = $(event.currentTarget);
         valueValue = value[0].value;
         row = value.parent();
-        type = row.children()[0].value;
+        type = row.children()[0].value.trim();
+        console.log(type);
         if (type == 'G') {
-            if (valueValue in ['häls', 'västb']) {
-            value.removeClass("red");
-        } else {
-            value.addClass("red");
+            console.log("Type är G");
+            if ($.inArray(valueValue, ['häls', 'västb']) >= 0) {
+            /* if (['häls', 'västb'].includes(valueValue)) { */
+                console.log("värde " + valueValue + " är i listan");
+                value.removeClass("red");
+            } else {
+                console.log("värdet inte i listan");
+                value.addClass("red");
+            }
         }
     }
 
