@@ -15,7 +15,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
@@ -70,6 +70,21 @@ $(document).ready(function() {
         // id = element[0].id.replace('data-', '');
         next = element.next();
         next.first().after(element.first());
+    }
+
+    $('.d-value').change(function(event) { checkValue(event); });
+
+    function checkValue(event) {
+        value = $(event.currentTarget);
+        valueValue = value[0].value;
+        row = value.parent();
+        type = row.children()[0].value;
+        if (type == 'G') {
+            if (valueValue in ['häls', 'västb']) {
+            value.removeClass("red");
+        } else {
+            value.addClass("red");
+        }
     }
 
     $('#spara').click(submitOrder);

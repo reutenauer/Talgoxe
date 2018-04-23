@@ -134,3 +134,7 @@ body {
 .US {
   font-style: italic;
 }
+
+.red {
+  background: red;
+}
