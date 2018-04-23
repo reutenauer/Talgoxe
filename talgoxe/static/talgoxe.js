@@ -74,9 +74,9 @@ $(document).ready(function() {
 
     $('.d-value').change(function(event) { console.log("focus out"); checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
-    landskap = ['gotl', 'häls', 'västb'];
-    shortLandskap = { 'gl' : 'gotl', 'hsl' : 'häls', 'vb' : 'västb' };
-    shortLandskapValues = values(shortLandskap);
+    landskap = { 'gl' : 'gotl', 'hsl' : 'häls', 'vb' : 'västb' };
+    longLandskap = [];
+    for (key in landskap) { longLandskap.push(landskap[key]); }
 
     function checkValue(event) {
         value = $(event.currentTarget);
@@ -86,11 +86,11 @@ $(document).ready(function() {
         console.log(type);
         if (type == 'G') {
             console.log("Type är G");
-            if (valueValue in shortLandskap) {
+            if (valueValue in landskap) {
                 console.log("Hittat kortare förkortning " + valueValue);
-                value[0].value = shortLandskap[valueValue];
+                value[0].value = landskap[valueValue];
                 value.removeClass("red");
-            } else if ($.inArray(valueValue, shortLandskapValues) >= 0) {
+            } else if ($.inArray(valueValue, longLandskap) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
                 console.log("värde " + valueValue + " är i listan");
                 value.removeClass("red");
