@@ -76,6 +76,7 @@ $(document).ready(function() {
 
     $('.d-type').change(function(event) { checkType(event); });
 
+    /* TODO Hämsta listor (typer och landskap) från någon ändepunkt på servern */
     types = [
         'srt', 'sov', 'fo', 'vk', 'vb', 'ssv', 'vr', 'ok', 'ust', 'm1',
         'm2', 'g', 'gp', 'be', 'rbe', 'us', 'sp', 'ssg', 'hr', 'foa',
