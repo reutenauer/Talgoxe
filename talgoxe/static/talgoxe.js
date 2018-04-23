@@ -45,7 +45,9 @@ $(document).ready(function() {
 
     function removeRow(event) {
         console.log("Trying to remove a row ...");
-        $(event.currentTarget).parent().remove();
+        if (confirm("Är du säker?")) {
+            $(event.currentTarget).parent().remove();
+        }
     }
 
     $('.moveRowUp').click(function(event) {
