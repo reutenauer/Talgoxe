@@ -21,6 +21,8 @@ $(document).ready(function() {
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
         removeButtonId = '#remove-row-' + counter;
         $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
+        $('.d-type').change(function(event) { checkType(event); });
+        $('.d-value').change(function(event) { checkValue(event); });
     }
 
     function submitOrder(event) {
