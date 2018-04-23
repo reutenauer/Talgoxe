@@ -90,8 +90,8 @@ $(document).ready(function() {
     $('#spara').click(submitOrder);
 
     $('#sok-artikel').on('keyup', function(event) {
-	newSearchString = $(event.currentTarget)[0].value;
-	console.log(newSearchString);
+        newSearchString = $(event.currentTarget)[0].value;
+        console.log(newSearchString);
         if (newSearchString != searchString) {
             searchingFeedback = $('#searching-feedback');
             searchingFeedback.show();
