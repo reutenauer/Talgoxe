@@ -95,7 +95,7 @@ $(document).ready(function() {
         }
     }
 
-    $('.d-value').change(function(event) { console.log("focus out"); checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
+    $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
     landskap = {
         'sk' : 'skåne', 'bl' : 'blek', 'öl' : 'öland', 'sm' : 'smål', 'ha' : 'hall',
@@ -113,19 +113,14 @@ $(document).ready(function() {
         valueValue = value[0].value.trim().toLowerCase();
         row = value.parent();
         type = row.children()[0].value.trim().toLowerCase();
-        console.log(type);
         if (type == 'g') {
-            console.log("Type är G");
             if (valueValue in landskap) {
-                console.log("Hittat kortare förkortning " + valueValue);
                 value[0].value = landskap[valueValue];
                 value.removeClass("red");
             } else if ($.inArray(valueValue, longLandskap) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
-                console.log("värde " + valueValue + " är i listan");
                 value.removeClass("red");
             } else {
-                console.log("värdet inte i listan");
                 value.addClass("red");
             }
         }
