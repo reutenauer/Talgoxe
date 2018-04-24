@@ -75,7 +75,9 @@ def artiklar(request, id):
     lemma = Lemma.objects.get(id = id)
     count = lemmata.filter(lemma__lt = lemma.lemma).count()
     ct10 = count + 10
-    lemma.collect()
+    for i in range(10):
+        currlemma = lemmata.all()[count + i]
+        currlemma.collect()
     context = {
         'lemma': lemma,
         'lemmata': lemmata,
