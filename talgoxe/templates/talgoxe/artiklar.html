@@ -4,14 +4,16 @@
 <!DOCTYPE html>
 <html lang="sv">
   <head>
-    <title>{{ lemma.lemma }} ff. – Svenskt dialektlexikon</title>
+    <title>{{ lemma.lemma }} följ. – Svenskt dialektlexikon</title>
     <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&amp;subset=latin">
   </head>
 
   <body>
     <div>
-      {% include "talgoxe/artikel.html" %}
+        {% for lemma in extracted_lemmata %}
+            {% include "talgoxe/artikel.html" %}
+        {% endfor %}
     </div>
   </body>
 </html>

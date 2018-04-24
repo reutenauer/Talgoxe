@@ -73,11 +73,15 @@ def artiklar(request, id):
     template = loader.get_template('talgoxe/artiklar.html')
     lemmata = Lemma.objects.order_by('lemma')
     lemma = Lemma.objects.get(id = id)
+    count = lemmata.filter(lemma__lt = lemma.lemma).count()
+    ct10 = count + 10
     lemma.collect()
     context = {
         'lemma': lemma,
         'lemmata': lemmata,
         'new_segments': lemma.new_segments,
+        'rank': count,
+        'extracted_lemmata': lemmata.all()[count:ct10]
     }
 
     return render_template(request, template, context)
