@@ -75,15 +75,16 @@ def artiklar(request, id):
     lemma = Lemma.objects.get(id = id)
     count = lemmata.filter(lemma__lt = lemma.lemma).count()
     ct10 = count + 10
-    for i in range(10):
-        currlemma = lemmata.all()[count + i]
-        currlemma.collect()
+    simple_lemmata = lemmata.all()[count:ct10]
+    extracted_lemmata = []
+    for simple_lemma in simple_lemmata:
+        simple_lemma.collect()
+        extracted_lemmata += [simple_lemma]
     context = {
         'lemma': lemma,
         'lemmata': lemmata,
-        'new_segments': lemma.new_segments,
         'rank': count,
-        'extracted_lemmata': lemmata.all()[count:ct10]
+        'extracted_lemmata': extracted_lemmata,
     }
 
     return render_template(request, template, context)
