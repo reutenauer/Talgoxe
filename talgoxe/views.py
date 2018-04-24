@@ -46,7 +46,7 @@ def artikel(request, id):
         lemma = Lemma.objects.get(id = id)
         lemma.update(request.POST)
 
-    template = loader.get_template('talgoxe/artikel.html')
+    template = loader.get_template('talgoxe/redigera.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
     lemma = Lemma.objects.filter(id = id).first()
     print(id)
@@ -65,6 +65,19 @@ def artikel(request, id):
         'lemma': lemma,
         'lemmata': lemmata,
         'new_segments': lemma.new_segments
+    }
+
+    return render_template(request, template, context)
+
+def artiklar(request, id):
+    template = loader.get_template('talgoxe/artiklar.html')
+    lemmata = Lemma.objects.order_by('lemma')
+    lemma = Lemma.objects.get(id)
+    lemma.collect()
+    context = {
+        'lemma': lemma,
+        'lemmata': lemmata,
+        'segments': lemma.new_segments,
     }
 
     return render_template(request, template, context)
