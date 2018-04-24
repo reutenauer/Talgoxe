@@ -74,8 +74,7 @@ def artiklar(request, id):
     lemmata = Lemma.objects.order_by('lemma')
     lemma = Lemma.objects.get(id = id)
     count = lemmata.filter(lemma__lt = lemma.lemma).count()
-    ct10 = count + 10
-    simple_lemmata = lemmata.all()[count:ct10]
+    simple_lemmata = lemmata.all()[count:count + 10]
     extracted_lemmata = []
     for simple_lemma in simple_lemmata:
         simple_lemma.collect()
