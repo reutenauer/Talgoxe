@@ -1,0 +1,31 @@
+<p>
+{% spaceless %}
+<strong>{{ lemma }}</strong>
+{% with setspace as True %}
+    {% for segment in new_segments %}
+        {% if not segment.isrightdelim %}
+        {% comment %}
+        {% if setspace and not segment.isrightdelim %}
+        {% endcomment %}
+            <span>⁠ ⁠</span> {% comment %} FIXME Funkar tydligen inte med LEFTDELIM {% endcomment %}
+        {% endif %}
+        {% comment %}
+        {% if segment.isleftdelim %}
+            [set setspace to False!]
+        {% else %}
+            [comment set setspace to True]
+        {% endif %}
+        {% endcomment %}
+        {% if segment.ismoment and segment.display %}
+            <span class="{{ segment.type }}">{{ segment.text.format }}</span>
+        {% else %}
+            {% if segment.type.abbrev == 'ref' %}
+                <span class="{{ segment.type }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
+            {% else %}
+                <span class="{{ segment.type }}">{{ segment.format }}</span>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endwith %}
+{% endspaceless %}
+</p>

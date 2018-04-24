@@ -72,12 +72,12 @@ def artikel(request, id):
 def artiklar(request, id):
     template = loader.get_template('talgoxe/artiklar.html')
     lemmata = Lemma.objects.order_by('lemma')
-    lemma = Lemma.objects.get(id)
+    lemma = Lemma.objects.get(id = id)
     lemma.collect()
     context = {
         'lemma': lemma,
         'lemmata': lemmata,
-        'segments': lemma.new_segments,
+        'new_segments': lemma.new_segments,
     }
 
     return render_template(request, template, context)

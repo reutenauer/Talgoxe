@@ -1,0 +1,16 @@
+{% load static %}
+{% load talgoxe_style %}
+
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <title>{{ lemma.lemma }} ff. – Svenskt dialektlexikon</title>
+    <link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
+  </head>
+
+  <body>
+    <div>
+      {% include "talgoxe/artikel.html" %}
+    </div>
+  </body>
+</html>
