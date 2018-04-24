@@ -15,12 +15,14 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"> <textarea rows="1" style="width: 65%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /> <button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button> <button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
         removeButtonId = '#remove-row-' + counter;
         $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
+        $('.d-type').change(function(event) { checkType(event); });
+        $('.d-value').change(function(event) { checkValue(event); });
     }
 
     function submitOrder(event) {
@@ -72,22 +74,53 @@ $(document).ready(function() {
         next.first().after(element.first());
     }
 
-    $('.d-value').change(function(event) { console.log("focus out"); checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
+    $('.d-type').change(function(event) { checkType(event); });
+
+    /* TODO Hämsta listor (typer och landskap) från någon ändepunkt på servern */
+    types = [
+        'srt', 'sov', 'fo', 'vk', 'vb', 'ssv', 'vr', 'ok', 'ust', 'm1',
+        'm2', 'g', 'gp', 'be', 'rbe', 'us', 'sp', 'ssg', 'hr', 'foa',
+        'm3', 'm0', 'vh', 'hh', 'okt', 'pcp', 'öv', 'hv', 'övp', 'ref',
+        'int', 'obj', 'ip', 'ko', 'kl', 'nyr', 'ti', 'dsp', 'vs', 'gt',
+        'gtp', 'bea', 'äv', 'ävk', 'fot', 'tip', 'tik', 'flv', 'lhv', 'gö',
+        'göp'
+    ];
+
+    function checkType(event) {
+        type = $(event.currentTarget)[0].value.trim().toLowerCase();
+        if ($.inArray(type, types) >= 0) {
+            $(event.currentTarget).removeClass("red");
+        } else {
+            $(event.currentTarget).addClass("red");
+        }
+    }
+
+    $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
+
+    landskap = {
+        'sk' : 'skåne', 'bl' : 'blek', 'öl' : 'öland', 'sm' : 'smål', 'ha' : 'hall',
+        'vg' : 'västg', 'bo' : 'boh', 'dsl' : 'dalsl', 'gl' : 'gotl', 'ög' : 'östg',
+        'götal' : 'götal', 'sdm' : 'sörml', 'nk' : 'närke', 'vrm' : 'värml', 'ul' : 'uppl',
+        'vstm' : 'västm', 'dal' : 'dal', 'sveal' : 'sveal', 'gst' : 'gästr', 'hsl' : 'häls',
+        'hrj' : 'härj' , 'mp' : 'med', 'jl' : 'jämtl', 'åm' : 'ång', 'vb' : 'västb',
+        'lpl' : 'lappl', 'nb' : 'norrb', 'norrl' : 'norrl'
+    };
+    longLandskap = [];
+    for (key in landskap) { longLandskap.push(landskap[key]); }
 
     function checkValue(event) {
         value = $(event.currentTarget);
-        valueValue = value[0].value;
+        valueValue = value[0].value.trim().toLowerCase();
         row = value.parent();
-        type = row.children()[0].value.trim();
-        console.log(type);
-        if (type == 'G') {
-            console.log("Type är G");
-            if ($.inArray(valueValue, ['häls', 'västb']) >= 0) {
+        type = row.children()[0].value.trim().toLowerCase();
+        if (type == 'g') {
+            if (valueValue in landskap) {
+                value[0].value = landskap[valueValue];
+                value.removeClass("red");
+            } else if ($.inArray(valueValue, longLandskap) >= 0) {
             /* if (['häls', 'västb'].includes(valueValue)) { */
-                console.log("värde " + valueValue + " är i listan");
                 value.removeClass("red");
             } else {
-                console.log("värdet inte i listan");
                 value.addClass("red");
             }
         }
