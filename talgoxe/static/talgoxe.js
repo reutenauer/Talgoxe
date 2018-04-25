@@ -167,18 +167,19 @@ $(document).ready(function() {
         });
     }
 
-    $('.nav').click(function(event) { showArticle($(event.currentTarget)) });
+    $('.nobullet').click(function(event) { showArticle($(event.currentTarget)) });
 
     function showArticle(element) {
+        console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
         if (article.hasClass("hidden")) {
             article.removeClass("hidden");
-            element.html('▾');
+            element.children().first().html('▾');
             article.show();
         } else {
             article.addClass("hidden");
-            element.html('▸');
+            element.children().first().html('▸');
             article.hide();
         }
     }
