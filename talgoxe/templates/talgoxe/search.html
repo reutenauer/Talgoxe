@@ -1,0 +1,21 @@
+{% include "talgoxe/header.html" %}
+
+<h2>Sökresultat</h2>
+<p>{{ count }} resultat som jag kommer att visa snart. Din söksträng var {{ q }}.</p>
+<p>Spolar:
+  <ul>
+    {% for spole in spolar %}
+      <li>{{ spole }} (från {{ spole.lemma }})</li>
+    {% endfor %}
+  </ul>
+</p>
+
+<p>Lemmata ({{ lemmata|length }} resultat):
+  <ul>
+    {% for lemma in lemmata %}
+      <li>{{ lemma }}</li>
+    {% endfor %}
+  </ul>
+</p>
+
+{% include "talgoxe/footer.html" %}
