@@ -166,4 +166,23 @@ $(document).ready(function() {
             $(childElement).parent().hide();
         });
     }
+
+    $('.nav').click(function(event) { showArticle(event) });
+
+    function showArticle(event) {
+        var artId = event.currentTarget.id.replace(/^lemma-/, 'artikel-');
+        element = $(event.currentTarget);
+        console.log("Article ID is " + artId);
+        article = $('#' + artId);
+        console.log(article);
+        if (article.hasClass("hidden")) {
+            article.removeClass("hidden");
+            element.html('▾');
+            article.show();
+        } else {
+            article.addClass("hidden");
+            element.html('▸');
+            article.hide();
+        }
+    }
 });

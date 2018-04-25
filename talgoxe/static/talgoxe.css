@@ -138,3 +138,15 @@ body {
 .red {
   background: red;
 }
+
+.hidden {
+  display: none;
+}
+
+.nav {
+  cursor: pointer;
+}
+
+.nobullet {
+  list-style: none;
+}
