@@ -1,9 +1,8 @@
 {% include "talgoxe/header.html" %}
 
-<h2>Sökresultat</h2>
-<p>Du sökte {{ q }}:</p>
+<h2>{{ lemmata|length }} sökresultat på {{ q }}</h2>
 
-<p>{{ lemmata|length }} resultat:
+<p>
   <ul>
     {% for lemma in lemmata %}
       <li class="träff" id="lemma-{{ lemma.id }}"><span>▸</span> {{ lemma.lemma }}</li>
