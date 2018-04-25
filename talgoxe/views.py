@@ -32,7 +32,7 @@ def render_template(request, template, context):
 def index(request):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
-    context = { 'lemmata' : lemmata }
+    context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon" }
     return render_template(request, template, context)
 
 def create(request):
@@ -64,7 +64,8 @@ def artikel(request, id):
         'segments': lemma.segments,
         'lemma': lemma,
         'lemmata': lemmata,
-        'new_segments': lemma.new_segments
+        'new_segments': lemma.new_segments,
+        'pagetitle': "%s – redigera i Svenskt dialektlexikon" % lemma.lemma,
     }
 
     return render_template(request, template, context)
@@ -84,6 +85,7 @@ def artiklar(request, id):
         'lemmata': lemmata,
         'rank': count,
         'extracted_lemmata': extracted_lemmata,
+        'pagetitle': "%s följ. – Svenskt dialektlexikon" % lemma.lemma,
     }
 
     return render_template(request, template, context)

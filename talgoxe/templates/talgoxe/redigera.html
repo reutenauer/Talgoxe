@@ -1,16 +1,4 @@
-{% load static %}
-{% load talgoxe_style %}
-
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<title>{{ lemma.lemma }} – Svenskt dialektlexikon</title>
-<meta charset="utf-8" />
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold&amp;subset=latin">
-<link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}">
-<script src="{% static "jquery-3.2.1.min.js" %}"></script>
-<script src="{% static "talgoxe.js" %}"></script>
-</head>
+{% include "talgoxe/header.html" %}
 
 <div id="inmatning">
 <h2>Inmatning</h2>
@@ -46,4 +34,5 @@
         console.log("Submit button clicked.");
     });
 </script>
-</html>
+
+{% include "talgoxe/footer.html" %}

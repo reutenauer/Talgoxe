@@ -1,9 +1,5 @@
-{% load static %}
-{% load talgoxe_style %}
-<script src="{% static "jquery-3.2.1.min.js" %}" type="text/javascript"></script>
-<script src="{% static "talgoxe.js" %}" type="text/javascript"></script>
-<meta charset="UTF-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="{% static "talgoxe.css" %}" />
+{% include "talgoxe/header.html" %}
 
 {% include "talgoxe/ordlista.html" %}
+
+{% include "talgoxe/footer.html" %}
