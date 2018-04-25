@@ -167,10 +167,9 @@ $(document).ready(function() {
         });
     }
 
-    $('.nobullet').click(function(event) { showArticle($(event.currentTarget)) });
+    $('.träff').click(function(event) { showArticle($(event.currentTarget)) });
 
     function showArticle(element) {
-        console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
         if (article.hasClass("hidden")) {
