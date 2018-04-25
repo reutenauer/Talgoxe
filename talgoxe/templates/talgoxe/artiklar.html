@@ -6,7 +6,7 @@
 
     <div>
         {% for lemma in extracted_lemmata %}
-            {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}
+            <p>{% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}</p>
         {% endfor %}
     </div>
 

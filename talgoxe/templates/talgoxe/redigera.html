@@ -21,7 +21,7 @@
 </div>
 <div id="artikel">
 <h2>Artikel – läsa <a href="{% url 'artiklar' lemma.id %}">bara artiklar</a></h2>
-{% include 'talgoxe/artikel.html' %}
+<p>{% include 'talgoxe/artikel.html' %}</p>
 <a href="{% url 'print_artikel' lemma.id %}">PDF version</a>&nbsp;
 <a href="{% url 'export_to_odf' lemma.id %}">ODF version</a>
 </div>

@@ -5,10 +5,14 @@
 <p>
   <ul>
     {% for lemma in lemmata %}
-      <li class="träff" id="lemma-{{ lemma.id }}"><span>▸</span> {{ lemma.lemma }}</li>
-      <div class="hidden" id="artikel-{{ lemma.id }}">
-          {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}
-      </div>
+      <li class="träff" id="lemma-{{ lemma.id }}">
+        <span>▸</span>
+        <span>{{ lemma.lemma }}</span>
+        <span class="hidden" id="artikel-{{ lemma.id }}">
+          {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}<br />
+        </span>
+        <p class="hidden" />
+      </li>
     {% endfor %}
   </ul>
 </p>

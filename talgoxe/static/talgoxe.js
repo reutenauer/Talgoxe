@@ -175,11 +175,15 @@ $(document).ready(function() {
         if (article.hasClass("hidden")) {
             article.removeClass("hidden");
             element.children().first().html('▾');
+            $(element.children()[1]).hide();
             article.show();
+            element.children().last().show();
         } else {
             article.addClass("hidden");
             element.children().first().html('▸');
+            $(element.children()[1]).show();
             article.hide();
+            element.children().last().hide();
         }
     }
 });
