@@ -189,7 +189,7 @@ def search(request):
     print(request.GET)
     söksträng = request.GET['q']
     spolar = Data.objects.filter(d__contains = söksträng)
-    lemmata = list(OrderedDict.fromkeys([spole.lemma for spole in spolar]))
+    lemmata = sorted(list(OrderedDict.fromkeys([spole.lemma for spole in spolar])), key = lambda x: x.lemma)
     for lemma in lemmata: # FIXME Hemskt att vara tvungen att göra det här...
         lemma.collect()
     count = spolar.count()
