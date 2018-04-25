@@ -190,7 +190,9 @@ def search(request):
     spolar = Data.objects.filter(d__contains = söksträng)
     lemmata = set()
     lemmadd = lemmata.add
-    lemmata = [spole.lemma for spole in spolar if not (spole.lemma in lemmata or lemmadd(spole.lemma))]
+    for spole in spolar:
+        if not spole.lemma in lemmata:
+            lemmadd(spole.lemma)
     # lemmata = map(lambda s: s.lemma, spolar)
     count = spolar.count()
     template = loader.get_template('talgoxe/search.html')
