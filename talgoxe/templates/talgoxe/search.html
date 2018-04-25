@@ -1,20 +1,24 @@
 {% include "talgoxe/header.html" %}
 
-<h2>{{ lemmata|length }} sökresultat för ”{{ q }}”</h2>
+{% if q == 'NULL' %}
+    Ingen söksträng.  Försök <span style="font-family: 'Courier';">{{ uri }}?q=söksträng</span>
+{% else %}
+  <h2>{{ lemmata|length }} sökresultat för ”{{ q }}”</h2>
 
-<p>
-  <ul>
-    {% for lemma in lemmata %}
-      <li class="träff" id="lemma-{{ lemma.id }}">
-        <span>▸</span>
-        <span>{{ lemma.lemma }}</span>
-        <span class="hidden" id="artikel-{{ lemma.id }}">
-          {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}<br />
-        </span>
-        <p class="hidden" />
-      </li>
-    {% endfor %}
-  </ul>
-</p>
+  <p>
+    <ul>
+      {% for lemma in lemmata %}
+        <li class="träff" id="lemma-{{ lemma.id }}">
+          <span>▸</span>
+          <span>{{ lemma.lemma }}</span>
+          <span class="hidden" id="artikel-{{ lemma.id }}">
+            {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}<br />
+          </span>
+          <p class="hidden" />
+        </li>
+      {% endfor %}
+    </ul>
+  </p>
+{% endif %}
 
 {% include "talgoxe/footer.html" %}

@@ -6,6 +6,8 @@ import io
 import os
 import re
 from collections import OrderedDict
+
+from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
 
 from django.shortcuts import render
@@ -187,13 +189,18 @@ def export_to_odf(request, id):
 
 def search(request):
     print(request.GET)
-    söksträng = request.GET['q']
+    print(request.path)
+    template = loader.get_template('talgoxe/search.html')
+    try:
+        söksträng = request.GET['q']
+    except MultiValueDictKeyError:
+        uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
+        return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
     spolar = Data.objects.filter(d__contains = söksträng)
     lemmata = sorted(list(OrderedDict.fromkeys([spole.lemma for spole in spolar])), key = lambda x: x.lemma)
     for lemma in lemmata: # FIXME Hemskt att vara tvungen att göra det här...
         lemma.collect()
     count = spolar.count()
-    template = loader.get_template('talgoxe/search.html')
     context = { 'q' : söksträng, 'lemmata' : lemmata }
 
     return render_template(request, template, context)
