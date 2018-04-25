@@ -6,7 +6,10 @@
 <p>{{ lemmata|length }} resultat:
   <ul>
     {% for lemma in lemmata %}
-      <li>{{ lemma }}</li>
+      <li><span class="hidden">▸</span> {{ lemma.lemma }}</li>
+      <div class="hidden">
+          {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}
+      </div>
     {% endfor %}
   </ul>
 </p>

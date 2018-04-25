@@ -190,6 +190,8 @@ def search(request):
     söksträng = request.GET['q']
     spolar = Data.objects.filter(d__contains = söksträng)
     lemmata = list(OrderedDict.fromkeys([spole.lemma for spole in spolar]))
+    for lemma in lemmata:
+        lemma.collect()
     count = spolar.count()
     template = loader.get_template('talgoxe/search.html')
     context = { 'q' : söksträng, 'lemmata' : lemmata }
