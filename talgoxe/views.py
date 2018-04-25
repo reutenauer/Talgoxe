@@ -5,7 +5,7 @@ from os import system, chdir
 import io
 import os
 import re
-from collections import OrderedList
+from collections import OrderedDict
 from django.conf import settings
 
 from django.shortcuts import render
@@ -189,7 +189,7 @@ def search(request):
     print(request.GET)
     söksträng = request.GET['q']
     spolar = Data.objects.filter(d__contains = söksträng)
-    lemmata = list(OrderedList.fromkeys([spole.lemma for spole in spolar]))
+    lemmata = list(OrderedDict.fromkeys([spole.lemma for spole in spolar]))
     # lemmata = map(lambda s: s.lemma, spolar)
     count = spolar.count()
     template = loader.get_template('talgoxe/search.html')
