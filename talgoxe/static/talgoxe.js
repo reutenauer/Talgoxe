@@ -167,14 +167,11 @@ $(document).ready(function() {
         });
     }
 
-    $('.nav').click(function(event) { showArticle(event) });
+    $('.nav').click(function(event) { showArticle($(event.currentTarget)) });
 
-    function showArticle(event) {
-        var artId = event.currentTarget.id.replace(/^lemma-/, 'artikel-');
-        element = $(event.currentTarget);
-        console.log("Article ID is " + artId);
+    function showArticle(element) {
+        var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
-        console.log(article);
         if (article.hasClass("hidden")) {
             article.removeClass("hidden");
             element.html('▾');
