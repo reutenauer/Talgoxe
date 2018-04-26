@@ -194,14 +194,14 @@ $(document).ready(function() {
         var artId = element.id.replace(/^lemma-/, '');
         console.log("artId = " + artId);
         console.log("Fetching from /talgoxe/artikel/" + artId);
-        var artResponse = $.get('/talgoxe/artikel/' + artId);
-        // var artikel = $.get('/talgoxe/artikel/' + artId).responseText;
-        console.log("---- Artikel for " + artId + " ----");
-        console.log(artResponse);
-        console.log("---- ----");
-        console.log(artResponse.responseText);
-        console.log("---- ----");
-        $(element).html(artikel + '<br />');
+        $.get('/talgoxe/artikel/' + artId).done(function(data) {
+            console.log("---- Artikel for " + artId + " ----");
+            console.log(data);
+            console.log("---- ----");
+            console.log(data.responseText);
+            console.log("---- ----");
+            $(element).html(data.responseText + '<br />');
+        });
         $(element).removeClass('virgin');
     }
 });
