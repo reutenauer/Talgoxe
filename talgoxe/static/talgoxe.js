@@ -190,10 +190,18 @@ $(document).ready(function() {
     }
 
     function fetchArticle(element) {
-        var artId = element.id.replace(/^artikel-/, '');
-        var artikel = $.get('/talgoxe/artikel/' + artId).responseText;
-        console.log("Artikel for " + artId + ":");
-        element.html(artikel + '<br />');
-        element.removeClass('virgin');
+        console.log(element);
+        var artId = element.id.replace(/^lemma-/, '');
+        console.log("artId = " + artId);
+        console.log("Fetching from /talgoxe/artikel/" + artId);
+        var artResponse = $.get('/talgoxe/artikel/' + artId);
+        // var artikel = $.get('/talgoxe/artikel/' + artId).responseText;
+        console.log("---- Artikel for " + artId + " ----");
+        console.log(artResponse);
+        console.log("---- ----");
+        console.log(artResponse.responseText);
+        console.log("---- ----");
+        $(element).html(artikel + '<br />');
+        $(element).removeClass('virgin');
     }
 });

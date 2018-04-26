@@ -8,10 +8,10 @@
   <p>
     <ul>
       {% for lemma in lemmata %}
-        <li class="träff" id="lemma-{{ lemma.id }}">
+        <li class="träff virgin" id="lemma-{{ lemma.id }}">
           <span class="träffelement">▸</span>
           <span class="träffelement">{{ lemma.lemma }}</span>
-          <span class="träffelement hidden virgin" id="artikel-{{ lemma.id }}" />
+          <span class="träffelement hidden" id="artikel-{{ lemma.id }}" />
           <a href="{% url 'artikel' lemma.id %}">Redigera</a>
           <p class="hidden" />
         </li>
