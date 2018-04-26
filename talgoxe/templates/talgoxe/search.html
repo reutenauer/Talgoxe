@@ -11,9 +11,7 @@
         <li class="träff" id="lemma-{{ lemma.id }}">
           <span class="träffelement">▸</span>
           <span class="träffelement">{{ lemma.lemma }}</span>
-          <span class="träffelement hidden" id="artikel-{{ lemma.id }}">
-            {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}<br />
-          </span>
+          <span class="träffelement hidden virgin" id="artikel-{{ lemma.id }}" />
           <a href="{% url 'artikel' lemma.id %}">Redigera</a>
           <p class="hidden" />
         </li>

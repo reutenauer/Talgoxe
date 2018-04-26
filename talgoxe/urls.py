@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^(?P<id>\d+)/odf', views.export_to_odf, name = 'export_to_odf'),
     url(r'^print$', views.print_lexicon, name = 'printing'),
     url(r'^search$', views.search, name = 'search'),
+    url(r'^artikel/(?P<id>\d+)$', views.article, name = 'article'),
 ]
