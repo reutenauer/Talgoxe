@@ -143,7 +143,10 @@ body {
   display: none;
 }
 
-.träff {
-  cursor: pointer;
+li.träff {
   list-style: none;
+}
+
+.träff .träffelement {
+  cursor: pointer;
 }

@@ -9,11 +9,12 @@
     <ul>
       {% for lemma in lemmata %}
         <li class="träff" id="lemma-{{ lemma.id }}">
-          <span>▸</span>
-          <span>{{ lemma.lemma }}</span>
-          <span class="hidden" id="artikel-{{ lemma.id }}">
+          <span class="träffelement">▸</span>
+          <span class="träffelement">{{ lemma.lemma }}</span>
+          <span class="träffelement hidden" id="artikel-{{ lemma.id }}">
             {% include "talgoxe/artikel.html" with lemma=lemma new_segments=lemma.new_segments %}<br />
           </span>
+          <a href="{% url 'artikel' lemma.id %}">Redigera</a>
           <p class="hidden" />
         </li>
       {% endfor %}
