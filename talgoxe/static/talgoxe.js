@@ -198,9 +198,7 @@ $(document).ready(function() {
             console.log("---- Artikel for " + artId + " ----");
             console.log(data);
             console.log("---- ----");
-            console.log(data.responseText);
-            console.log("---- ----");
-            $(element).html(data.responseText + '<br />');
+            $(element).html(data + '<br />');
         });
         $(element).removeClass('virgin');
     }
