@@ -10,7 +10,7 @@ read password
 echo "Deleting and re-creating database just in case"
 mysql -u root -p$password <<EOSQL
 DROP DATABASE $database;
-CREATE DATABASE $database;
+CREATE DATABASE $database CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 EOSQL
 
 echo "Importing ..."
