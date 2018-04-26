@@ -190,17 +190,11 @@ $(document).ready(function() {
     }
 
     function fetchArticle(element) {
-        console.log(element);
         var artId = element.id.replace(/^lemma-/, '');
-        console.log("artId = " + artId);
-        console.log("Fetching from /talgoxe/artikel/" + artId);
         $.get('/talgoxe/artikel/' + artId).done(function(data) {
-            console.log("---- Artikel for " + artId + " ----");
-            console.log(data);
-            console.log("---- ----");
             $('#artikel-' + artId).html(data);
+            $(element).off("click");
+            $(element).removeClass("virgin");
         });
-        $(element).off("click");
-        $(element).removeClass("virgin");
     }
 });
