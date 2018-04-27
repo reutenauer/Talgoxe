@@ -217,7 +217,9 @@ def print_on_demand(request):
     for key in request.POST:
         mdata = re.match('selected-(\d+)', key)
         if mdata:
-            lemmata.append(Lemma.objects.get(id = int(mdata.group(1))))
+            lemma = Lemma.objects.get(id = int(mdata.group(1)))
+            lemma.collect()
+            lemmata.append(lemma)
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 

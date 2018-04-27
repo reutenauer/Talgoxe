@@ -2,7 +2,8 @@
 
 <h2>Redo att skriva ut</h2>
 {% for lemma in lemmata %}
-<p><tt>ids</tt>: {{ ids }}</p>
+    {% include 'talgoxe/artikel.html' with lemma=lemma new_segments=lemma.new_segments %}
+    <br />
 {% endfor %}
 
 {% include "talgoxe/footer.html" %}
