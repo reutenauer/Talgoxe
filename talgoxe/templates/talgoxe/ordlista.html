@@ -8,7 +8,7 @@
 <p id="searching-feedback" style="display: none;"></p>
 <ul>
 {% for lemma in lemmata %}
-    <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a></li>
+    <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a> <input type="checkbox" id="selected-{{ lemma.id }}" /></li>
 {% endfor %}
 </ul>
 </div>
