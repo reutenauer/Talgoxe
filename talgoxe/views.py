@@ -211,3 +211,10 @@ def article(request, id):
     context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments }
 
     return render_template(request, template, context)
+
+def print_on_demand(request):
+    ids = request.POST['ids']
+    template = loader.get_template('talgoxe/print_on_demand.html')
+    context = { 'ids' : ids }
+
+    return render_template(request, template, context)
