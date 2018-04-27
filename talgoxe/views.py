@@ -213,8 +213,12 @@ def article(request, id):
     return render_template(request, template, context)
 
 def print_on_demand(request):
-    postdata = request.POST['selected-2040117']
+    ids = []
+    for key in request.POST:
+        mdata = re.match('selected-(\d+)', key)
+        if mdata:
+            ids.push(mdata.group(1))
     template = loader.get_template('talgoxe/print_on_demand.html')
-    context = { 'postdata' : postdata }
+    context = { 'ids' : ids }
 
     return render_template(request, template, context)
