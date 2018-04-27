@@ -168,6 +168,7 @@ $(document).ready(function() {
     }
 
     $('.träff .träffelement').click(function(event) { showArticle($(event.currentTarget).parent()) });
+    $('.virgin').click(function(event) { fetchArticle(event.currentTarget); });
 
     function showArticle(element) {
         console.log(element);
@@ -186,5 +187,14 @@ $(document).ready(function() {
             article.hide();
             element.children().last().hide();
         }
+    }
+
+    function fetchArticle(element) {
+        var artId = element.id.replace(/^lemma-/, '');
+        $.get('/talgoxe/artikel/' + artId).done(function(data) {
+            $('#artikel-' + artId).html(data);
+            $(element).off("click");
+            $(element).removeClass("virgin");
+        });
     }
 });
