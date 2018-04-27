@@ -213,8 +213,9 @@ def article(request, id):
     return render_template(request, template, context)
 
 def print_on_demand(request):
+    postdata = request.POST
     ids = request.POST['ids']
     template = loader.get_template('talgoxe/print_on_demand.html')
-    context = { 'ids' : ids }
+    context = { 'ids' : ids, 'postdata' : postdata }
 
     return render_template(request, template, context)

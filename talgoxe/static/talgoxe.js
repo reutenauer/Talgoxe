@@ -198,19 +198,4 @@ $(document).ready(function() {
             $(element).removeClass("virgin");
         });
     }
-
-    var toPrint = [];
-
-    $('input[type="checkbox"]').click(function(event) { preparePrinting(event.currentTarget); });
-
-    function preparePrinting(element) {
-        toPrint.push(element.id.replace(/selected-/, ''));
-    }
-
-    $('#start-printing').click(startPrinting);
-
-    function startPrinting() {
-        console.log(toPrint);
-        $.post(window.location.href.replace(/\/talgoxe.$/, '/talgoxe/print_on_demand'), toPrint);
-    }
 });

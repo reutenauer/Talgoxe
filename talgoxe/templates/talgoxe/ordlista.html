@@ -3,13 +3,15 @@
 <p>Sök bland artiklarna:
 <input type="text" id="sok-artikel" />
 <button id="sok-artikel-button">Sök</button>
-<button id="start-printing">Börja skriva ut</button>
+<input type="submit">Börja skriva ut</button>
 </p>
 
 <p id="searching-feedback" style="display: none;"></p>
+<form action="print-on-demand">
 <ul>
 {% for lemma in lemmata %}
     <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a> <input type="checkbox" id="selected-{{ lemma.id }}" /></li>
 {% endfor %}
 </ul>
 </div>
+</form>
