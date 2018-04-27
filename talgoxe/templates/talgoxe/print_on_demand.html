@@ -1,6 +1,8 @@
 {% include "talgoxe/header.html" %}
 
-<h2>Begäran på utskrift</h2>
+<h2>Redo att skriva ut</h2>
+{% for lemma in lemmata %}
 <p><tt>ids</tt>: {{ ids }}</p>
+{% endfor %}
 
 {% include "talgoxe/footer.html" %}

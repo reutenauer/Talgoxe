@@ -213,12 +213,12 @@ def article(request, id):
     return render_template(request, template, context)
 
 def print_on_demand(request):
-    ids = []
+    lemmata = []
     for key in request.POST:
         mdata = re.match('selected-(\d+)', key)
         if mdata:
-            ids.push(mdata.group(1))
+            lemmata.append(Lemma.objects.get(id = int(mdata.group(1))))
     template = loader.get_template('talgoxe/print_on_demand.html')
-    context = { 'ids' : ids }
+    context = { 'lemmata' : lemmata }
 
     return render_template(request, template, context)
