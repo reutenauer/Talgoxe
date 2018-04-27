@@ -191,7 +191,8 @@ $(document).ready(function() {
 
     function fetchArticle(element) {
         var artId = element.id.replace(/^lemma-/, '');
-        $.get('/talgoxe/artikel/' + artId).done(function(data) {
+        var artUrl = window.location.href.replace(/\/search.*$/, '/artikel/');
+        $.get(artUrl + artId).done(function(data) {
             $('#artikel-' + artId).html(data);
             $(element).off("click");
             $(element).removeClass("virgin");
