@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'^artikel/(?P<id>\d+)?$', views.article, name = 'article'),
     url(r'^artikel/partial/(?P<id>\d+)\.(?P<format>\w+)$', views.partial_article, name = 'article_partial'),
     url(r'print-on-demand', views.print_on_demand, name = 'print_on_demand'),
+    url(r'print-on-demand/pdf', views.print_pdf, name = 'print_pdf'),
+    url(r'print-on-demand/odf', views.print_odf, name = 'print_odf'),
 ]

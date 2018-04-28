@@ -244,3 +244,7 @@ def print_on_demand(request):
     context = { 'lemmata' : lemmata }
 
     return render_template(request, template, context)
+
+def print_pdf(request):
+    if request.META['REQUEST_METHOD'] == 'GET':
+        return HttpResponse("Den här endpointen ska användas med POST.")
