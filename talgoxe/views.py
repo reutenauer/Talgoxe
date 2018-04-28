@@ -246,5 +246,6 @@ def print_on_demand(request):
     return render_template(request, template, context)
 
 def print_pdf(request):
-    if request.META['REQUEST_METHOD'] == 'GET':
+    if request.META['REQUEST_METHOD'] != 'POST':
         return HttpResponse("Den här endpointen ska användas med POST.")
+    elif request.META['REQUEST_
