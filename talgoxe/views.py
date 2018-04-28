@@ -223,9 +223,9 @@ def print_on_demand(request):
             lemma.collect()
             lemmata.append(lemma)
         elif bdata:
-            lemmata + Lemma.objects.filter(lemma__startswith = bdata.group(1))
-            map(lemmata, lambda lemma: lemma.collect())
-            lemmata
+            local = Lemma.objects.filter(lemma__startswith = bdata.group(1))
+            map(local, lambda lemma: lemma.collect())
+            lemmata += local
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 
