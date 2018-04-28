@@ -247,12 +247,21 @@ def print_on_demand(request):
     return render_template(request, template, context)
 
 def print_pdf(request):
-    if request.META['REQUEST_METHOD'] != 'POST':
-        return HttpResponse("Den här endpointen ska användas med POST.")
-    else:
-        ids = []
-        for id in request.POST:
-            ids.append(id)
+    ids = []
+    # for id in request.GET:
+        # value = map(lambda s: s.strip(), request.GET[id].split(','))
+        # ids.append([id, deque(map(lambda s: s.strip(), request.GET[id].split(',')))])
+        # value = list(map(lambda s: s.strip(), request.GET[id].split(',')))
+        # ids.append([id, value])
+    # list(map(lambda s: s.strip(), request.GET['ids'].split(',')))
+    retvalue = ""
+    tex = io.StringIO()
+    for id in map(lambda s: s.strip(), request.GET['ids'].split(',')):
+        lemma = Lemma.objects.get(id = id)
+        # retvalue += " " + lemma.lemma
+        lemma.process(tex)
+        tex.write('\\par')
+    return HttpResponse(retvalue)
 
 def print_odf(request):
     return HttpResponse("Hej!")
