@@ -221,7 +221,7 @@ def partial_article(request, id, format):
     if format == None:
         format = 'html'
     if format == 'html':
-        return HttpResponseRedirect('/talgoxe/artikel/%s' % id)
+        return HttpResponseRedirect(reverse('article', args = (id,)))
 
 def print_on_demand(request):
     lemmata = []
