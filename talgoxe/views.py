@@ -205,22 +205,17 @@ def search(request):
 
     return render_template(request, template, context)
 
-def article(request, id, format):
+def article(request, id):
     lemma = Lemma.objects.get(id = id)
-    if format == None:
-        format = 'html'
-    if format == 'html':
-        template = loader.get_template('talgoxe/artikel.html')
-        lemma.collect()
-        context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments, 'format' : format }
+    template = loader.get_template('talgoxe/artikel.html')
+    lemma.collect()
+    context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments, 'format' : format }
 
-        return render_template(request, template, context)
+    return render_template(request, template, context)
 
 def partial_article(request, id, format):
     lemma = Lemma.objects.get(id = id)
-    if format == None:
-        format = 'html'
-    if format == 'html':
+    if format == None: # format = 'html'
         return HttpResponseRedirect(reverse('article', args = (id,)))
 
 def print_on_demand(request):
