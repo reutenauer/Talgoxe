@@ -107,6 +107,7 @@ def artikel_efter_stickord(request, stickord):
         return render_template(request, template, context)
 
 def print_stuff(request, id = None):
+    print(id)
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = os.path.join(tempdir, 'sdl.tex')
     import locale
@@ -125,15 +126,27 @@ def print_stuff(request, id = None):
         """)
 
     if id:
-        source.write("\\startcolumns[n=2,balance=no]\n")
-        lemma = Lemma.objects.get(id = id)
-        lemma.process(source)
+        print(type)
+        print(id)
+        print(type(id))
+        if type(id) == str:
+            source.write("\\startcolumns[n=2,balance=no]\n")
+            lemma = Lemma.objects.get(id = id)
+            lemma.process(source)
+            basename = '%s-%s' % (id, lemma.lemma)
+        elif type(id) == list:
+            source.write("\\startcolumns[n=2,balance=yes]\n")
+            for i in id:
+                lemma = Lemma.objects.get(id = i)
+                lemma.process(source)
+                source.write("\\par")
+        basename = 'sdl'
         source.write("\\stopcolumns\n")
-        basename = '%s-%s' % (id, lemma.lemma)
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
         for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
             source.write("\\startparagraph\n")
+            # source.write("{\\bf %s\\par}" % lemma.lemma)
             lemma.process(source)
             source.write("\\stopparagraph\n")
         source.write("\\stopcolumns")
@@ -144,9 +157,11 @@ def print_stuff(request, id = None):
     resourcefile = open(sourcename)
     resource = resourcefile.read()
     resourcefile.close()
+
     return run_context(request, tempdir,  basename)
 
 def run_context(request, tempdir, basename):
+    print(tempdir)
     chdir(tempdir)
     os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
     os.environ['TMPDIR'] = '/tmp'
@@ -256,12 +271,9 @@ def print_pdf(request):
     # list(map(lambda s: s.strip(), request.GET['ids'].split(',')))
     retvalue = ""
     tex = io.StringIO()
-    for id in map(lambda s: s.strip(), request.GET['ids'].split(',')):
-        lemma = Lemma.objects.get(id = id)
-        # retvalue += " " + lemma.lemma
-        lemma.process(tex)
-        tex.write('\\par')
-    return HttpResponse(retvalue)
+    print_stuff(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    template = loader.get_template("talgoxe/download_custom_pdf.html")
+    return render_template(request, template, context)
 
 def print_odf(request):
     return HttpResponse("Hej!")

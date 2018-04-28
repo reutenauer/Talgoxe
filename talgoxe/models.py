@@ -233,7 +233,7 @@ class Lemma(models.Model):
         # GÖP, GTP, NYR, VB
         self.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
 
-        paragraph = generate_content()
+        paragraph = self.generate_content()
         odt.body += paragraph
         odt.save()
 
