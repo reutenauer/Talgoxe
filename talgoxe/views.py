@@ -110,7 +110,7 @@ def print_stuff(request, id = None):
     if id:
         lemma = Lemma.objects.get(id = id)
     tempdir = mkdtemp('', 'SDLartikel')
-    sourcename = tempdir + '/sdl.tex'
+    sourcename = os.path.join(tempdir, 'sdl.tex')
     import locale
     locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
     loc = locale.getpreferredencoding('False')
@@ -143,6 +143,9 @@ def print_stuff(request, id = None):
     resourcefile = open(sourcename)
     resource = resourcefile.read()
     resourcefile.close()
+    return run_context(request, tempdir, '%s-%s' % (id, lemma.lemma))
+
+def run_context(request, tempdir, basename):
     chdir(tempdir)
     os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
     os.environ['TMPDIR'] = '/tmp'
@@ -152,18 +155,17 @@ def print_stuff(request, id = None):
     import logging
     logger = logging.getLogger('django')
     logger.log(logging.DEBUG, output.read())
-    if id:
-        basename = str(id) + '-' + lemma.lemma
-    else:
+    if not id:
         basename = 'sdl'
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
+    sourcename = os.path.join(tempdir, 'sdl.tex')
     logfile = open(sourcename.replace('.tex', '.log'))
     log = logfile.read()
     logfile.close()
     template = loader.get_template('talgoxe/download_pdf.html')
-    context = { 'filepath' : 'ord/%s-%s.pdf' % (id, lemma.lemma) }
+    context = { 'filepath' : 'ord/%s.pdf' % basename }
     return render_template(request, template, context)
 
 def print_artikel(request, id):
