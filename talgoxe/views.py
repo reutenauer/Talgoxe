@@ -5,7 +5,7 @@ from os import system, chdir
 import io
 import os
 import re
-from collections import OrderedDict
+from collections import OrderedDict, deque
 
 from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
@@ -223,9 +223,9 @@ def print_on_demand(request):
             lemma.collect()
             lemmata.append(lemma)
         elif bdata:
-            local = Lemma.objects.filter(lemma__startswith = bdata.group(1))
-            map(local, lambda lemma: lemma.collect())
-            lemmata += local
+            hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
+            deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
+            lemmata += hel_bokstav
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 
