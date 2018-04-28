@@ -208,5 +208,9 @@ $(document).ready(function() {
         });
         console.log("Article IDs:");
         console.log(articles);
+        $.post(window.location.href + '.pdf', articles, function(data) {
+            console.log("POST completed!  Data:");
+            console.log(data);
+        });
     }
 });
