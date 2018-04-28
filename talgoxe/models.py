@@ -5,6 +5,7 @@ from tempfile import mkdtemp
 
 import ezodf
 from ezodf import newdoc, Heading, Paragraph, Span
+from lxml import etree
 
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
@@ -231,6 +232,14 @@ class Lemma(models.Model):
         self.add_style(odt, 'US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
         self.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
+
+        paragraph = generate_content()
+        odt.body += paragraph
+        odt.save()
+
+        return odt
+
+    def generate_content(self):
         paragraph = Paragraph()
         paragraph += Span(self.lemma, style_name = 'SO')
         self.resolve_pilcrow()
@@ -246,10 +255,11 @@ class Lemma(models.Model):
                     spacebefore = False
                 else:
                     spacebefore = True
-        odt.body += paragraph
-        odt.save()
+        return paragraph
 
-        return odt
+    def serialise(self):
+        paragraph = self.generate_content()
+        return etree.tostring(paragraph.xmlnode)
 
     def update(self, post_data):
         order = post_data['order'].split(',')
