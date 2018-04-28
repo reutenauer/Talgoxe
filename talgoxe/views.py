@@ -205,9 +205,10 @@ def search(request):
 
     return render_template(request, template, context)
 
-def article(request, id, format = 'html'):
+def article(request, id, format):
     lemma = Lemma.objects.get(id = id)
-    print(format)
+    if format == None:
+        format = 'html'
     if format == 'html':
         template = loader.get_template('talgoxe/artikel.html')
         lemma.collect()
