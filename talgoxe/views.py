@@ -238,8 +238,9 @@ def print_on_demand(request):
             lemmata.append(lemma)
         elif bdata:
             hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
-            deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
+            # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
             lemmata += hel_bokstav
+    sorted(lemmata, key = lambda lemma: lemma.lemma)
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 
@@ -252,3 +253,6 @@ def print_pdf(request):
         ids = []
         for id in request.POST:
             ids.append(id)
+
+def print_odf(request):
+    return HttpResponse("Hej!")

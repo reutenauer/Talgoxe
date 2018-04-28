@@ -198,4 +198,15 @@ $(document).ready(function() {
             $(element).removeClass("virgin");
         });
     }
+
+    $('#skapa-pdf').click(function(event) { createPDF(event.currentTarget); });
+
+    function createPDF(element) {
+        articles = [];
+        $('input').each(function(i, article) {
+            articles.push(article.value.replace(/^article-/, ''));
+        });
+        console.log("Article IDs:");
+        console.log(articles);
+    }
 });
