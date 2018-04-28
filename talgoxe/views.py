@@ -205,13 +205,15 @@ def search(request):
 
     return render_template(request, template, context)
 
-def article(request, id):
+def article(request, id, format = 'html'):
     lemma = Lemma.objects.get(id = id)
-    template = loader.get_template('talgoxe/artikel.html')
-    lemma.collect()
-    context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments }
+    print(format)
+    if format == 'html':
+        template = loader.get_template('talgoxe/artikel.html')
+        lemma.collect()
+        context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments, 'format' : format }
 
-    return render_template(request, template, context)
+        return render_template(request, template, context)
 
 def print_on_demand(request):
     lemmata = []
