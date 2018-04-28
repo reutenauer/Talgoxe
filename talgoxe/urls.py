@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^print$', views.print_lexicon, name = 'printing'),
     url(r'^search$', views.search, name = 'search'),
     url(r'^artikel/(?P<id>\d+)(\.(?P<format>\w+))?$', views.article, name = 'article'),
+    url(r'^artikel/partial/(?P<id>\d+)\.(?P<format>\w+)$', views.partial_article, name = 'article_partial'),
     url(r'print-on-demand', views.print_on_demand, name = 'print_on_demand'),
 ]

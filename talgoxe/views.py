@@ -216,6 +216,12 @@ def article(request, id, format):
 
         return render_template(request, template, context)
 
+def partial_article(request, id, format):
+    lemma = Lemma.objects.get(id = id)
+    if format == None:
+        format = 'html'
+    if format == 'html':
+
 def print_on_demand(request):
     lemmata = []
     for key in request.POST:
