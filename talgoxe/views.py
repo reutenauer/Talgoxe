@@ -248,4 +248,7 @@ def print_on_demand(request):
 def print_pdf(request):
     if request.META['REQUEST_METHOD'] != 'POST':
         return HttpResponse("Den här endpointen ska användas med POST.")
-    elif request.META['REQUEST_
+    else:
+        ids = []
+        for id in request.POST:
+            ids.append(id)

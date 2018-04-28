@@ -1,10 +1,13 @@
 {% include "talgoxe/header.html" %}
 
 <h2>Redo att skriva ut</h2>
+<form action="{% url 'print_pdf' %}" method="POST">
 {% for lemma in lemmata %}
+    <input type="hidden" value="article-{{ lemma.id }}" />
     {% include 'talgoxe/artikel.html' with lemma=lemma new_segments=lemma.new_segments %}
     <br />
 {% endfor %}
+</form>
 
 <button id="skapa-pdf">Skapa PDF</button> <button id="skapa-odf">Skapa ODF</button>
 
