@@ -7,6 +7,12 @@
     <br />
 {% endfor %}
 
-<button id="skapa-pdf">Skapa PDF</button> <button id="skapa-odf">Skapa ODF</button>
+<form action="{{ url 'print_pdf' }}" method="POST">
+    <button id="skapa-pdf">Skapa PDF</button>
+</form>
+
+<form action="{{ url 'print_odf' }}" method="POST">
+    <button id="skapa-odf">Skapa ODF</button>
+</form>
 
 {% include "talgoxe/footer.html" %}
