@@ -107,8 +107,6 @@ def artikel_efter_stickord(request, stickord):
         return render_template(request, template, context)
 
 def print_stuff(request, id = None):
-    if id:
-        lemma = Lemma.objects.get(id = id)
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = os.path.join(tempdir, 'sdl.tex')
     import locale
@@ -128,8 +126,10 @@ def print_stuff(request, id = None):
 
     if id:
         source.write("\\startcolumns[n=2,balance=no]\n")
+        lemma = Lemma.objects.get(id = id)
         lemma.process(source)
         source.write("\\stopcolumns\n")
+        basename = '%s-%s' % (id, lemma.lemma)
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
         for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
@@ -137,13 +137,14 @@ def print_stuff(request, id = None):
             lemma.process(source)
             source.write("\\stopparagraph\n")
         source.write("\\stopcolumns")
+        basename = 'sdl'
 
     source.write("\\stoptext\n")
     source.close()
     resourcefile = open(sourcename)
     resource = resourcefile.read()
     resourcefile.close()
-    return run_context(request, tempdir, '%s-%s' % (id, lemma.lemma))
+    return run_context(request, tempdir,  basename)
 
 def run_context(request, tempdir, basename):
     chdir(tempdir)
@@ -155,8 +156,6 @@ def run_context(request, tempdir, basename):
     import logging
     logger = logging.getLogger('django')
     logger.log(logging.DEBUG, output.read())
-    if not id:
-        basename = 'sdl'
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
