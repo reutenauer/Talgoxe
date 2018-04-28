@@ -9,9 +9,19 @@
 </p>
 
 <p id="searching-feedback" style="display: none;"></p>
+
+<ul>
+  {% for bokstav in bokstäver %}
+      <li class="bokstäver"><input type="checkbox" name="bokstav-{{ bokstav }}" />{{ bokstav|upper }}</li>
+  {% endfor %}
+</ul>
+
 <ul>
 {% for lemma in lemmata %}
-    <li style="display: none;"><a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a> <input type="checkbox" name="selected-{{ lemma.id }}" /></li>
+    <li class="nobullet">
+      <input type="checkbox" name="selected-{{ lemma.id }}" />
+      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a>
+    </li>
 {% endfor %}
 </ul>
 </div>

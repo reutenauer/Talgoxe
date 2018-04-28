@@ -150,3 +150,11 @@ li.träff {
 .träff .träffelement {
   cursor: pointer;
 }
+
+.nobullet {
+  list-style: none;
+}
+
+.bokstäver {
+  display: inline;
+}
