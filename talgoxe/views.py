@@ -215,7 +215,7 @@ def article(request, id):
 
 def partial_article(request, id, format):
     lemma = Lemma.objects.get(id = id)
-    if format == None: # format = 'html'
+    if format == 'html':
         return HttpResponseRedirect(reverse('article', args = (id,)))
 
 def print_on_demand(request):
