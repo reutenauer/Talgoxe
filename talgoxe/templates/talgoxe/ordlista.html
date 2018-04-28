@@ -12,7 +12,7 @@
 
 <ul>
   {% for bokstav in bokstäver %}
-      <li class="bokstäver"><input type="checkbox" name="bokstav-{{ bokstav }}" />{{ bokstav|upper }}</li>
+      <li class="bokstav">{{ bokstav|upper }} <input type="checkbox" name="bokstav-{{ bokstav }}" /></li>
   {% endfor %}
 </ul>
 

@@ -217,10 +217,15 @@ def print_on_demand(request):
     lemmata = []
     for key in request.POST:
         mdata = re.match('selected-(\d+)', key)
+        bdata = re.match('bokstav-(.)', key)
         if mdata:
             lemma = Lemma.objects.get(id = int(mdata.group(1)))
             lemma.collect()
             lemmata.append(lemma)
+        elif bdata:
+            lemmata + Lemma.objects.filter(lemma__startswith = bdata.group(1))
+            map(lemmata, lambda lemma: lemma.collect())
+            lemmata
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 
