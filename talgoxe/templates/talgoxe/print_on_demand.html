@@ -2,13 +2,19 @@
 
 <h2>Redo att skriva ut</h2>
 {% for lemma in lemmata %}
-    <input type="hidden" value="article-{{ lemma.id }}" />
+    <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
     {% include 'talgoxe/artikel.html' with lemma=lemma new_segments=lemma.new_segments %}
     <br />
 {% endfor %}
 
-    <button id="skapa-pdf">Skapa PDF</button>
+    <a id="skapa-pdf">Skapa PDF</a>
 
-    <button id="skapa-odf">Skapa ODF</button>
+    <a id="skapa-odf">Skapa ODF</a>
+
+<!--
+<h2>Test</h2>
+{% load static %}
+<button><a href="{% static 'ord/sdl-utdrag.pdf' %}">klicka mig</a></button>
+-->
 
 {% include "talgoxe/footer.html" %}

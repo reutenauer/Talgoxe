@@ -202,17 +202,22 @@ $(document).ready(function() {
     $('#skapa-pdf').click(function(event) { createPDF(event.currentTarget); });
 
     function createPDF(element) {
+        console.log(element);
+        $(element).html("Förbereder PDF...");
         articles = [];
-        $('input').each(function(i, article) {
+        $('input.toprint').each(function(i, article) {
             articles.push(article.value.replace(/^article-/, ''));
         });
         console.log("Article IDs:");
         console.log(articles);
-        url = window.location.href + '/pdf?ids=' + new String(articles);
+        url = window.location.href.replace(/\/talgoxe.*/, '/talgoxe/print-on-demand') + '/pdf?ids=' + new String(articles);
         console.log("Getting " + url);
         $.get(url).done(function(data) {
             console.log("GET completed!  Data:");
             console.log(data);
+            $(element).off('click');
+            $(element).attr("href", data.trim());
+            $(element).html("Ladda ner PDF");
         });
     }
 });

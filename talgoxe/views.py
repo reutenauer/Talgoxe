@@ -135,12 +135,16 @@ def print_stuff(request, id = None):
             lemma.process(source)
             basename = '%s-%s' % (id, lemma.lemma)
         elif type(id) == list:
+            id = sorted(id, key = lambda id: Lemma.objects.get(id = id).lemma)
             source.write("\\startcolumns[n=2,balance=yes]\n")
             for i in id:
                 lemma = Lemma.objects.get(id = i)
                 lemma.process(source)
                 source.write("\\par")
-            basename = 'sdl-utdrag'
+            if len(id) == 1:
+                basename = '%s-%s' % (id[0], Lemma.objects.get(id = id[0]).lemma)
+            else:
+                basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
         source.write("\\stopcolumns\n")
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
