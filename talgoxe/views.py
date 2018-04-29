@@ -140,7 +140,7 @@ def print_stuff(request, id = None):
                 lemma = Lemma.objects.get(id = i)
                 lemma.process(source)
                 source.write("\\par")
-        basename = 'sdl'
+            basename = 'sdl-utdrag'
         source.write("\\stopcolumns\n")
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
@@ -271,8 +271,9 @@ def print_pdf(request):
     # list(map(lambda s: s.strip(), request.GET['ids'].split(',')))
     retvalue = ""
     tex = io.StringIO()
-    print_stuff(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    return print_stuff(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
     template = loader.get_template("talgoxe/download_custom_pdf.html")
+    context = { }
     return render_template(request, template, context)
 
 def print_odf(request):

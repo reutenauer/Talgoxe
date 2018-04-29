@@ -208,7 +208,9 @@ $(document).ready(function() {
         });
         console.log("Article IDs:");
         console.log(articles);
-        $.get(window.location.href + '/pdf?ids=' + new String(articles)).done(function(data) {
+        url = window.location.href + '/pdf?ids=' + new String(articles);
+        console.log("Getting " + url);
+        $.get(url).done(function(data) {
             console.log("GET completed!  Data:");
             console.log(data);
         });
