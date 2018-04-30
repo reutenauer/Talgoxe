@@ -9,7 +9,7 @@ echo "MySQL root password? "
 read password
 echo "Deleting and re-creating database just in case"
 mysql -u root -p$password <<EOSQL
-DROP DATABASE $database;
+DROP DATABASE IF EXISTS $database;
 CREATE DATABASE $database CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 EOSQL
 
