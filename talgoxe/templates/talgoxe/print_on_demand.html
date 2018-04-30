@@ -1,5 +1,6 @@
 {% include "talgoxe/header.html" %}
 
+{% if redo %}
 <h2>Redo att skriva ut</h2>
 {% for lemma in lemmata %}
     <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
@@ -10,6 +11,15 @@
     <a id="skapa-pdf">Skapa PDF</a>
 
     <a id="skapa-odf">Skapa ODF</a>
+{% else %}
+<form method="POST">
+{% csrf_token %}
+<p>Sök bland artiklarna:
+<input type="submit" value="Börja skriva om">
+</p>
+</form>
+
+{% endif %}
 
 <!--
 <h2>Test</h2>

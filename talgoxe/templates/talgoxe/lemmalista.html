@@ -1,0 +1,8 @@
+<ul>
+{% for lemma in lemmata %}
+    <li class="hidden nobullet">
+      <input type="checkbox" name="selected-{{ lemma.id }}" />
+      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a>
+    </li>
+{% endfor %}
+</ul>

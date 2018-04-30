@@ -1,28 +1,14 @@
 <div>
 {% include "talgoxe/ny_stickord.html" %}
-<form action="{% url 'print_on_demand' %}" method="POST">
-{% csrf_token %}
 <p>Sök bland artiklarna:
 <input type="text" id="sok-artikel" />
 <button id="sok-artikel-button">Sök</button>
-<input type="submit" value="Börja skriva ut" />
 </p>
 
 <p id="searching-feedback" style="display: none;"></p>
 
-<ul>
-  {% for bokstav in bokstäver %}
-      <li class="bokstav">{{ bokstav|upper }} <input type="checkbox" name="bokstav-{{ bokstav }}" /></li>
-  {% endfor %}
-</ul>
+{% include "talgoxe/bokstavslista.html" %}
 
-<ul>
-{% for lemma in lemmata %}
-    <li class="hidden nobullet">
-      <input type="checkbox" name="selected-{{ lemma.id }}" />
-      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a>
-    </li>
-{% endfor %}
-</ul>
+{% include "talgoxe/lemmalista.html" %}
+
 </div>
-</form>
