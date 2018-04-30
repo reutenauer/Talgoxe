@@ -259,7 +259,7 @@ def print_on_demand(request):
             hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
             # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
             lemmata += hel_bokstav
-    sorted(lemmata, key = lambda lemma: lemma.lemma)
+    lemmata = sorted(lemmata, key = lambda lemma: lemma.lemma)
     template = loader.get_template('talgoxe/print_on_demand.html')
     context = { 'lemmata' : lemmata }
 
