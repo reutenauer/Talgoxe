@@ -35,8 +35,7 @@ def render_template(request, template, context):
 def index(request):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
-    bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
-    context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'bokstäver' : bokstäver }
+    context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
 def create(request):
@@ -247,21 +246,34 @@ def partial_article(request, id, format):
         return HttpResponse(lemma.serialise())
 
 def print_on_demand(request):
-    lemmata = []
-    for key in request.POST:
-        mdata = re.match('selected-(\d+)', key)
-        bdata = re.match('bokstav-(.)', key)
-        if mdata:
-            lemma = Lemma.objects.get(id = int(mdata.group(1)))
-            lemma.collect()
-            lemmata.append(lemma)
-        elif bdata:
-            hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
-            # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
-            lemmata += hel_bokstav
-    lemmata = sorted(lemmata, key = lambda lemma: lemma.lemma)
+    method = request.META['REQUEST_METHOD']
     template = loader.get_template('talgoxe/print_on_demand.html')
-    context = { 'lemmata' : lemmata }
+    if method == 'POST':
+        print(request.POST)
+        lemmata = []
+        print('----')
+        for key in request.POST:
+            mdata = re.match('selected-(\d+)', key)
+            bdata = re.match('bokstav-(.)', key)
+            if mdata:
+                print(mdata.group(1))
+                lemma = Lemma.objects.get(id = int(mdata.group(1)))
+                lemma.collect()
+                lemmata.append(lemma)
+            elif bdata:
+                print(bdata.group(1))
+                hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
+                # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
+                lemmata += hel_bokstav
+        print('----')
+        lemmata = sorted(lemmata, key = lambda lemma: lemma.lemma)
+        context = { 'lemmata' : lemmata, 'redo' : True }
+        print("Number of lemmata:")
+        print(len(lemmata))
+    elif method == 'GET':
+        lemmata = Lemma.objects.order_by('lemma')
+        bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
+        context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver }
 
     return render_template(request, template, context)
 

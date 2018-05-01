@@ -14,8 +14,8 @@
 {% else %}
 <form method="POST">
 {% csrf_token %}
-<p>Sök bland artiklarna:
-<input type="submit" value="Börja skriva om">
+{% include "talgoxe/ordlista.html" %}
+<input type="submit" value="Börja skriva ut" action="{% url 'print_on_demand' %}">
 </p>
 </form>
 
