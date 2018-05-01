@@ -1,5 +1,7 @@
 <div>
+{% if not checkboxes %}
 {% include "talgoxe/ny_stickord.html" %}
+{% endif %}
 <p>Sök bland artiklarna:
 <input type="text" id="sok-artikel" />
 <button id="sok-artikel-button">Sök</button>
