@@ -91,9 +91,18 @@ $(document).ready(function() {
         'göp'
     ];
 
+    /* TODO Check type before! Need to re-add textarea if changing from M1 or M2 to sth. else */
     function checkType(event) {
         type = $(event.currentTarget)[0].value.trim().toLowerCase();
-        if ($.inArray(type, types) >= 0) {
+        if (type == 'm1' || type == 'm2') {
+          console.log("type = " + type);
+          id2 = event.currentTarget.id.replace(/^type-/, '#value-');
+          console.log("Looking for element with ID " + id2);
+          element = $(id2);
+          console.log("Target object:");
+          console.log(element);
+          element.remove();
+        } else if ($.inArray(type, types) >= 0) {
             $(event.currentTarget).removeClass("red");
         } else {
             $(event.currentTarget).addClass("red");
