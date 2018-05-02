@@ -102,6 +102,10 @@ $(document).ready(function() {
           console.log("Target object:");
           console.log(element);
           element.remove();
+          addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
+          pos = event.currentTarget.id.replace(/^type-/, '');
+          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '"><strong>⇓</strong></button>');
+          addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '"><strong>⇑</strong></button>');
         } else if ($.inArray(type, types) >= 0) {
             $(event.currentTarget).removeClass("red");
         } else {
