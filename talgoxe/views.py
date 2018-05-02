@@ -196,6 +196,8 @@ def printing(request):
     return HttpResponse('<p>Preparing to print!</p>');
 
 def export_to_odf(request, id):
+    print(type(id))
+    print(id)
     tempfilename = mktemp('.odt')
     odf = Lemma.start_odf(tempfilename)
     if type(id) == str:
@@ -206,7 +208,9 @@ def export_to_odf(request, id):
         for i in id:
             lemma = Lemma.objects.get(id = i)
             lemma.process_odf(odf)
-            finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
+        finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
+        if len(id) == 1:
+            finalname = '%s-%s.odt' % (id[0], Lemma.objects.get(id = id[0]).lemma)
     Lemma.stop_odf(odf)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
