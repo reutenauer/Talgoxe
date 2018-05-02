@@ -196,7 +196,7 @@ class Lemma(models.Model):
             else:
                 setspace = True
             type = segment.type.__unicode__()
-            text = segment.format().replace(u'\\', '\\backslash ')
+            text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             outfile.write(('\\SDL:%s{%s}' % (type, text)))
 
     def add_style(self, opendoc, type, xmlchunk):
