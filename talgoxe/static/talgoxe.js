@@ -209,13 +209,10 @@ $(document).ready(function() {
     function createPDF(element) {
         console.log(element);
         $(element).html("Förbereder PDF...");
-        articles = [];
-        $('input.toprint').each(function(i, article) {
-            articles.push(article.value.replace(/^article-/, ''));
-        });
+        articles = collectArticles();
         console.log("Article IDs:");
         console.log(articles);
-        url = window.location.href.replace(/\/talgoxe.*/, '/talgoxe/print-on-demand') + '/pdf?ids=' + new String(articles);
+        url = printableEndpoint('pdf', articles);
         console.log("Getting " + url);
         $.get(url).done(function(data) {
             console.log("GET completed!  Data:");
@@ -224,5 +221,31 @@ $(document).ready(function() {
             $(element).attr("href", data.trim());
             $(element).html("Ladda ner PDF");
         });
+    }
+
+    function collectArticles() {
+        articles = [];
+        $('input.toprint').each(function(i, article) {
+            articles.push(article.value.replace(/^article-/, ''));
+        });
+
+        return articles;
+    }
+
+    function printableEndpoint(format, articles) {
+        return window.location.href.replace(/\/talgoxe.*/, '/talgoxe/print-on-demand') + '/' + format + '?ids=' + new String(articles);
+    }
+
+    $('#skapa-odf').click(function(event) { createODF(event.currentTarget); });
+
+    function createODF(element) {
+      $(element).html("Förbereder ODF...");
+      articles = collectArticles();
+      url = printableEndpoint('odf', articles);
+      $.get(url).done(function(link) {
+        $(element).off('click');
+        $(element).attr("href", link.trim());
+        $(element).html("Ladda ner ODF");
+      });
     }
 });

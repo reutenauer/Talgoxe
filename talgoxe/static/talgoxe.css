@@ -167,3 +167,12 @@ a#skapa-pdf {
   color: initial;
   cursor: pointer;
 }
+
+a#skapa-odf {
+  appearance: button;
+  -moz-appearance: button;
+  -webkit-appearance: button;
+  cursor: pointer;
+  text-decoration: none;
+  color: initial;
+}

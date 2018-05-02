@@ -234,6 +234,7 @@ class Lemma(models.Model):
         Lemma.add_style(odt, 'US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
         Lemma.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
+        Lemma.add_style(odt, 'SP', 'fo:font-style="italic"')
 
         return odt
 

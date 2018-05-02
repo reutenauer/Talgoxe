@@ -201,16 +201,17 @@ def export_to_odf(request, id):
     if type(id) == str:
         lemma = Lemma.objects.get(id = id)
         lemma.process_odf(odf)
+        finalname = "%s-%s.odt" % (id, lemma.lemma)
     elif type(id) == list:
         for i in id:
-            lemma = Lemma.objects(id = i)
+            lemma = Lemma.objects.get(id = i)
             lemma.process_odf(odf)
+            finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
     Lemma.stop_odf(odf)
-    finalname = "%s-%s.odt" % (id, lemma.lemma)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
     template = loader.get_template('talgoxe/download_odf.html')
-    context = { 'filepath' : 'ord/%s-%s.odt' % (id, lemma.lemma) }
+    context = { 'filepath' : 'ord/%s' % finalname }
     return render_template(request, template, context)
 
 def search(request):
@@ -285,6 +286,7 @@ def print_on_demand(request):
     return render_template(request, template, context)
 
 def print_pdf(request):
+    print(request.GET)
     ids = []
     # for id in request.GET:
         # value = map(lambda s: s.strip(), request.GET[id].split(','))
@@ -300,4 +302,5 @@ def print_pdf(request):
     return render_template(request, template, context)
 
 def print_odf(request):
-    return export_to_odf(request, list(map(lambda s: strip(), request.GET['ids'].split(','))))
+    print(request.GET)
+    return export_to_odf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
