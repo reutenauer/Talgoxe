@@ -104,7 +104,7 @@ $(document).ready(function() {
           element.remove();
           addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
           pos = event.currentTarget.id.replace(/^type-/, '');
-          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
+          addAfter.after('<button class="moveMomentDown" id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
           addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
         } else if ($.inArray(type, types) >= 0) {
             element = $(event.currentTarget.id.replace(/^type-/, '#moment-up-'));
@@ -115,7 +115,8 @@ $(document).ready(function() {
               console.log(element.attr("id"));
               element.remove();
               $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
-              $(event.currentTarget.id.replace(/^type-/, '#value-')).after("<textarea></textarea>");
+              $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
+              $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
             } else console.log("no");
             $(event.currentTarget).removeClass("red");
         } else {
