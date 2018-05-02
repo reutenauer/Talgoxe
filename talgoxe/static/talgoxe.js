@@ -104,9 +104,19 @@ $(document).ready(function() {
           element.remove();
           addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
           pos = event.currentTarget.id.replace(/^type-/, '');
-          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '" tabindex="1"><strong>⇓</strong></button>');
+          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
           addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
         } else if ($.inArray(type, types) >= 0) {
+            element = $(event.currentTarget.id.replace(/^type-/, '#moment-up-'));
+            console.log("element?");
+            if (element.attr("id")) {
+              console.log("yes");
+              console.log(element);
+              console.log(element.attr("id"));
+              element.remove();
+              $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
+              $(event.currentTarget.id.replace(/^type-/, '#value-')).after("<textarea></textarea>");
+            } else console.log("no");
             $(event.currentTarget).removeClass("red");
         } else {
             $(event.currentTarget).addClass("red");
