@@ -196,9 +196,16 @@ def printing(request):
     return HttpResponse('<p>Preparing to print!</p>');
 
 def export_to_odf(request, id):
-    lemma = Lemma.objects.get(id = id)
     tempfilename = mktemp('.odt')
-    odf = lemma.process_odf(tempfilename)
+    odf = Lemma.start_odf(tempfilename)
+    if type(id) == int:
+        lemma = Lemma.objects.get(id = id)
+        lemma.process_odf(odf)
+    elif type(id) == list:
+        for i in id:
+            lemma = Lemma.objects(id = i)
+            lemma.process_odf(odf)
+    Lemma.stop_odf(odf)
     finalname = "%s-%s.odt" % (id, lemma.lemma)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
@@ -294,3 +301,14 @@ def print_pdf(request):
 
 def print_odf(request):
     return HttpResponse("Hej!")
+    tempfilename = mktemp('.odt')
+    odt = Lemma.start_odf(tempfilename)
+    for id in request.GET['ids']:
+        lemma = Lemma.objects.get(id = id)
+        lemma.process_odf(odt)
+    Lemma.stop_odf(odt)
+    basename = 'sdl-utdrag.odt'
+    template = loader.get_template("talgoxe/download_odf.html")
+    context = { 'filepath' : tempfilename }
+
+    return render_template(request, template, context)

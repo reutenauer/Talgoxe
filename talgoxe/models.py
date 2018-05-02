@@ -199,45 +199,51 @@ class Lemma(models.Model):
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             outfile.write(('\\SDL:%s{%s}' % (type, text)))
 
-    def add_style(self, opendoc, type, xmlchunk):
+    @staticmethod
+    def add_style(opendoc, type, xmlchunk):
         opendoc.inject_style("""
             <style:style style:name="%s" style:family="text">
                 <style:text-properties %s />
             </style:style>
             """ % (type, xmlchunk))
 
-    def process_odf(self, tempfilename):
+    @staticmethod
+    def start_odf(tempfilename):
         odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
-        self.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        self.add_style(odt, 'OK', 'fo:font-size="9pt"')
-        self.add_style(odt, 'G', 'fo:font-size="9pt"')
-        self.add_style(odt, 'DSP', 'fo:font-style="italic"')
-        self.add_style(odt, 'TIP', 'fo:font-size="9pt"')
+        Lemma.add_style(odt, 'SO', 'fo:font-weight="bold"')
+        Lemma.add_style(odt, 'OK', 'fo:font-size="9pt"')
+        Lemma.add_style(odt, 'G', 'fo:font-size="9pt"')
+        Lemma.add_style(odt, 'DSP', 'fo:font-style="italic"')
+        Lemma.add_style(odt, 'TIP', 'fo:font-size="9pt"')
         # IP
-        self.add_style(odt, 'M1', 'fo:font-weight="bold"')
-        self.add_style(odt, 'M2', 'fo:font-weight="bold"')
+        Lemma.add_style(odt, 'M1', 'fo:font-weight="bold"')
+        Lemma.add_style(odt, 'M2', 'fo:font-weight="bold"')
         # VH, HH, VR, HR
-        self.add_style(odt, 'REF', 'fo:font-weight="bold"')
-        self.add_style(odt, 'FO', 'fo:font-style="italic"')
-        self.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
-        self.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
+        Lemma.add_style(odt, 'REF', 'fo:font-weight="bold"')
+        Lemma.add_style(odt, 'FO', 'fo:font-style="italic"')
+        Lemma.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
+        Lemma.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
         # ÖVP. Se nedan!
         # BE, ÖV
         # ÄV, ÄVK se nedan
         # FOT
-        self.add_style(odt, 'GT', 'fo:font-size="9pt"')
+        Lemma.add_style(odt, 'GT', 'fo:font-size="9pt"')
         # SOV, TI
         # HV, INT, OKT
         # VS, GÖ, GP, UST
-        self.add_style(odt, 'US', 'fo:font-style="italic"')
+        Lemma.add_style(odt, 'US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
-        self.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
-
-        paragraph = self.generate_content()
-        odt.body += paragraph
-        odt.save()
+        Lemma.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
 
         return odt
+
+    def process_odf(self, odt):
+        paragraph = self.generate_content()
+        odt.body += paragraph
+
+    @staticmethod
+    def stop_odf(odt):
+        odt.save()
 
     def generate_content(self):
         paragraph = Paragraph()
