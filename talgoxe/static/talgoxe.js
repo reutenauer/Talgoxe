@@ -47,7 +47,12 @@ $(document).ready(function() {
 
     function removeRow(event) {
         console.log("Trying to remove a row ...");
-        if (confirm("Är du säker?")) {
+        id = event.currentTarget.id.replace(/^remove-row-/, '')
+        console.log("id is " + id);
+        console.log($('#type-' + id)[0].value == '');
+        console.log($('#value-' + id)[0].value == '');
+        if ($('#type-' + id)[0].value.trim() == '' && $('#value-' + id)[0].value.trim() == '') $(event.currentTarget).parent().remove();
+        else if (confirm("Är du säker?")) {
             $(event.currentTarget).parent().remove();
         }
     }
