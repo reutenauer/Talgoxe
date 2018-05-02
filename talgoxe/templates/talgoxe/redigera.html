@@ -16,6 +16,10 @@
       <button class="removeRow" id="remove-row-{{ d.pos }}" tabindex="-1"><strong>-</strong></button>
       <button class="moveRowUp" id="row-up-{{ d.pos }}" tabindex="-1"><strong>↑</strong></button>
       <button class="moveRowDown" id="row-down-{{ d.pos }}" tabindex="-1"><strong>↓</strong></button>
+      {% if d.type.abbrev == 'm1' or d.type.abbrev == 'm2' %}
+      <button class="moveMomentUp" id="moment-up-{{ d.pos }}" tabindex="-1"><strong>⇑</strong></button>
+      <button class="moveMomentDown" id="moment-down-{{ d.pos }}" tabindex="-1"><strong>⇓</strong></button>
+      {% endif %}
     </li>
 {% endfor %}
 </ul>

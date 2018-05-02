@@ -21,8 +21,8 @@ $(document).ready(function() {
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
         removeButtonId = '#remove-row-' + counter;
         $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
-        $('.d-type').change(function(event) { checkType(event); });
-        $('.d-value').change(function(event) { checkValue(event); });
+        $('#type-' + counter).change(function(event) { checkType(event); });
+        $('#value-' + counter).change(function(event) { checkValue(event); });
     }
 
     function submitOrder(event) {
@@ -104,8 +104,8 @@ $(document).ready(function() {
           element.remove();
           addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
           pos = event.currentTarget.id.replace(/^type-/, '');
-          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '"><strong>⇓</strong></button>');
-          addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '"><strong>⇑</strong></button>');
+          addAfter.after('<button class="moveMomentDown id="moment-down-' + pos + '" tabindex="1"><strong>⇓</strong></button>');
+          addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
         } else if ($.inArray(type, types) >= 0) {
             $(event.currentTarget).removeClass("red");
         } else {
