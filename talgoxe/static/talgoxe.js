@@ -151,7 +151,7 @@ $(document).ready(function() {
         if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
         nextMoment = element.next();
         var i = 1;
-        while (moment.length > 0 && moment[0].id && rowType(moment) != 'M1') {
+        while (nextMoment.length > 0 && nextMoment[0].id && rowType(nextMoment) != 'M1') {
             console.log(i);
             moment = moment.next();
         }
