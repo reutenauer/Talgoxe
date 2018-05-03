@@ -68,6 +68,16 @@ $(document).ready(function() {
         moveDown($(event.currentTarget).parent());
     });
 
+    $('.moveMomentUp').click(function(event) {
+        event.preventDefault();
+        moveMomentUp($(event.currentTarget).parent());
+    });
+
+    $('.moveMomentDown').click(function(event) {
+        event.preventDefault();
+        moveMomentDown($(event.currentTarget).parent());
+    });
+
     function moveUp(element) {
         prev = element.prev();
         prev.first().before(element.first());
@@ -117,11 +127,33 @@ $(document).ready(function() {
               $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
               $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
               $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
+              $('#moment-up-' + pos).click(function(event) { event.preventDefault(); moveMomentUp($(event.currentTarget).parent()); });
+              $('#moment-down-' + pos).click(function(event) { moveMomentDown($(event.currentTarget).parent()); });
             } else console.log("no");
             $(event.currentTarget).removeClass("red");
         } else {
             $(event.currentTarget).addClass("red");
         }
+    }
+
+    function moveMomentUp(element) {
+        /* TODO A separate function */
+        moment = element.prev();
+        while (moment[0].id && rowType(moment) != 'M1') moment = moment.prev();
+        console.log(moment);
+        console.log(moment.length);
+        console.log(moment[0].id);
+        if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
+    }
+
+    function rowType(row) {
+        console.log(row);
+        console.log(row.length);
+        return $(row[0].id.replace(/^data-/, '#type-'))[0].value.trim();
+    }
+
+    function moveMomentDown(element) {
+        console.log("Starting to move moment down.");
     }
 
     $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
