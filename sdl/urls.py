@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^talgoxe/', include('talgoxe.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('django.contrib.auth.urls')),
 ]
