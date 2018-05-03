@@ -169,8 +169,11 @@ $(document).ready(function() {
         var i = 1;
         while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
             console.log(i);
+            /*
             if (dir == 'up') ids.unshift(nextMoment[0].id);
             else ids.push(nextMoment[0].id);
+            */
+            ids.unshift(nextMoment[0],id);
             nextMoment = nextMoment.next();
             if (!nextMoment[0]) {
                 if(dir == 'up') {
@@ -183,8 +186,10 @@ $(document).ready(function() {
             i++;
         }
         if (dir == 'down') {
+            ids = []
             momentAfter = nextMoment.next();
             while (momentAfter.length > 0 && momentAfter[0].id && !isRightMomentType(momentAfter)) {
+                ids.unshift(momentAfter[0].id);
                 momentAfter = momentAfter.next();
                 if (!momentAfter[0]) break;
             }
