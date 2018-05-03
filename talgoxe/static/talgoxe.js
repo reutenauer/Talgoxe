@@ -140,7 +140,7 @@ $(document).ready(function() {
         /* TODO A separate function */
         moment = element.prev();
         ids = [];
-        while (moment[0].id && rowType(moment) != 'M1') {
+        while (moment[0].id && isRightMomentType(moment)) {
             ids.push(moment[0].id);
             moment = moment.prev();
         }
@@ -165,6 +165,10 @@ $(document).ready(function() {
                 nextMoment.after($('#' + id));
             }
         }
+    }
+
+    function isRightMomentType(element) {
+        return rowType(moment) != 'M1';
     }
 
     function rowType(row) {
