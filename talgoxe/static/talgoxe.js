@@ -157,6 +157,11 @@ $(document).ready(function() {
             nextMoment = nextMoment.next();
         }
         console.log(nextMoment);
+        console.log("Moving stuff:");
+        for (id in ids) {
+            console.log(id);
+            nextMoment.after($('#' + id));
+        }
     }
 
     function rowType(row) {
