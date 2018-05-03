@@ -186,7 +186,7 @@ $(document).ready(function() {
             i++;
         }
         if (dir == 'down') {
-            ids = [nextMoment[0].id]
+            ids = []
             momentAfter = nextMoment.next();
             while (momentAfter.length > 0 && momentAfter[0].id && !isRightMomentType(momentAfter)) {
                 ids.unshift(momentAfter[0].id);
@@ -203,6 +203,7 @@ $(document).ready(function() {
             /* ids.push(momentAfter[0].id); */
             /* ids.push(moment.next()[0].id); */ // Samma som två rader högre!
             ids.push(element[0].id);
+            ids.unshift(nextMoment[0].id);
         }
         console.log(nextMoment);
         console.log(ids);
