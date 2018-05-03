@@ -70,7 +70,7 @@ $(document).ready(function() {
 
     $('.moveMomentUp').click(function(event) {
         event.preventDefault();
-        moveMomentUp($(event.currentTarget).parent());
+        moveMomentUp($(event.currentTarget).parent(), isM1);
     });
 
     $('.moveMomentDown').click(function(event) {
@@ -127,7 +127,7 @@ $(document).ready(function() {
               $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
               $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
               $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
-              $('#moment-up-' + pos).click(function(event) { event.preventDefault(); moveMomentUp($(event.currentTarget).parent()); });
+              $('#moment-up-' + pos).click(function(event) { event.preventDefault(); moveMomentUp($(event.currentTarget).parent(), isM1); });
               $('#moment-down-' + pos).click(function(event) { moveMomentDown($(event.currentTarget).parent()); });
             } else console.log("no");
             $(event.currentTarget).removeClass("red");
@@ -136,11 +136,11 @@ $(document).ready(function() {
         }
     }
 
-    function moveMomentUp(element) {
+    function moveMomentUp(element, isRightMomentType) {
         /* TODO A separate function */
         moment = element.prev();
         ids = [];
-        while (moment[0].id && isRightMomentType(moment)) {
+        while (moment[0].id && !isRightMomentType(moment)) {
             ids.push(moment[0].id);
             moment = moment.prev();
         }
@@ -153,9 +153,10 @@ $(document).ready(function() {
             ids.unshift(moment[0].id);
             nextMoment = element.next();
             var i = 1;
-            while (nextMoment.length > 0 && nextMoment[0].id && rowType(nextMoment) != 'M1') {
+            while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
                 console.log(i);
                 nextMoment = nextMoment.next();
+                i++;
             }
             console.log(nextMoment);
             console.log("Moving stuff:");
@@ -167,8 +168,8 @@ $(document).ready(function() {
         }
     }
 
-    function isRightMomentType(element) {
-        return rowType(moment) != 'M1';
+    function isM1(element) {
+        return rowType(moment) == 'M1';
     }
 
     function rowType(row) {
