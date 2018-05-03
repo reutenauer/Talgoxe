@@ -141,7 +141,7 @@ $(document).ready(function() {
         moment = element.prev();
         ids = [];
         while (moment[0].id && !isRightMomentType(moment)) {
-            ids.push(moment[0].id);
+            // ids.push(moment[0].id);
             moment = moment.prev();
         }
         console.log(moment);
@@ -150,20 +150,24 @@ $(document).ready(function() {
         console.log(ids);
         if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
         else {
-            ids.unshift(moment[0].id);
+            // ids.unshift(moment[0].id);
             nextMoment = element.next();
+            ids.unshift(nextMoment[0].id);
             var i = 1;
             while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
                 console.log(i);
                 nextMoment = nextMoment.next();
+                if (!nextMoment[0]) break;
+                ids.unshift(nextMoment[0].id);
                 i++;
             }
             console.log(nextMoment);
+            console.log(ids);
             console.log("Moving stuff:");
             for (i in ids) {
                 id = ids[i];
                 console.log(id);
-                nextMoment.after($('#' + id));
+                moment.after($('#' + id));
             }
         }
     }
