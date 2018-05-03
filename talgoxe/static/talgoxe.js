@@ -70,10 +70,7 @@ $(document).ready(function() {
 
     $('.moveMomentUp').click(moveMomentUp);
 
-    $('.moveMomentDown').click(function(event) {
-        event.preventDefault();
-        moveMomentDown($(event.currentTarget).parent());
-    });
+    $('.moveMomentDown').click(moveMomentDown);
 
     function moveUp(element) {
         prev = element.prev();
@@ -125,7 +122,7 @@ $(document).ready(function() {
               $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
               $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
               $('#moment-up-' + pos).click(moveMomentUp);
-              $('#moment-down-' + pos).click(function(event) { moveMomentDown($(event.currentTarget).parent()); });
+              $('#moment-down-' + pos).click(moveMomentDown);
             } else console.log("no");
             $(event.currentTarget).removeClass("red");
         } else {
@@ -135,6 +132,10 @@ $(document).ready(function() {
 
     function moveMomentUp(event) {
         moveMoment(event, 'up');
+    }
+
+    function moveMomentDown(event) {
+        moveMoment(event, 'down');
     }
 
     function moveMoment(event, dir) {
@@ -148,17 +149,19 @@ $(document).ready(function() {
         /* TODO A separate function */
         moment = element.prev();
         ids = [];
-        while (moment[0].id && !isRightMomentType(moment)) {
-            // ids.push(moment[0].id);
-            moment = moment.prev();
-        }
-        console.log(moment);
-        console.log(moment.length);
-        console.log(moment[0].id);
-        console.log(ids);
-        if (!moment[0].id) {
-            alert("Cannot flytta momentet upp, det är det första i artikeln.");
-            return;
+        if (dir == 'up') {
+            while (moment[0].id && !isRightMomentType(moment)) {
+                // ids.push(moment[0].id);
+                moment = moment.prev();
+            }
+            console.log(moment);
+            console.log(moment.length);
+            console.log(moment[0].id);
+            console.log(ids);
+            if (!moment[0].id) {
+                alert("Cannot flytta momentet upp, det är det första i artikeln.");
+                return;
+            }
         }
 
         // ids.unshift(moment[0].id);
@@ -166,19 +169,37 @@ $(document).ready(function() {
         var i = 1;
         while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
             console.log(i);
-            ids.unshift(nextMoment[0].id);
+            if (dir == 'up') ids.unshift(nextMoment[0].id);
+            else ids.push(nextMoment[0].id);
             nextMoment = nextMoment.next();
-            if (!nextMoment[0]) break;
+            if (!nextMoment[0]) {
+                if(dir == 'up') {
+                    break;
+                } else {
+                    alert("Kan inte flytta momentet ner, det är det sista i artikeln.");
+                    return;
+                }
+            }
             i++;
         }
-        ids.unshift(element[0].id);
+        if (dir == 'down') {
+            momentAfter = nextMoment.next();
+            while (momentAfter.length > 0 && momentAfter[0].id && !isRightMomentType(momentAfter)) {
+                momentAfter = momentAfter.next();
+                if (!momentAfter[0]) break;
+            }
+        }
+        if (dir == 'up') ids.unshift(element[0].id);
+        else ids.unshift(nextMoment[0].id);
+        // else ids.push(moment[0].id);
         console.log(nextMoment);
         console.log(ids);
         console.log("Moving stuff:");
         for (i in ids) {
             id = ids[i];
             console.log(id);
-            moment.after($('#' + id));
+            if (dir == 'up') moment.after($('#' + id));
+            else nextMoment.before($('#' + id));
         }
     }
 
@@ -200,9 +221,11 @@ $(document).ready(function() {
         return $(row[0].id.replace(/^data-/, '#type-'))[0].value.trim();
     }
 
+    /*
     function moveMomentDown(element) {
         console.log("Starting to move moment down.");
     }
+    */
 
     $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
