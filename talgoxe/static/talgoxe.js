@@ -153,7 +153,7 @@ $(document).ready(function() {
         var i = 1;
         while (nextMoment.length > 0 && nextMoment[0].id && rowType(nextMoment) != 'M1') {
             console.log(i);
-            moment = moment.next();
+            nextMoment = nextMoment.next();
         }
         console.log(moment);
     }
