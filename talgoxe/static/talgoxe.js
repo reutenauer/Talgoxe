@@ -173,7 +173,7 @@ $(document).ready(function() {
             if (dir == 'up') ids.unshift(nextMoment[0].id);
             else ids.push(nextMoment[0].id);
             */
-            ids.unshift(nextMoment[0],id);
+            ids.unshift(nextMoment[0].id);
             nextMoment = nextMoment.next();
             if (!nextMoment[0]) {
                 if(dir == 'up') {
@@ -194,8 +194,8 @@ $(document).ready(function() {
                 if (!momentAfter[0]) break;
             }
         }
-        if (dir == 'up') ids.unshift(element[0].id);
-        else ids.unshift(nextMoment[0].id);
+        /* if (dir == 'up') */ ids.unshift(element[0].id);
+        /* else ids.unshift(nextMoment[0].id); */
         // else ids.push(moment[0].id);
         console.log(nextMoment);
         console.log(ids);
