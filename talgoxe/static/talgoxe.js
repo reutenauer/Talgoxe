@@ -186,7 +186,7 @@ $(document).ready(function() {
             i++;
         }
         if (dir == 'down') {
-            ids = []
+            ids = [nextMoment[0].id]
             momentAfter = nextMoment.next();
             while (momentAfter.length > 0 && momentAfter[0].id && !isRightMomentType(momentAfter)) {
                 ids.unshift(momentAfter[0].id);
@@ -194,17 +194,24 @@ $(document).ready(function() {
                 if (!momentAfter[0]) break;
             }
         }
-        /* if (dir == 'up') */ ids.unshift(element[0].id);
+        if (dir == 'up') ids.unshift(element[0].id);
         /* else ids.unshift(nextMoment[0].id); */
         // else ids.push(moment[0].id);
+        /* else ids.push(element[0].id); */
+        else {
+            /* ids.unshift(element[0].id); */
+            /* ids.push(momentAfter[0].id); */
+            /* ids.push(moment.next()[0].id); */ // Samma som två rader högre!
+            ids.push(element[0].id);
+        }
         console.log(nextMoment);
         console.log(ids);
-        console.log("Moving stuff:");
+        console.log("Moving stuff after:");
+        console.log(moment);
         for (i in ids) {
             id = ids[i];
             console.log(id);
-            if (dir == 'up') moment.after($('#' + id));
-            else nextMoment.before($('#' + id));
+            moment.after($('#' + id));
         }
     }
 
