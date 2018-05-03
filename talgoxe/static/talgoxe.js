@@ -149,18 +149,21 @@ $(document).ready(function() {
         console.log(moment[0].id);
         console.log(ids);
         if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
-        else ids.push(moment[0].id);
-        nextMoment = element.next();
-        var i = 1;
-        while (nextMoment.length > 0 && nextMoment[0].id && rowType(nextMoment) != 'M1') {
-            console.log(i);
-            nextMoment = nextMoment.next();
-        }
-        console.log(nextMoment);
-        console.log("Moving stuff:");
-        for (id in ids) {
-            console.log(id);
-            nextMoment.after($('#' + id));
+        else {
+            ids.push(moment[0].id);
+            nextMoment = element.next();
+            var i = 1;
+            while (nextMoment.length > 0 && nextMoment[0].id && rowType(nextMoment) != 'M1') {
+                console.log(i);
+                nextMoment = nextMoment.next();
+            }
+            console.log(nextMoment);
+            console.log("Moving stuff:");
+            for (i in ids) {
+                id = ids[i];
+                console.log(id);
+                nextMoment.after($('#' + id));
+            }
         }
     }
 
