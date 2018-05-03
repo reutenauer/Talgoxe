@@ -10,7 +10,7 @@ from collections import OrderedDict, deque
 from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -43,6 +43,8 @@ def create(request):
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
 def artikel(request, id):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         print(request.POST)
