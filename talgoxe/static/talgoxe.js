@@ -156,15 +156,15 @@ $(document).ready(function() {
         else {
             // ids.unshift(moment[0].id);
             nextMoment = element.next();
-            ids.unshift(nextMoment[0].id);
             var i = 1;
             while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
                 console.log(i);
+                ids.unshift(nextMoment[0].id);
                 nextMoment = nextMoment.next();
                 if (!nextMoment[0]) break;
-                ids.unshift(nextMoment[0].id);
                 i++;
             }
+            ids.unshift(element[0].id);
             console.log(nextMoment);
             console.log(ids);
             console.log("Moving stuff:");
