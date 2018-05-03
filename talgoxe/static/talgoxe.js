@@ -124,7 +124,7 @@ $(document).ready(function() {
               $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
               $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
               $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
-              $('#moment-up-' + pos).click(moveMomentUp); { event.preventDefault(); moveMomentUp($(event.currentTarget).parent(), isM1); });
+              $('#moment-up-' + pos).click(moveMomentUp);
               $('#moment-down-' + pos).click(function(event) { moveMomentDown($(event.currentTarget).parent()); });
             } else console.log("no");
             $(event.currentTarget).removeClass("red");
@@ -133,13 +133,14 @@ $(document).ready(function() {
         }
     }
 
-    function moveM1Up(event) {
-        moveMomentUp(event, isM1);
-    }
-
-    function moveMomentUp(element, isRightMomentType) {
+    function moveMomentUp(event) {
         event.preventDefault();
         element = $(event.currentTarget).parent();
+        if (isM1(element)) {
+            isRightMomentType = isM1;
+        } else if (isM2(element)) {
+            isRightMomentType = isM1OrM2;
+        }
         /* TODO A separate function */
         moment = element.prev();
         ids = [];
@@ -177,6 +178,14 @@ $(document).ready(function() {
 
     function isM1(element) {
         return rowType(element) == 'M1';
+    }
+
+    function isM2(element) {
+        return rowType(element) == 'M2';
+    }
+
+    function isM1OrM2(element) {
+        return isM1(element) || isM2(element);
     }
 
     function rowType(row) {
