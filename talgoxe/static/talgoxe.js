@@ -169,7 +169,7 @@ $(document).ready(function() {
     }
 
     function isM1(element) {
-        return rowType(moment) == 'M1';
+        return rowType(element) == 'M1';
     }
 
     function rowType(row) {
