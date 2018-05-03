@@ -134,6 +134,10 @@ $(document).ready(function() {
     }
 
     function moveMomentUp(event) {
+        moveMoment(event, 'up');
+    }
+
+    function moveMoment(event, dir) {
         event.preventDefault();
         element = $(event.currentTarget).parent();
         if (isM1(element)) {
@@ -152,27 +156,29 @@ $(document).ready(function() {
         console.log(moment.length);
         console.log(moment[0].id);
         console.log(ids);
-        if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
-        else {
-            // ids.unshift(moment[0].id);
-            nextMoment = element.next();
-            var i = 1;
-            while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
-                console.log(i);
-                ids.unshift(nextMoment[0].id);
-                nextMoment = nextMoment.next();
-                if (!nextMoment[0]) break;
-                i++;
-            }
-            ids.unshift(element[0].id);
-            console.log(nextMoment);
-            console.log(ids);
-            console.log("Moving stuff:");
-            for (i in ids) {
-                id = ids[i];
-                console.log(id);
-                moment.after($('#' + id));
-            }
+        if (!moment[0].id) {
+            alert("Cannot flytta momentet upp, det är det första i artikeln.");
+            return;
+        }
+
+        // ids.unshift(moment[0].id);
+        nextMoment = element.next();
+        var i = 1;
+        while (nextMoment.length > 0 && nextMoment[0].id && !isRightMomentType(nextMoment)) {
+            console.log(i);
+            ids.unshift(nextMoment[0].id);
+            nextMoment = nextMoment.next();
+            if (!nextMoment[0]) break;
+            i++;
+        }
+        ids.unshift(element[0].id);
+        console.log(nextMoment);
+        console.log(ids);
+        console.log("Moving stuff:");
+        for (i in ids) {
+            id = ids[i];
+            console.log(id);
+            moment.after($('#' + id));
         }
     }
 
