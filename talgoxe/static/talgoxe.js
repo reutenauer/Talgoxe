@@ -139,11 +139,23 @@ $(document).ready(function() {
     function moveMomentUp(element) {
         /* TODO A separate function */
         moment = element.prev();
-        while (moment[0].id && rowType(moment) != 'M1') moment = moment.prev();
+        ids = [];
+        while (moment[0].id && rowType(moment) != 'M1') {
+            ids.push(moment[0].id);
+            moment = moment.prev();
+        }
         console.log(moment);
         console.log(moment.length);
         console.log(moment[0].id);
+        console.log(ids);
         if (!moment[0].id) alert("Cannot flytta momentet upp, det är det första i artikeln.");
+        nextMoment = element.next();
+        var i = 1;
+        while (moment.length > 0 && moment[0].id && rowType(moment) != 'M1') {
+            console.log(i);
+            moment = moment.next();
+        }
+        console.log(moment);
     }
 
     function rowType(row) {
