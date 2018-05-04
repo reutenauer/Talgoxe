@@ -97,7 +97,7 @@ def artiklar(request, id):
     return render_template(request, template, context)
 
 def artikel_efter_stickord(request, stickord):
-    lemmata = Lemma.objects.filter(id__gt = 0, lemma = stickord)
+    lemmata = Lemma.objects.filter(id__gt = 0, lemma = stickord).order_by('rank')
     # TODO: 0!
     if len(lemmata) == 1:
         return HttpResponseRedirect(reverse('artikel', args = (lemmata.first().id,)))
