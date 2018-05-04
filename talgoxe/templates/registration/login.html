@@ -1,0 +1,11 @@
+{% include "talgoxe/header.html" %}
+
+<h2>Logga in till Talgoxen</h2>
+
+<form action="{% url 'login' %}" method="POST">
+  {% csrf_token %}
+  <p>Användarnamn: <input type="text" name="username" /> Lösenord: <input type="password" name="password" /></p>
+  <input type="submit" value="Submit" />
+</form>
+
+{% include "talgoxe/footer.html" %}
