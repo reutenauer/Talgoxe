@@ -1,5 +1,5 @@
 # Uppsala, 2018-02-16, 2018-04-13, 2018-04-16.
 
-cd ..
+cd /var/www/django/sdl
 git checkout HEAD -- .
 sudo systemctl restart httpd
