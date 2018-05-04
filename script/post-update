@@ -2,5 +2,5 @@
 
 worktree=/var/www/django/sdl
 cd $worktree
-git --work-tree=$worktree checkout HEAD -- .
+git --work-tree=$worktree checkout HEAD -- $worktree
 sudo systemctl restart httpd
