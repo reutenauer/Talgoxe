@@ -1,5 +1,6 @@
 # Uppsala, 2018-02-16, 2018-04-13, 2018-04-16, 2018-05-04.
 
+unset GIT_WORK_TREE
 worktree=/var/www/django/sdl
 cd $worktree
 git --work-tree=$worktree checkout HEAD -- $worktree
