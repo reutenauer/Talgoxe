@@ -24,6 +24,8 @@ if VERSION[1] == 7 or VERSION[1] == 8:
 else:
     from django.urls import reverse
 
+from django.contrib.auth.decorators import login_required
+
 from talgoxe.models import Data, Lemma, Lexicon, Type
 
 def render_template(request, template, context):
@@ -42,9 +44,8 @@ def create(request):
     lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
+@login_required
 def artikel(request, id):
-    if not request.user.is_authenticated:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         print(request.POST)
