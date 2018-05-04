@@ -36,7 +36,7 @@ def render_template(request, template, context):
 
 def index(request):
     template = loader.get_template('talgoxe/index.html')
-    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma')
+    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma', 'rank')
     context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
