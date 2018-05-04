@@ -4,7 +4,7 @@
       {% if checkboxes %}
       <input type="checkbox" name="selected-{{ lemma.id }}" />
       {% endif %}
-      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}</a>
+      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }} <sup>{{ lemma.rank }}</sup></a>
     </li>
 {% endfor %}
 </ul>

@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class Lemma(models.Model):
     lemma = models.CharField(max_length = 100)
+    rank = models.SmallIntegerField()
     segments = []
 
     def __str__(self):
