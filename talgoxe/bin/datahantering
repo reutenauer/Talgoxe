@@ -18,3 +18,10 @@ mysql -u root -p$password $database <$datadump
 echo "Import done.  Now remunching data ..."
 mysql -u root -p$password $database <remunch-data.sql
 echo "Done!"
+
+echo "Superuser name? "
+read username
+echo "Superuser email? "
+read email
+../../manage.py migrate --fake-initiaal
+../../manage.py createsuperuser --username=$username --email=$email
