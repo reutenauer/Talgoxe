@@ -1,4 +1,4 @@
-# Uppsala, 2018-02-16, 2018-04-13, 2018-04-16.
+# Uppsala, 2018-02-16, 2018-04-13, 2018-04-16, 2018-05-04.
 
 cd /var/www/django/sdl
 git checkout HEAD -- .
