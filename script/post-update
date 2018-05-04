@@ -1,11 +1,4 @@
 # Uppsala, 2018-02-16, 2018-04-13, 2018-04-16.
 
-unset GIT_DIR GIT_WORK_TREE
-worktree=/var/www/django/sdl
-cd $worktree
-echo 'Current work directory:'
-pwd
-git --work-tree=$worktree pull cwd master
-git --work-tree=$worktree checkout HEAD -- .
-cd .git
+git checkout HEAD -- .
 sudo systemctl restart httpd
