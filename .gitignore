@@ -1,4 +1,4 @@
 *.pyc
 sdl/settings.py
 talgoxe/static/ord
-log
+log/*.log
