@@ -35,12 +35,14 @@ def render_template(request, template, context):
     else:
         return HttpResponse(template.render(context, request)) # Django version 1.11
 
+@login_required
 def index(request):
     template = loader.get_template('talgoxe/index.html')
     lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma', 'rank')
     context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
+@login_required # FIXME Något om användaren faktiskt är utloggad?
 def create(request):
     stickord = request.POST['ny_stickord'].strip()
     print("Fick lemma ’%s’" % stickord)
@@ -94,6 +96,7 @@ def artikel(request, id):
 
     return render_template(request, template, context)
 
+@login_required
 def artiklar(request, id):
     template = loader.get_template('talgoxe/artiklar.html')
     lemmata = Lemma.objects.order_by('lemma')
@@ -114,6 +117,7 @@ def artiklar(request, id):
 
     return render_template(request, template, context)
 
+@login_required
 def artikel_efter_stickord(request, stickord):
     lemmata = Lemma.objects.filter(id__gt = 0, lemma = stickord).order_by('rank')
     # TODO: 0!
@@ -239,6 +243,7 @@ def export_to_odf(request, id):
     context = { 'filepath' : 'ord/%s' % finalname }
     return render_template(request, template, context)
 
+@login_required
 def search(request):
     print(request.GET)
     print(request.path)
@@ -256,6 +261,7 @@ def search(request):
 
     return render_template(request, template, context)
 
+@login_required
 def article(request, id):
     lemma = Lemma.objects.get(id = id)
     template = loader.get_template('talgoxe/artikel.html')
@@ -278,6 +284,7 @@ def partial_article(request, id, format):
     elif format == 'odf':
         return HttpResponse(lemma.serialise())
 
+@login_required
 def print_on_demand(request):
     method = request.META['REQUEST_METHOD']
     template = loader.get_template('talgoxe/print_on_demand.html')
@@ -310,6 +317,7 @@ def print_on_demand(request):
 
     return render_template(request, template, context)
 
+@login_required
 def print_pdf(request):
     print(request.GET)
     ids = []
@@ -326,6 +334,7 @@ def print_pdf(request):
     context = { }
     return render_template(request, template, context)
 
+@login_required
 def print_odf(request):
     print(request.GET)
     return export_to_odf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
