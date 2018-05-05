@@ -23,5 +23,5 @@ echo "Superuser name? "
 read username
 echo "Superuser email? "
 read email
-../../manage.py migrate --fake-initiaal
+../../manage.py migrate --fake-initial
 ../../manage.py createsuperuser --username=$username --email=$email
