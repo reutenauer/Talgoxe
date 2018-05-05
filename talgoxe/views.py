@@ -46,7 +46,7 @@ def create(request):
     print("Fick lemma ’%s’" % stickord)
     företrädare = Lemma.objects.filter(lemma = stickord)
     maxrank = företrädare.aggregate(Max('rank'))['rank__max']
-    if maxrank:
+    if maxrank != None:
         if maxrank == 0:
             print("==== 0 = Hej, numrerar om ett lemma...")
             lemma0 = företrädare.first()
