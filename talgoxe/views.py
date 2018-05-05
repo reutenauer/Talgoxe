@@ -25,6 +25,7 @@ else:
     from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 
 from talgoxe.models import Data, Lemma, Lexicon, Type
 
@@ -41,7 +42,19 @@ def index(request):
     return render_template(request, template, context)
 
 def create(request):
-    lemma = Lemma.objects.create(lemma = request.POST['ny_stickord'])
+    stickord = request.POST['ny_stickord']
+    företrädare = Lemma.objects.filter(lemma = stickord)
+    maxrank = företrädare.aggregate(Max('rank'))['rank__max']
+    if maxrank:
+        if maxrank == 0:
+            lemma0 = företrädare.first()
+            lemma0.update({ 'rank' : 1 })
+            rank = 2
+        else:
+            rank = maxrank + 1
+    else:
+        rank = 0
+    lemma = Lemma.objects.create(lemma = stickord, rank = rank)
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
 @login_required

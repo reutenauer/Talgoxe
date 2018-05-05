@@ -2,7 +2,7 @@
 
 {% for lemma in lemmata %}
 <ul>
-  <li class="nobullet"><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }} <sup>{{ lemma.rank }}</sup></a></li>
+  <li class="nobullet"><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }}<sup>{{ lemma.rank }}</sup></a></li>
 </ul>
 {% endfor %}
 

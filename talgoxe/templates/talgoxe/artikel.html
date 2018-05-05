@@ -1,5 +1,5 @@
 {% spaceless %}
-<strong>{{ lemma }}</strong>
+<strong>{{ lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}{% endif %}</sup></strong>
 {% with setspace as True %}
     {% for segment in new_segments %}
         {% if not segment.isrightdelim %}
