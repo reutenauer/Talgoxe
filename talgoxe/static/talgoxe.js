@@ -105,7 +105,7 @@ $(document).ready(function() {
           element = $(id2);
           console.log("Target object:");
           console.log(element);
-          element.remove();
+          element.hide();
           addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
           pos = event.currentTarget.id.replace(/^type-/, '');
           addAfter.after('<button class="moveMomentDown" id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
@@ -119,8 +119,7 @@ $(document).ready(function() {
               console.log(element.attr("id"));
               element.remove();
               $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
-              $(event.currentTarget.id.replace(/^type-/, '#type-')).after(' <textarea rows="1" style="width: 55%;" name="value-' + pos + '" id="value-' + pos + '" class="d-value" />');
-              $(event.currentTarget.id.replace(/^type-/, '#value-')).change(function(event) { checkValue(event); });
+              $(event.currentTarget.id.replace(/^type-/, '#value-')).show();
               $('#moment-up-' + pos).click(moveMomentUp);
               $('#moment-down-' + pos).click(moveMomentDown);
             } else console.log("no");
