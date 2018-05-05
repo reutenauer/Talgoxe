@@ -8,7 +8,7 @@ body {
 
 #inmatning {
   border: 1px solid black;
-  width: 40%;
+  width: 60%;
   float: left;
   margin-right: 2%;
   font-family: 'Courier';
@@ -27,15 +27,20 @@ body {
   border: 1px solid black;
   width: 40%;
   /* float: left; */
-  left: 38%;
+  /* left: 38%; */
+  left: 59%;
+  top: 0px;
   position: fixed;
 }
 
 #ordlista {
+  /*
   width: 16%;
   float: left;
-  position: absolute;
-  left: 80%;
+  */
+  /* position: absolute; */
+  /* position: fixed;
+  /* left: 80%; */
 }
 
 .SO {
@@ -175,4 +180,8 @@ a#skapa-odf {
   cursor: pointer;
   text-decoration: none;
   color: initial;
+}
+
+#inmatning li:nth-child(2n) {
+  background: green;
 }
