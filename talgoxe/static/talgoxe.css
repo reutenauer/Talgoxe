@@ -9,7 +9,10 @@ body {
 #inmatning {
   border: 1px solid black;
   width: 60%;
-  float: left;
+  position: fixed;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
   margin-right: 2%;
   font-family: 'Courier';
   margin-left: -40px;
@@ -23,16 +26,12 @@ body {
   list-style-type: none;
 }
 
-#artikelcontainer {
-  position: fixed;
-  left: 60%;
-  top: 0px;
-}
-
 #artikel {
   border: 1px solid black;
-  /* width: 40%; */
-  /* float: left; */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 40%;
+  float: left;
   /* left: 38%; */
   /*
   left: 59%;
