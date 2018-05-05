@@ -26,6 +26,7 @@ else:
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
+from django.contrib.auth import logout
 
 from talgoxe.models import Data, Lemma, Lexicon, Type
 
@@ -338,3 +339,8 @@ def print_pdf(request):
 def print_odf(request):
     print(request.GET)
     return export_to_odf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+
+def easylogout(request):
+    logout(request)
+    template = loader.get_template("talgoxe/logout.html")
+    return render_template(request, template, { })
