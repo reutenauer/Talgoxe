@@ -23,14 +23,22 @@ body {
   list-style-type: none;
 }
 
+#artikelcontainer {
+  position: fixed;
+  left: 60%;
+  top: 0px;
+}
+
 #artikel {
   border: 1px solid black;
-  width: 40%;
+  /* width: 40%; */
   /* float: left; */
   /* left: 38%; */
+  /*
   left: 59%;
   top: 0px;
   position: fixed;
+  */
 }
 
 #ordlista {
