@@ -6,33 +6,25 @@ body {
   font-family: 'Droid Serif', Georgia, Times, serif, roman;
 }
 
-#ordlista {
-  height: 10%;
-}
-
-#twospalter {
-  height: 90%;
-}
-
 /* Tack https://stackoverflow.com/a/11752273/46495 :-) */
 #inmatning {
   border: 1px solid black;
-  width: 60%;
+  width: 55%;
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 85%;
+  height: 80%;
   margin-right: 2%;
   font-family: 'Courier';
-  margin-left: -40px;
 }
 
-#inmatning h2 {
-  margin-left: 40px;
+#inmatning ul {
+  margin-left: -36px;
 }
 
 #inmatning li {
   list-style-type: none;
+  margin-left: -3px;
 }
 
 #artikel {
@@ -43,7 +35,7 @@ body {
   width: 40%;
   float: left;
   left: 59%;
-  height: 85%;
+  height: 80%;
   /*
   left: 59%;
   top: 0px;
