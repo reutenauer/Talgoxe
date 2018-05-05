@@ -6,6 +6,7 @@ body {
   font-family: 'Droid Serif', Georgia, Times, serif, roman;
 }
 
+/* Tack https://stackoverflow.com/a/11752273/46495 :-) */
 #inmatning {
   border: 1px solid black;
   width: 60%;
@@ -27,12 +28,14 @@ body {
 }
 
 #artikel {
+  position: fixed;
   border: 1px solid black;
   overflow-y: scroll;
   overflow-x: hidden;
   width: 40%;
   float: left;
-  /* left: 38%; */
+  left: 60%;
+  height: 100%;
   /*
   left: 59%;
   top: 0px;
