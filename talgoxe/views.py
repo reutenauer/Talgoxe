@@ -46,19 +46,19 @@ def create(request):
     print("Fick lemma ’%s’" % stickord)
     företrädare = Lemma.objects.filter(lemma = stickord)
     maxrank = företrädare.aggregate(Max('rank'))['rank__max']
-    if maxrank != None:
-        if maxrank == 0:
-            print("==== 0 = Hej, numrerar om ett lemma...")
-            lemma0 = företrädare.first()
-            lemma0.rank = 1
-            lemma0.save()
-            rank = 2
-        else:
-            print("==== 1+")
-            rank = maxrank + 1
+    if maxrank == None:
+        rank = 0
+    elif maxrank == 0:
+        print("==== 0 = Hej, numrerar om ett lemma...")
+        lemma0 = företrädare.first()
+        lemma0.rank = 1
+        lemma0.save()
+        rank = 2
+    elif maxrank > 0:
+        print("==== 1+")
+        rank = maxrank + 1
     else:
         print("==== None")
-        rank = 0
     lemma = Lemma.objects.create(lemma = stickord, rank = rank)
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
