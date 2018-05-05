@@ -3,7 +3,7 @@
 <div id="ordlista">
 {% include 'talgoxe/ordlista.html' %}
 </div>
-
+<div id="twospalter">
 <div id="inmatning">
 <h2>Inmatning</h2>
 <form action="{% url 'artikel' lemma.id %}" method="POST">
@@ -35,6 +35,7 @@
 <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
 <a id="skapa-pdf">PDF version</a>&nbsp;
 <a id="skapa-odf">ODF version</a>
+</div>
 </div>
 
 <script>

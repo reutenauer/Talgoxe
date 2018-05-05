@@ -6,6 +6,14 @@ body {
   font-family: 'Droid Serif', Georgia, Times, serif, roman;
 }
 
+#ordlista {
+  height: 10%;
+}
+
+#twospalter {
+  height: 90%;
+}
+
 /* Tack https://stackoverflow.com/a/11752273/46495 :-) */
 #inmatning {
   border: 1px solid black;
@@ -13,7 +21,7 @@ body {
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 100%;
+  height: 85%;
   margin-right: 2%;
   font-family: 'Courier';
   margin-left: -40px;
@@ -34,8 +42,8 @@ body {
   overflow-x: hidden;
   width: 40%;
   float: left;
-  left: 60%;
-  height: 100%;
+  left: 59%;
+  height: 85%;
   /*
   left: 59%;
   top: 0px;
