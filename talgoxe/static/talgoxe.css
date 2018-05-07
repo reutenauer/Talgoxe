@@ -195,3 +195,7 @@ a#skapa-odf {
 #inmatning li:nth-child(2n) {
   background: green;
 }
+
+.d-type, .addRow, .removeRow, .moveRowUp, .moveRowDown, .moveMomentUp, .moveMomentDown {
+  vertical-align: top;
+}
