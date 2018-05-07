@@ -299,7 +299,7 @@ def print_on_demand(request):
             if mdata:
                 print(mdata.group(1))
                 lemma = Lemma.objects.get(id = int(mdata.group(1)))
-                lemma.collect()
+                # lemma.collect()
                 lemmata.append(lemma)
             elif bdata:
                 print(bdata.group(1))
