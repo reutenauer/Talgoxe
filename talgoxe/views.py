@@ -250,12 +250,12 @@ def export_to_docx(request, ids):
       lemma = Lemma.objects.get(id = id)
       docx = Lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)
-   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-   system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
-   template = loader.get_template('talgoxe/download_odf.html')
-   context = { 'filepath' : 'ord/%s' % filename }
+  staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
+  system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
+  template = loader.get_template('talgoxe/download_odf.html')
+  context = { 'filepath' : 'ord/%s' % filename }
 
-   return render_template(request, template, context)
+  return render_template(request, template, context)
 
 @login_required
 def search(request):
