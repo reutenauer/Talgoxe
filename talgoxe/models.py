@@ -284,7 +284,7 @@ class Lemma(models.Model):
         Lemma.add_docx_style(document, 'FO', True, False, 12)
         Lemma.add_docx_style(document, 'TIK', True, False, 9)
         Lemma.add_docx_style(document, 'FLV', False, True, 9)
-        Lemma.add_docx_style(document, 'ÖVP', False, False, 12) # FIXME Add parentheses!
+        Lemma.add_docx_style(document, 'ÖVP', False, False, 12)
         Lemma.add_docx_style(document, 'BE', False, False, 12)
         Lemma.add_docx_style(document, 'ÖV', False, False, 12)
         Lemma.add_docx_style(document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
@@ -320,7 +320,11 @@ class Lemma(models.Model):
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
                     paragraph.add_run(' ', style = document.styles[type])
-                paragraph.add_run(segment.format(), style = document.styles[type])
+                if type == 'ÖVP': # TODO Något bättre
+                    run = '(' + segment.format() + ')'
+                else:
+                    run = segment.format()
+                paragraph.add_run(run, style = document.styles[type])
                 if segment.isleftdelim():
                     spacebefore = False
                 else:
