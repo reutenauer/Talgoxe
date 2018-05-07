@@ -333,7 +333,7 @@ def print_on_demand(request):
                 # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
                 lemmata += hel_bokstav
         print('----')
-        lemmata = sorted(lemmata, key = lambda lemma: lemma.lemma)
+        lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rank)) # TODO Make unique
         context = { 'lemmata' : lemmata, 'redo' : True }
         print("Number of lemmata:")
         print(len(lemmata))

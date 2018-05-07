@@ -13,11 +13,11 @@
     <a id="skapa-pdf">Skapa PDF</a>
 
     <a id="skapa-odf">Skapa ODF</a>
+    <a id="skapa-docx">Skapa Word</a>
 {% else %}
 <form method="POST">
 {% csrf_token %}
 {% include "talgoxe/ordlista.html" %}
-<input type="submit" value="Börja skriva ut" action="{% url 'print_on_demand' %}">
 </p>
 </form>
 

@@ -11,6 +11,8 @@ import docx
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 
+# FIXME Superscripts!
+
 class Lemma(models.Model):
     lemma = models.CharField(max_length = 100)
     rank = models.SmallIntegerField()
@@ -292,11 +294,20 @@ class Lemma(models.Model):
         Lemma.add_docx_style(document, 'FOT', True, False, 12)
         Lemma.add_docx_style(document, 'GT', False, False, 9)
         Lemma.add_docx_style(document, 'SOV', False, True, 12)
-        # TI, HV, INT, OKT, VS, GÖ, GP, UST
+        for style in ('TI', 'HV', 'INT'):
+            Lemma.add_docx_style(document, style)
+        Lemma.add_docx_style(document, 'OKT', False, False, 9)
+        for style in ('VS', 'GÖ', 'GP'):
+            Lemma.add_docx_style(document, style)
+        Lemma.add_docx_style(document, 'UST', True, False, 12)
         Lemma.add_docx_style(document, 'US', True, False, 12)
-        # GÖP, GTP, NYR, VB
-        # Lemma.add_docx_style(document, 'OG' ? ? ?) # TODO
+        for style in ('GÖP', 'GTP', 'NYR', 'VB'):
+            Lemma.add_docx_style(document, style)
+        OG = document.styles.add_style('OG', docx.enum.style.WD_STYLE_TYPE.CHARACTER)
+        OG.font.strike = True
         Lemma.add_docx_style(document, 'SP', True, False, 12)
+        Lemma.add_docx_style(document, 'M0', False, True, 18)
+        Lemma.add_docx_style(document, 'M3', True, False, 6)
 
     @staticmethod
     def add_docx_style(document, type, italic = False, bold = False, size = 12):
@@ -309,11 +320,17 @@ class Lemma(models.Model):
         style.font.size = docx.shared.Pt(size)
 
     def process_docx(self, filename):
-        self.collect()
         document = docx.Document()
         Lemma.add_docx_styles(document)
+        self.generate_docx_paragraph(document)
+        document.save(filename)
+
+    def generate_docx_paragraph(self, document):
+        self.collect()
         paragraph = document.add_paragraph()
         paragraph.add_run(self.lemma, style = 'SO')
+        if self.rank > 0:
+            paragraph.add_run(str(self.rank), style = 'SO').font.superscript = True
         spacebefore = True
         for segment in self.new_segments:
             type = segment.type.__str__()
@@ -329,7 +346,6 @@ class Lemma(models.Model):
                     spacebefore = False
                 else:
                     spacebefore = True
-        document.save(filename)
 
     def serialise(self):
         paragraph = self.generate_content()
