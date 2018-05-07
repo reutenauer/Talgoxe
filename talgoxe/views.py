@@ -244,6 +244,19 @@ def export_to_odf(request, id):
     context = { 'filepath' : 'ord/%s' % finalname }
     return render_template(request, template, context)
 
+def export_to_docx(request, id):
+  tempfilename = mktemp('.docx')
+  if type(id) == str:
+      lemma = Lemma.objects.get(id = id)
+      docx = Lemma.process_docx(tempfilename)
+      filename = '%s-%s.docx' % (id, lemma.lemma)
+   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
+   system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
+   template = loader.get_template('talgoxe/download_odf.html')
+   context = { 'filepath' : 'ord/%s' % filename }
+
+   return render_template(request, template, context)
+
 @login_required
 def search(request):
     print(request.GET)
@@ -339,6 +352,10 @@ def print_pdf(request):
 def print_odf(request):
     print(request.GET)
     return export_to_odf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+
+@login_required
+def print_docx(request):
+    return export_to_docx(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
 
 def easylogout(request):
     logout(request)

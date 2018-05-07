@@ -6,6 +6,7 @@ from tempfile import mkdtemp
 import ezodf
 from ezodf import newdoc, Heading, Paragraph, Span
 from lxml import etree
+import docx
 
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
@@ -264,6 +265,23 @@ class Lemma(models.Model):
                 else:
                     spacebefore = True
         return paragraph
+
+    def process_docx(self, filename):
+        self.collect()
+        document = docx.Document()
+        paragraph = document.add_paragraph()
+        spacebefore = True
+        for segment in self.new_segments:
+            type = segment.type.__str__()
+            if not type == 'KO':
+                if spacebefore and not segment.isrightdelim():
+                    paragraph.add_run(' ', style = document.styles[type])
+                paragraph.add_run(segment.format(), style = document.styles[type])
+                if segment.isleftdelim():
+                    spacebefore = False
+                else:
+                    spacebefore = True
+        document.save(filename)
 
     def serialise(self):
         paragraph = self.generate_content()

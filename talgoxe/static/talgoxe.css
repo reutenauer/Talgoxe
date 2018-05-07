@@ -183,7 +183,7 @@ a#skapa-pdf {
   cursor: pointer;
 }
 
-a#skapa-odf {
+a#skapa-odf, a#skapa-docx {
   appearance: button;
   -moz-appearance: button;
   -webkit-appearance: button;
