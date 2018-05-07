@@ -244,9 +244,9 @@ def export_to_odf(request, id):
     context = { 'filepath' : 'ord/%s' % finalname }
     return render_template(request, template, context)
 
-def export_to_docx(request, id):
+def export_to_docx(request, ids):
   tempfilename = mktemp('.docx')
-  if type(id) == str:
+  if len(ids) == 1:
       lemma = Lemma.objects.get(id = id)
       docx = Lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)

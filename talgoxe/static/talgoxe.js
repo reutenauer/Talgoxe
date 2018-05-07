@@ -414,4 +414,18 @@ $(document).ready(function() {
             $('[name="selected-' + id + '"]').remove();
         }
     }
+
+    $('#skapa-docx').click(createDOCX);
+
+    function createDOCX(event) {
+        element = $(event.currentTarget);
+        element.html("Förbereder Word-dokument...");
+        articles = collectArticles();
+        url = printableEndpoint('docx', articles);
+        $.get(url).done(function(link) {
+            element.off("click");
+            element.attr("href", link.trim());
+            element.html("Ladda ner Wordfilen");
+        });
+    }
 });
