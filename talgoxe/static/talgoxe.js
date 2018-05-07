@@ -298,9 +298,10 @@ $(document).ready(function() {
         }
 
         regexp = new RegExp('^' + string);
+        var nbhits = 0;
         $(".ordlistelement").each(function(i, childElement) {
             element = $(childElement).parent();
-            if ($(childElement).html().match(regexp)) element.show();
+            if ($(childElement).html().match(regexp)) { element.show(); nbhits++; }
             else element.hide();
         });
     }
