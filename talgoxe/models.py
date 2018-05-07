@@ -313,6 +313,7 @@ class Lemma(models.Model):
         document = docx.Document()
         Lemma.add_docx_styles(document)
         paragraph = document.add_paragraph()
+        paragraph.add_run(self.lemma, style = 'SO')
         spacebefore = True
         for segment in self.new_segments:
             type = segment.type.__str__()
