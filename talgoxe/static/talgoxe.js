@@ -400,6 +400,18 @@ $(document).ready(function() {
 
     function selectLemma(event) {
         console.log(event.currentTarget);
-        $(event.currentTarget).show();
+        name = $(event.currentTarget).attr("name").replace(/^select/, 'selected');
+        console.log(name);
+        /* lemma = $('[name="' + name + '"]'); */
+        lemma = $('#li-' + name);
+        console.log(lemma);
+        id = name.replace(/^selected-/, '');
+        if ($(event.currentTarget).is(':checked')) {
+            lemma.show();
+            lemma.after('<input type="hidden" name="selected-' + id + '" />');
+        } else {
+            lemma.hide();
+            $('[name="selected-' + id + '"]').remove();
+        }
     }
 });

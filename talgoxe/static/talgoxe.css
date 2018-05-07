@@ -202,9 +202,11 @@ a#skapa-odf {
 
 #lemmata-to-select {
   float: left;
+  width: 50%;
 }
 
 #selected-lemmata {
   float: left;
-  left: 50%
+  left: 50%;
+  width: 50%;
 }

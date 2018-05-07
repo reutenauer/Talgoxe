@@ -11,11 +11,10 @@
 </ul>
 </div>
 <div id="selected-lemmata">
+<ul>
 {% for lemma in lemmata %}
-  <ul>
-    <input type="hidden" name="selected-{{ lemma.id }}" />
-    <li class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}
+    <li id="li-selected-{{ lemma.id }}" class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}
     </li>
-  </ul>
 {% endfor %}
+  </ul>
 </div>
