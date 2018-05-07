@@ -5,7 +5,7 @@
 <div id="ordlista">
 {% include "talgoxe/ny_stickord.html" %}
 <form action="{% url 'search' %}" method="GET" target="_blank">
-  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /></p>
+  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /> <input type="checkbox" checked /> Sök överallt</p>
 </form>
 {% include 'talgoxe/ordlista.html' %}
 </div>
