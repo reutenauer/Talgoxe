@@ -1,15 +1,15 @@
 <div>
 
-<p>{% if checkboxes %}Välja{% else %}Öppna{% endif %} artikel:
-<input type="text" id="sok-artikel" />
-<button id="sok-artikel-button" tabindex="-1">{% if checkboxes %}Välja{% else %}Öppna{% endif %}</button>
-</p>
-
-<p id="searching-feedback" class="hidden">Det fanns ingen träff på din sökning på ”<span id="sökstrang">sökstrang</span>”.</p>
-
 {% if checkboxes %}
 {% include "talgoxe/bokstavslista.html" %}
 {% endif %}
+
+<p>{% if checkboxes %}Välja{% else %}Öppna{% endif %} artikel:
+<input type="text" id="sok-artikel" />
+<button id="sok-artikel-button" tabindex="-1">{% if checkboxes %}Välj{% else %}Öppna{% endif %}</button>
+</p>
+
+<p id="searching-feedback" class="hidden">Det fanns ingen träff på din sökning på ”<span id="sökstrang">sökstrang</span>”.</p>
 
 {% include "talgoxe/lemmalista.html" %}
 

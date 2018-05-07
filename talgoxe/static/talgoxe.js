@@ -275,14 +275,18 @@ $(document).ready(function() {
     $('#sok-artikel').on('keyup', function(event) {
         newSearchString = $(event.currentTarget)[0].value;
         console.log(newSearchString);
+        /*
         if (newSearchString != searchString) {
             searchingFeedback = $('#searching-feedback');
             searchingFeedback.show();
             searchingFeedback.html('Letar efter ' + newSearchString + '...');
+            */
             searchArticles(newSearchString);
+            /*
             searchingFeedback.html('');
             searchingFeedback.hide();
         }
+        */
         searchString = newSearchString;
     });
 
@@ -297,16 +301,16 @@ $(document).ready(function() {
             return;
         }
 
+        $('#sökstrang').html(string);
         regexp = new RegExp('^' + string);
         var nbhits = 0;
         $(".ordlistelement").each(function(i, childElement) {
             element = $(childElement).parent();
             if ($(childElement).html().match(regexp)) { element.show(); nbhits++; }
             else element.hide();
-            $('#sökstrang').html(string);
-            if (nbhits == 0) $('#searching-feedback').show();
-            else ('#searching-feedback').hide();
         });
+        if (nbhits == 0) $('#searching-feedback').show();
+        else $('#searching-feedback').hide();
     }
 
     function hideEverything() {
@@ -390,5 +394,12 @@ $(document).ready(function() {
         $(element).attr("href", link.trim());
         $(element).html("Ladda ner ODF");
       });
+    }
+
+    $('.toselect').click(selectLemma);
+
+    function selectLemma(event) {
+        console.log(event.currentTarget);
+        $(event.currentTarget).show();
     }
 });

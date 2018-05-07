@@ -199,3 +199,12 @@ a#skapa-odf {
 .d-type, .addRow, .removeRow, .moveRowUp, .moveRowDown, .moveMomentUp, .moveMomentDown {
   vertical-align: top;
 }
+
+#lemmata-to-select {
+  float: left;
+}
+
+#selected-lemmata {
+  float: left;
+  left: 50%
+}

@@ -1,10 +1,21 @@
+<div id="lemmata-to-select">
 <ul>
 {% for lemma in lemmata %}
     <li class="hidden nobullet">
       {% if checkboxes %}
-      <input type="checkbox" name="selected-{{ lemma.id }}" />
+      <input type="checkbox" name="select-{{ lemma.id }}" class="toselect" />
       {% endif %}
       <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}</a>
     </li>
 {% endfor %}
 </ul>
+</div>
+<div id="selected-lemmata">
+{% for lemma in lemmata %}
+  <ul>
+    <input type="hidden" name="selected-{{ lemma.id }}" />
+    <li class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}
+    </li>
+  </ul>
+{% endfor %}
+</div>
