@@ -1,4 +1,4 @@
-<div id="lemmata-to-select">
+{% if checkboxes %}<div id="lemmata-to-select">{% endif %}
 <ul>
 {% for lemma in lemmata %}
     <li class="hidden nobullet">
@@ -9,7 +9,8 @@
     </li>
 {% endfor %}
 </ul>
-</div>
+{% if checkboxes %}</div>{% endif %}
+{% if checkboxes %}
 <div id="selected-lemmata">
 <ul>
 {% for lemma in lemmata %}
@@ -18,3 +19,4 @@
 {% endfor %}
   </ul>
 </div>
+{% endif %}
