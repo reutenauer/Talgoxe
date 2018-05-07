@@ -6,6 +6,7 @@ import io
 import os
 import re
 from collections import OrderedDict, deque
+from docx import Document
 
 from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
@@ -254,6 +255,14 @@ def export_to_docx(request, ids):
       print(tempfilename)
       docx = lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)
+  else:
+      filename = 'sdl-utdrag.docx'
+      document = Document()
+      Lemma.add_docx_styles(document)
+      for i in ids:
+          lemma = Lemma.objects.get(id = i)
+          lemma.generate_docx_paragraph(document)
+      document.save(tempfilename)
   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
   system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
   template = loader.get_template('talgoxe/download_odf.html')
@@ -329,7 +338,7 @@ def print_on_demand(request):
         print("Number of lemmata:")
         print(len(lemmata))
     elif method == 'GET':
-        lemmata = Lemma.objects.order_by('lemma')
+        lemmata = Lemma.objects.order_by('lemma', 'rank')
         bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
         context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver }
 
