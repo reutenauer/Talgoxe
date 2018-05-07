@@ -2,6 +2,10 @@
 
 <div id="ordlista">
 {% include 'talgoxe/ordlista.html' %}
+<form action="{% url 'search' %}" method="POST" target="_blank">
+  {% csrf_token %}
+  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /></p>
+</form>
 </div>
 <div id="twospalter">
 <div id="inmatning">
