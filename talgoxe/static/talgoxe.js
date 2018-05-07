@@ -303,6 +303,9 @@ $(document).ready(function() {
             element = $(childElement).parent();
             if ($(childElement).html().match(regexp)) { element.show(); nbhits++; }
             else element.hide();
+            $('#sökstrang').html(string);
+            if (nbhits == 0) $('#searching-feedback').show();
+            else ('#searching-feedback').hide();
         });
     }
 
