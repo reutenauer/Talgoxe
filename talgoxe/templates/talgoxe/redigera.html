@@ -1,6 +1,12 @@
 {% include "talgoxe/header.html" %}
 
+{% include "talgoxe/user_summary.html" %}
+
 <div id="ordlista">
+{% include "talgoxe/ny_stickord.html" %}
+<form action="{% url 'search' %}" method="GET" target="_blank">
+  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /> <input type="checkbox" checked /> Sök överallt</p>
+</form>
 {% include 'talgoxe/ordlista.html' %}
 </div>
 <div id="twospalter">
@@ -31,7 +37,7 @@
 </form>
 </div>
 <div id="artikel">
-<h2>Artikel – läsa <a href="{% url 'artiklar' lemma.id %}">bara artiklar</a></h2>
+<h2>Artikel</h2>
 <p>{% include 'talgoxe/artikel.html' %}</p>
 <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
 <a id="skapa-pdf">PDF version</a>&nbsp;

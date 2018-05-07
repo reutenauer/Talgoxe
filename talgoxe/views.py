@@ -74,7 +74,7 @@ def artikel(request, id):
         lemma.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
-    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
+    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma','rank') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
     lemma = Lemma.objects.filter(id = id).first()
     print(id)
     print(lemma.lemma)
@@ -312,7 +312,7 @@ def print_on_demand(request):
             if mdata:
                 print(mdata.group(1))
                 lemma = Lemma.objects.get(id = int(mdata.group(1)))
-                lemma.collect()
+                # lemma.collect()
                 lemmata.append(lemma)
             elif bdata:
                 print(bdata.group(1))
