@@ -266,6 +266,11 @@ class Lemma(models.Model):
                     spacebefore = True
         return paragraph
 
+    @staticmethod
+    def add_styles(document):
+        styles = document.styles
+        styles.add_style('OK')
+
     def process_docx(self, filename):
         self.collect()
         document = docx.Document()

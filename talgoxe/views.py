@@ -246,9 +246,13 @@ def export_to_odf(request, id):
 
 def export_to_docx(request, ids):
   tempfilename = mktemp('.docx')
+  print("ids:")
+  print(ids)
   if len(ids) == 1:
+      id = ids[0]
       lemma = Lemma.objects.get(id = id)
-      docx = Lemma.process_docx(tempfilename)
+      print(tempfilename)
+      docx = lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)
   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
   system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
