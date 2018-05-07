@@ -267,13 +267,51 @@ class Lemma(models.Model):
         return paragraph
 
     @staticmethod
-    def add_styles(document):
-        styles = document.styles
-        styles.add_style('OK')
+    def add_docx_styles(document): # TODO Keyword arguments?
+        Lemma.add_docx_style(document, 'SO', False, True, 12)
+        Lemma.add_docx_style(document, 'OK', False, False, 9)
+        Lemma.add_docx_style(document, 'G', False, False, 9)
+        Lemma.add_docx_style(document, 'DSP', True, False, 12)
+        Lemma.add_docx_style(document, 'TIP', False, False, 9)
+        Lemma.add_docx_style(document, 'IP', False, False, 12)
+        Lemma.add_docx_style(document, 'M1', False, True, 12)
+        Lemma.add_docx_style(document, 'M2', False, True, 12)
+        Lemma.add_docx_style(document, 'VH', False, False, 12)
+        Lemma.add_docx_style(document, 'HH', False, False, 12)
+        Lemma.add_docx_style(document, 'VR', False, False, 12)
+        Lemma.add_docx_style(document, 'HR', False, False, 12)
+        Lemma.add_docx_style(document, 'REF', False, True, 12)
+        Lemma.add_docx_style(document, 'FO', True, False, 12)
+        Lemma.add_docx_style(document, 'TIK', True, False, 9)
+        Lemma.add_docx_style(document, 'FLV', False, True, 9)
+        Lemma.add_docx_style(document, 'ÖVP', False, False, 12) # FIXME Add parentheses!
+        Lemma.add_docx_style(document, 'BE', False, False, 12)
+        Lemma.add_docx_style(document, 'ÖV', False, False, 12)
+        Lemma.add_docx_style(document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
+        Lemma.add_docx_style(document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
+        Lemma.add_docx_style(document, 'FOT', True, False, 12)
+        Lemma.add_docx_style(document, 'GT', False, False, 9)
+        Lemma.add_docx_style(document, 'SOV', False, True, 12)
+        # TI, HV, INT, OKT, VS, GÖ, GP, UST
+        Lemma.add_docx_style(document, 'US', True, False, 12)
+        # GÖP, GTP, NYR, VB
+        # Lemma.add_docx_style(document, 'OG' ? ? ?) # TODO
+        Lemma.add_docx_style(document, 'SP', True, False, 12)
+
+    @staticmethod
+    def add_docx_style(document, type, italic = False, bold = False, size = 12):
+        style = document.styles.add_style(type, docx.enum.style.WD_STYLE_TYPE.CHARACTER)
+        style.base_style = document.styles['Default Paragraph Font']
+        if italic:
+            style.font.italic = True
+        if bold:
+            style.font.bold = True
+        style.font.size = docx.shared.Pt(size)
 
     def process_docx(self, filename):
         self.collect()
         document = docx.Document()
+        Lemma.add_docx_styles(document)
         paragraph = document.add_paragraph()
         spacebefore = True
         for segment in self.new_segments:
