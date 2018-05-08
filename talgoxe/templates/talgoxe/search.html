@@ -5,7 +5,7 @@
 {% else %}
   <h2>{{ lemmata|length }} sökresultat för ”{{ q }}”</h2>
 
-  <p><span class="träffelement">▸</span> <span class="träffelement">Visa alla</span></p>
+  <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
   <p>
     <ul>
       {% for lemma in lemmata %}

@@ -210,3 +210,7 @@ a#skapa-odf, a#skapa-docx {
   left: 50%;
   width: 50%;
 }
+
+#visa-alla, #visa-alla-text {
+  cursor: pointer;
+}

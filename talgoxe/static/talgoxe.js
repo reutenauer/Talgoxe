@@ -322,7 +322,7 @@ $(document).ready(function() {
     $('.träff .träffelement').click(function(event) { showArticle($(event.currentTarget).parent()) });
     $('.virgin').click(function(event) { fetchArticle(event.currentTarget); });
 
-    function showArticle(element) {
+    function showArticle(element) { /* TODO Make this into toggleArticle and make a real showArticle! */
         console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
@@ -350,6 +350,30 @@ $(document).ready(function() {
             $(element).removeClass("virgin");
         });
     }
+
+    $('#visa-alla, #visa-alla-text').click(function() {
+        if ($('#visa-alla-text').html() == "Visa alla") {
+
+            $('.träff .träffelement').each(function(i, element) {
+                article = $(element).parent();
+                console.log(article);
+                article.removeClass("hidden");
+                $(element).children().first().html('▾');
+                $(element).children()[1].hide()
+                article.show();
+                $(element).children().last().show();
+            });
+
+            $('.virgin').each(function(i, element) {
+                fetchArticle(element[0]);
+            });
+
+            $('#visa-alla-text').html('Dölja alla');
+        } else {
+            $('#visa-alla-text').html('Visa alla');
+            alert("Coming soon!");
+        }
+    });
 
     $('#skapa-pdf').click(function(event) { createPDF(event.currentTarget); });
 
