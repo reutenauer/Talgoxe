@@ -369,10 +369,15 @@ $(document).ready(function() {
                 fetchArticle(element);
             });
 
+            $('#visa-alla').html('▾'); /* Inte ⚾! */
             $('#visa-alla-text').html('Dölja alla');
         } else {
+            $('#visa-alla').html('▸');
             $('#visa-alla-text').html('Visa alla');
-            alert("Coming soon!");
+            
+            $('#lemma-*').each(function(i, lemma) {
+                console.log(lemma);
+            });
         }
     });
 
