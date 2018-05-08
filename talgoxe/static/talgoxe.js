@@ -374,9 +374,15 @@ $(document).ready(function() {
         } else {
             $('#visa-alla').html('▸');
             $('#visa-alla-text').html('Visa alla');
-            
-            $('#lemma-*').each(function(i, lemma) {
+
+            $('.träff').each(function(i, lemma) {
                 console.log(lemma);
+                article = $($(lemma).children()[2]);
+                article.addClass("hidden");
+                article.hide();
+                $(lemma).children().first().html('▸');
+                $($(lemma).children()[1]).show()
+                $(lemma).children().last().hide();
             });
         }
     });
