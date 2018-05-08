@@ -359,14 +359,14 @@ $(document).ready(function() {
                 lemma = article.parent();
                 console.log(article);
                 article.removeClass("hidden");
-                $(lemma).children().first().html('▾');
-                $(lemma).children()[1].hide()
+                lemma.children().first().html('▾');
+                $(lemma.children()[1]).hide()
                 article.show();
-                $(lemma).children().last().show();
+                lemma.children().last().show();
             });
 
             $('.virgin').each(function(i, element) {
-                fetchArticle(element[0]);
+                fetchArticle(element);
             });
 
             $('#visa-alla-text').html('Dölja alla');
