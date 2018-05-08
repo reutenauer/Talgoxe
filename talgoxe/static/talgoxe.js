@@ -354,14 +354,15 @@ $(document).ready(function() {
     $('#visa-alla, #visa-alla-text').click(function() {
         if ($('#visa-alla-text').html() == "Visa alla") {
 
-            $('.träff .träffelement').each(function(i, element) {
-                article = $(element).parent();
+            $('.träff .hidden').each(function(i, article) {
+                article = $(article);
+                lemma = article.parent();
                 console.log(article);
                 article.removeClass("hidden");
-                $(element).children().first().html('▾');
-                $(element).children()[1].hide()
+                $(lemma).children().first().html('▾');
+                $(lemma).children()[1].hide()
                 article.show();
-                $(element).children().last().show();
+                $(lemma).children().last().show();
             });
 
             $('.virgin').each(function(i, element) {
