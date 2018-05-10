@@ -462,6 +462,28 @@ $(document).ready(function() {
         $('[name="select-' + id + '"]').click();
     }
 
+    $("#selectalla").click(selectAll);
+
+    function selectAll(event) {
+        event.preventDefault();
+        $('[style="display: list-item;"]').each(function(i, element) {
+            var id = $(element).children().first().attr("name").replace(/^select-/, '')
+            console.log(id);
+            $('[name="select-' + id + '"]').click();
+        });
+    }
+
+    $('#ta-bort-alla').click(removeAll);
+
+    function removeAll(event) {
+        event.preventDefault();
+        $('.ta-bort').each(function(i, element) {
+            console.log(element);
+            /* var id = $(element).attr("id").replace(/^ta-bort-/, ''); */
+            $(element).click();
+        });
+    }
+
     $('#skapa-docx').click(createDOCX);
 
     function createDOCX(event) {

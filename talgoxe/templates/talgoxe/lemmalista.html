@@ -1,4 +1,4 @@
-{% if checkboxes %}<div id="lemmata-to-select">{% endif %}
+{% if checkboxes %}<div id="lemmata-to-select"><button id="selectalla">Välj alla</button>{% endif %}
 <ul>
 {% for lemma in lemmata %}
     <li class="hidden nobullet">
@@ -12,6 +12,7 @@
 {% if checkboxes %}</div>{% endif %}
 {% if checkboxes %}
 <div id="selected-lemmata">
+<button id="ta-bort-alla">Ta bort alla</button>
 <ul>
 {% for lemma in lemmata %}
     <li id="li-selected-{{ lemma.id }}" class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %} <input type="checkbox" id="ta-bort-{{ lemma.id }}" class="ta-bort" /> Ta bort
