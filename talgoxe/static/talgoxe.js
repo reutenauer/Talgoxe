@@ -451,6 +451,15 @@ $(document).ready(function() {
         }
     }
 
+    $(".ta-bort").click(removeLemma);
+
+    function removeLemma(event) {
+        lemma = $(event.currentTarget).parent();
+        lemma.hide();
+        $('[name="selected-' + id + '"]').remove();
+        $('[name="select-' + id + '"]').click();
+    }
+
     $('#skapa-docx').click(createDOCX);
 
     function createDOCX(event) {

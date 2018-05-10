@@ -14,7 +14,7 @@
 <div id="selected-lemmata">
 <ul>
 {% for lemma in lemmata %}
-    <li id="li-selected-{{ lemma.id }}" class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}
+    <li id="li-selected-{{ lemma.id }}" class="hidden nobullet">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %} <input type="checkbox" id="ta-bort-{{ lemma.id }}" class="ta-bort" /> Ta bort
     </li>
 {% endfor %}
   </ul>
