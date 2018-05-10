@@ -455,6 +455,7 @@ $(document).ready(function() {
 
     function removeLemma(event) {
         lemma = $(event.currentTarget).parent();
+        var id = lemma.attr("id").replace(/^li-selected-/, '');
         console.log(lemma);
         lemma.hide();
         $('[name="selected-' + id + '"]').remove();
