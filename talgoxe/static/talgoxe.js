@@ -47,7 +47,7 @@ $(document).ready(function() {
 
     function removeRow(event) {
         console.log("Trying to remove a row ...");
-        id = event.currentTarget.id.replace(/^remove-row-/, '')
+        var id = event.currentTarget.id.replace(/^remove-row-/, '')
         console.log("id is " + id);
         console.log($('#type-' + id)[0].value == '');
         console.log($('#value-' + id)[0].value == '');
@@ -209,7 +209,7 @@ $(document).ready(function() {
         console.log("Moving stuff after:");
         console.log(moment);
         for (i in ids) {
-            id = ids[i];
+            var id = ids[i];
             console.log(id);
             moment.after($('#' + id));
         }
@@ -441,7 +441,7 @@ $(document).ready(function() {
         /* lemma = $('[name="' + name + '"]'); */
         lemma = $('#li-' + name);
         console.log(lemma);
-        id = name.replace(/^selected-/, '');
+        var id = name.replace(/^selected-/, '');
         if ($(event.currentTarget).is(':checked')) {
             lemma.show();
             lemma.after('<input type="hidden" name="selected-' + id + '" />');
@@ -455,6 +455,7 @@ $(document).ready(function() {
 
     function removeLemma(event) {
         lemma = $(event.currentTarget).parent();
+        console.log(lemma);
         lemma.hide();
         $('[name="selected-' + id + '"]').remove();
         $('[name="select-' + id + '"]').click();
