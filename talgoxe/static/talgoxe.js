@@ -455,6 +455,7 @@ $(document).ready(function() {
             /* lemma.show(); */
             lastLemma.before('<li id="li-select-' + id + '" class="nobullet">' + lemma + ' <input type="checkbox" id="ta-bort-' + id + '" class="ta-bort" /> Ta bort <input type="hidden" name="selected-' + id + '" /></li>');
             tickBox = $('#ta-bort-' + id);
+            tickBox.click(removeLemma);
             if (tickBox.is(':checked')) tickBox.click()
             /* lemma.after('<input type="hidden" name="selected-' + id + '" />'); */
         } else {
@@ -469,12 +470,17 @@ $(document).ready(function() {
     $(".ta-bort").click(removeLemma);
 
     function removeLemma(event) {
+        console.log("Hej hej hej!");
         lemma = $(event.currentTarget).parent();
-        var id = lemma.attr("id").replace(/^li-selected-/, '');
+        var id = lemma.attr("id").replace(/^li-select-/, '');
         console.log(lemma);
-        lemma.hide();
+        lemma.remove();
         $('[name="selected-' + id + '"]').remove();
-        $('[name="select-' + id + '"]').click();
+        selector = '[name="select-' + id + '"]';
+        console.log(selector);
+        lemmaLeft = $(selector);
+        console.log(lemmaLeft);
+        lemmaLeft.click();
     }
 
     $("#selectalla").click(selectAll);
