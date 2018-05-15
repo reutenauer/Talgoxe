@@ -1,4 +1,5 @@
 var searchString = "";
+var lastLemma;
 
 $(document).ready(function() {
     if ($('.addRow').length > 0) {
@@ -436,21 +437,33 @@ $(document).ready(function() {
     $('.toselect').click(selectLemma);
 
     function selectLemma(event) {
+        if (!lastLemma) lastLemma = $('#lemma-0');
+
         console.log(event.currentTarget);
         name = $(event.currentTarget).attr("name").replace(/^select/, 'selected');
         console.log(name);
         /* lemma = $('[name="' + name + '"]'); */
+        /*
         lemma = $('#li-' + name);
         console.log(lemma);
+        */
         var id = name.replace(/^selected-/, '');
+        console.log(id);
+        lemma = $($('[name="select-' + id + '"]').parent().children()[1]).html().trim();
+        console.log(lemma);
         if ($(event.currentTarget).is(':checked')) {
-            lemma.show();
+            /* lemma.show(); */
+            lastLemma.after('<li id="li-select-' + id + '" class="nobullet">' + lemma + ' <input type="checkbox" id="ta-bort-' + id + '" class="ta-bort" /> Ta bort <input type="hidden" name="selected-' + id + '" /></li>');
+            lastLemma = $('#li-select-' + id);
             tickBox = $('#ta-bort-' + id);
             if (tickBox.is(':checked')) tickBox.click()
-            lemma.after('<input type="hidden" name="selected-' + id + '" />');
+            /* lemma.after('<input type="hidden" name="selected-' + id + '" />'); */
         } else {
+            $('#li-select-' + id).remove();
+            /*
             lemma.hide();
             $('[name="selected-' + id + '"]').remove();
+            */
         }
     }
 
