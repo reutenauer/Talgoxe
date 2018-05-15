@@ -479,6 +479,17 @@ $(document).ready(function() {
                 if (rightHandSide.is(':checked')) rightHandSide.click();
             }
         });
+
+        /* clearTicks(); */
+    }
+
+    function clearTicks() {
+        $('[style="display: list-item;"]').each(function(i, element) {
+            if (!element.id.match(/^li-selected-/)) {
+                tickBox = $(element).children().first();
+                if (tickBox.is(':checked')) tickBox.click();
+            }
+        });
     }
 
     $('#ta-bort-alla').click(removeAll);
