@@ -157,7 +157,7 @@ class Lemma(models.Model):
                 self.moments['M1'][m1].display = True
         if len(self.moments['M2']) > 1:
             for m2 in range(len(self.moments['M2'])):
-                self.moments['M2'][m2].text = '%c' % (96 + m2)
+                self.moments['M2'][m2].text = '%c' % (97 + m2)
                 self.moments['M2'][m2].display = True
         self.moments = { 'M1': [], 'M2': [] }
 
