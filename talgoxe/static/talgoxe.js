@@ -445,13 +445,13 @@ $(document).ready(function() {
         var id = name.replace(/^selected-/, '');
         if ($(event.currentTarget).is(':checked')) {
             lemma.show();
+            tickBox = $('#ta-bort-' + id);
+            if (tickBox.is(':checked')) tickBox.click()
             lemma.after('<input type="hidden" name="selected-' + id + '" />');
         } else {
             lemma.hide();
             $('[name="selected-' + id + '"]').remove();
         }
-
-        clearTicks();
     }
 
     $(".ta-bort").click(removeLemma);
@@ -479,15 +479,6 @@ $(document).ready(function() {
                 });
                 rightHandSide = $('#ta-bort-' + id);
                 if (rightHandSide.is(':checked')) rightHandSide.click();
-            }
-        });
-    }
-
-    function clearTicks() {
-        $('[style="display: list-item;"]').each(function(i, element) {
-            if (element.id.match(/^li-selected-/)) {
-                tickBox = $(element).children().first();
-                if (tickBox.is(':checked')) tickBox.click();
             }
         });
     }
