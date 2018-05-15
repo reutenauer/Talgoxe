@@ -453,8 +453,7 @@ $(document).ready(function() {
         console.log(lemma);
         if ($(event.currentTarget).is(':checked')) {
             /* lemma.show(); */
-            lastLemma.after('<li id="li-select-' + id + '" class="nobullet">' + lemma + ' <input type="checkbox" id="ta-bort-' + id + '" class="ta-bort" /> Ta bort <input type="hidden" name="selected-' + id + '" /></li>');
-            lastLemma = $('#li-select-' + id);
+            lastLemma.before('<li id="li-select-' + id + '" class="nobullet">' + lemma + ' <input type="checkbox" id="ta-bort-' + id + '" class="ta-bort" /> Ta bort <input type="hidden" name="selected-' + id + '" /></li>');
             tickBox = $('#ta-bort-' + id);
             if (tickBox.is(':checked')) tickBox.click()
             /* lemma.after('<input type="hidden" name="selected-' + id + '" />'); */
