@@ -470,7 +470,9 @@ $(document).ready(function() {
         $('[style="display: list-item;"]').each(function(i, element) {
             var id = $(element).children().first().attr("name").replace(/^select-/, '')
             console.log(id);
-            $('[name="select-' + id + '"]').click();
+            $('[name="select-' + id + '"]').each(function(i, element) {
+                if (!$(element).is(':checked')) $(element).click();
+            });
         });
     }
 
