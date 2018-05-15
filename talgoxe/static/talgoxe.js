@@ -450,6 +450,8 @@ $(document).ready(function() {
             lemma.hide();
             $('[name="selected-' + id + '"]').remove();
         }
+
+        clearTicks();
     }
 
     $(".ta-bort").click(removeLemma);
@@ -479,13 +481,11 @@ $(document).ready(function() {
                 if (rightHandSide.is(':checked')) rightHandSide.click();
             }
         });
-
-        /* clearTicks(); */
     }
 
     function clearTicks() {
         $('[style="display: list-item;"]').each(function(i, element) {
-            if (!element.id.match(/^li-selected-/)) {
+            if (element.id.match(/^li-selected-/)) {
                 tickBox = $(element).children().first();
                 if (tickBox.is(':checked')) tickBox.click();
             }
