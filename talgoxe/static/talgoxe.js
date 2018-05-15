@@ -468,13 +468,14 @@ $(document).ready(function() {
     function selectAll(event) {
         event.preventDefault();
         $('[style="display: list-item;"]').each(function(i, element) {
-            if (element.id.match(/^li-selected-/)) continue;
-            console.log($(element).children().first());
-            var id = $(element).children().first().attr("name").replace(/^select-/, '')
-            console.log(id);
-            $('[name="select-' + id + '"]').each(function(i, element) {
-                if (!$(element).is(':checked')) $(element).click();
-            });
+            if (!element.id.match(/^li-selected-/)) {
+                console.log($(element).children().first());
+                var id = $(element).children().first().attr("name").replace(/^select-/, '')
+                console.log(id);
+                $('[name="select-' + id + '"]').each(function(i, element) {
+                    if (!$(element).is(':checked')) $(element).click();
+                });
+            }
         });
     }
 
