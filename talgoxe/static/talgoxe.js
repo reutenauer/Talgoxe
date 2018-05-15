@@ -475,8 +475,8 @@ $(document).ready(function() {
                 $('[name="select-' + id + '"]').each(function(i, element) {
                     if (!$(element).is(':checked')) $(element).click();
                 });
-                rightHandSide = $('#li-selected-' + id);
-                if (rightHandSide.
+                rightHandSide = $('#ta-bort-' + id);
+                if (rightHandSide.is(':checked')) rightHandSide.click();
             }
         });
     }
