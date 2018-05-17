@@ -473,11 +473,18 @@ $(document).ready(function() {
     function removeLemma(event) {
         console.log("Hej hej hej!");
         lemma = $(event.currentTarget).parent();
-        var id = lemma.attr("id").replace(/^li-select-/, '');
-        console.log(lemma);
-        lemma.remove();
-        $('[name="selected-' + id + '"]').remove();
-        selector = '[name="select-' + id + '"]';
+        var name = $(event.currentTarget).attr("name");
+        if (name && name.match(/^selected-bokstav/)) {
+            bokstav = name.replace(/^selected-bokstav-/, '');
+            $('[name="selected-bokstav-' + bokstav + '"]').parent().remove();
+            selector = '[name="bokstav-' + bokstav + '"]'
+        } else  {
+            var id = lemma.attr("id").replace(/^li-select-/, '');
+            console.log(lemma);
+            lemma.remove();
+            $('[name="selected-' + id + '"]').remove();
+            selector = '[name="select-' + id + '"]';
+        }
         console.log(selector);
         lemmaLeft = $(selector);
         console.log(lemmaLeft);
@@ -519,7 +526,9 @@ $(document).ready(function() {
         box = $(event.currentTarget);
         bokstav = box.attr("name").replace(/^bokstav-/, '');
         if (box.is(':checked')) {
-            lastLemma.after('<li class="nobullet">' + bokstav + ' – hela bokstaven <input type="checkbox" name="selected-bokstav-' + bokstav + '" class="ta-bort" /> Ta bort</li>');
+            lastLemma.before('<li class="nobullet">' + bokstav + ' – hela bokstaven <input type="checkbox" name="selected-bokstav-' + bokstav + '" class="ta-bort" /> Ta bort</li>');
+            removeBox = $('[name="selected-bokstav-' + bokstav + '"]');
+            removeBox.click(removeLemma);
         } else {
             $('[name="selected-bokstav-' + bokstav + '"]').parent().remove();
         }
