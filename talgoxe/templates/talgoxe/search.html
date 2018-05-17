@@ -3,7 +3,13 @@
 {% if q == 'NULL' %}
     Ingen söksträng.  Försök <span style="font-family: 'Courier';">{{ uri }}?q=söksträng</span>
 {% else %}
-  <h2>{{ lemmata|length }} sökresultat för ”{{ q }}”</h2>
+  <h2>{{ titel }}</h2>
+
+  <p>
+    <a id="skapa-pdf">Skapa PDF</a>
+    <a id="skapa-odf">Skapa ODF</a>
+    <a id="skapa-docx">Skapa Word</a>
+  </p>
 
   <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
   <p>

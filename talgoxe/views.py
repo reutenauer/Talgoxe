@@ -284,7 +284,7 @@ def search(request):
     spolar = Data.objects.filter(d__contains = söksträng)
     lemmata = sorted(list(OrderedDict.fromkeys([spole.lemma for spole in spolar])), key = lambda x: x.lemma)
     count = spolar.count()
-    context = { 'q' : söksträng, 'lemmata' : lemmata }
+    context = { 'q' : söksträng, 'lemmata' : lemmata, 'titel' : '%d sökresultat för ”%s”' % (len(lemmata), söksträng) }
 
     return render_template(request, template, context)
 
@@ -334,9 +334,10 @@ def print_on_demand(request):
                 lemmata += hel_bokstav
         print('----')
         lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rank)) # TODO Make unique
-        context = { 'lemmata' : lemmata, 'redo' : True }
+        context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata) }
         print("Number of lemmata:")
         print(len(lemmata))
+        template = loader.get_template('talgoxe/search.html')
     elif method == 'GET':
         lemmata = Lemma.objects.order_by('lemma', 'rank')
         bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']

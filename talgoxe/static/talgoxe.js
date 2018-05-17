@@ -346,7 +346,7 @@ $(document).ready(function() {
 
     function fetchArticle(element) {
         var artId = element.id.replace(/^lemma-/, '');
-        var artUrl = window.location.href.replace(/\/search.*$/, '/artikel/');
+        var artUrl = window.location.href.replace(/\/talgoxe.*$/, '/talgoxe/artikel/');
         $.get(artUrl + artId).done(function(data) {
             $('#artikel-' + artId).html(data);
             $(element).off("click");
@@ -411,10 +411,12 @@ $(document).ready(function() {
 
     function collectArticles() {
         articles = [];
-        $('input.toprint').each(function(i, article) {
-            articles.push(article.value.replace(/^article-/, ''));
+        $('.träff').each(function(i, article) {
+            articles.push(article.id.replace(/^lemma-/, ''));
         });
 
+        console.log("Samlat in artiklar:");
+        console.log(articles);
         return articles;
     }
 
@@ -523,6 +525,7 @@ $(document).ready(function() {
     $('.bokstav [type="checkbox"]').click(addBokstav);
 
     function addBokstav(event) {
+        if (!lastLemma) lastLemma = $('#lemma-0');
         box = $(event.currentTarget);
         bokstav = box.attr("name").replace(/^bokstav-/, '');
         if (box.is(':checked')) {
