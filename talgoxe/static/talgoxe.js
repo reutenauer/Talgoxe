@@ -292,7 +292,8 @@ $(document).ready(function() {
         searchString = newSearchString;
     });
 
-    $('#sok-artikel-button').click(function() {
+    $('#sok-artikel-button').click(function(event) {
+        event.preventDefault();
         searchArticles($("#sok-artikel")[0].value);
     });
 
@@ -510,6 +511,27 @@ $(document).ready(function() {
             /* var id = $(element).attr("id").replace(/^ta-bort-/, ''); */
             $(element).click();
         });
+    }
+
+    $('.bokstav [type="checkbox"]').click(addBokstav);
+
+    function addBokstav(event) {
+        box = $(event.currentTarget);
+        bokstav = box.attr("name").replace(/^bokstav-/, '');
+        if (box.is(':checked')) {
+            lastLemma.after('<li class="nobullet">' + bokstav + ' – hela bokstaven <input type="checkbox" name="selected-bokstav-' + bokstav + '" class="ta-bort" /> Ta bort</li>');
+        } else {
+            $('[name="selected-bokstav-' + bokstav + '"]').parent().remove();
+        }
+    }
+
+    $('.bokstav .ta-bort').click(removeBokstav);
+
+    function removeBokstav(event) {
+        box = $(event.currentTarget);
+        bokstav = box.attr("name").replace(/^selected-bokstav-/, '');
+        $('[name="selected-bokstav-' + bokstav + '"]').parent().remove();
+        $('[name="bokstav-' + bokstav + '"]').click();
     }
 
     $('#skapa-docx').click(createDOCX);
