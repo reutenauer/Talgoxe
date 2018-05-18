@@ -357,9 +357,9 @@ $(document).ready(function() {
     $('#visa-alla, #visa-alla-text').click(function() {
         if ($('#visa-alla-text').html() == "Visa alla") {
 
-            $('.träff .hidden').each(function(i, article) {
-                article = $(article);
-                lemma = article.parent();
+            $('.träff').each(function(i, lemma) {
+                lemma = $(lemma);
+                article = $(lemma.children()[2]);
                 console.log(article);
                 article.removeClass("hidden");
                 lemma.children().first().html('▾');
