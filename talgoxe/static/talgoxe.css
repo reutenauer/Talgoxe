@@ -139,7 +139,7 @@ body {
 }
 
 .ÄV {
-  content: 'äv.'
+  /* content: 'äv.' */ /* Inte längre nödvändigt */
 }
 
 .GT {

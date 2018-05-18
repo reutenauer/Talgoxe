@@ -285,11 +285,11 @@ def search(request):
         sök_överallt = request.GET['sök-överallt']
     except MultiValueDictKeyError:
         sök_överallt = None
+    lemmata = list(Lemma.objects.filter(lemma__contains = söksträng))
     if sök_överallt:
         spolar = Data.objects.filter(d__contains = söksträng)
-        lemmata = sorted(list(OrderedDict.fromkeys([spole.lemma for spole in spolar])), key = lambda x: x.lemma)
-    else:
-        lemmata = sorted(list(Lemma.objects.filter(lemma__contains = söksträng)))
+        lemmata += [spole.lemma for spole in spolar]
+    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: lemma.lemma)
     context = { 'q' : söksträng, 'lemmata' : lemmata, 'titel' : '%d sökresultat för ”%s”' % (len(lemmata), söksträng) }
 
     return render_template(request, template, context)

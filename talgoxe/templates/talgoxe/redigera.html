@@ -5,7 +5,7 @@
 <div id="ordlista">
 {% include "talgoxe/ny_stickord.html" %}
 <form action="{% url 'search' %}" method="GET" target="_blank">
-  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /> <input type="checkbox" checked /> Sök överallt</p>
+  <p>Sök bland artiklarna: <input type="text" name="q" /><input type="submit" value="Sök" /> <input type="checkbox" name="sök-överallt"/> Sök överallt <a href="{% url 'print_on_demand' %}" target="_blank">Personaliserad sökning och utskrift</a></p>
 </form>
 {% include 'talgoxe/ordlista.html' %}
 </div>
@@ -41,9 +41,9 @@
 <h2>Artikel</h2>
 <p>{% include 'talgoxe/artikel.html' %}</p>
 <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
-<a id="skapa-pdf">PDF version</a>&nbsp;
-<a id="skapa-odf">ODF version</a>&nbsp;
-<a id="skapa-docx">Word version</a>
+<a id="skapa-pdf">PDF&nbsp;version</a>
+<a id="skapa-odf">ODF&nbsp;version</a>
+<a id="skapa-docx">Word&nbsp;version</a>
 </div>
 </div>
 

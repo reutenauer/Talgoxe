@@ -394,7 +394,7 @@ $(document).ready(function() {
 
     function createPDF(element) {
         console.log(element);
-        $(element).html("Förbereder PDF...");
+        $(element).html("Förbereder&nbsp;PDF...");
         articles = collectArticles();
         console.log("Article IDs:");
         console.log(articles);
@@ -405,7 +405,7 @@ $(document).ready(function() {
             console.log(data);
             $(element).off('click');
             $(element).attr("href", data.trim());
-            $(element).html("Ladda ner PDF");
+            $(element).html("Ladda&nbsp;ner&nbsp;PDF");
         });
     }
 
@@ -427,13 +427,13 @@ $(document).ready(function() {
     $('#skapa-odf').click(function(event) { createODF(event.currentTarget); });
 
     function createODF(element) {
-      $(element).html("Förbereder ODF...");
+      $(element).html("Förbereder&nbsp;ODF...");
       articles = collectArticles();
       url = printableEndpoint('odf', articles);
       $.get(url).done(function(link) {
         $(element).off('click');
         $(element).attr("href", link.trim());
-        $(element).html("Ladda ner ODF");
+        $(element).html("Ladda&nbsp;ner&nbsp;ODF");
       });
     }
 
@@ -550,13 +550,13 @@ $(document).ready(function() {
 
     function createDOCX(event) {
         element = $(event.currentTarget);
-        element.html("Förbereder Word-dokument...");
+        element.html("Förbereder&nbsp;Word‑dokument...");
         articles = collectArticles();
         url = printableEndpoint('docx', articles);
         $.get(url).done(function(link) {
             element.off("click");
             element.attr("href", link.trim());
-            element.html("Ladda ner Wordfilen");
+            element.html("Ladda&nbsp;ner&nbsp;Wordfilen");
         });
     }
 });

@@ -443,6 +443,8 @@ class Segment(): # Fjäder!
             return '('
         elif self.type.__unicode__().upper() == 'HR':
             return ')'
+        elif self.type.__unicode__().upper() == 'ÄV':
+            return 'äv.'
         else:
             return self.text.strip()
 
