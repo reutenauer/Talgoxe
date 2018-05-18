@@ -281,6 +281,10 @@ def search(request):
     except MultiValueDictKeyError:
         uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
+    try:
+        sök_överallt = request.GET['sök-överallt']
+    except MultiValueDictKeyError:
+        return render_template(request, template, { 'sök-överallt' : None, 'uri' : uri })
     spolar = Data.objects.filter(d__contains = söksträng)
     lemmata = sorted(list(OrderedDict.fromkeys([spole.lemma for spole in spolar])), key = lambda x: x.lemma)
     count = spolar.count()
