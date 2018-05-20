@@ -275,22 +275,30 @@ def search(request):
     print(request.GET)
     print(request.path)
     template = loader.get_template('talgoxe/search.html')
-    try:
+    if 'q' in request.GET:
         söksträng = request.GET['q']
         print(söksträng)
-    except MultiValueDictKeyError:
+    else:
         uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
-    try:
+    if 'sök-överallt' in request.GET:
         sök_överallt = request.GET['sök-överallt']
-    except MultiValueDictKeyError:
+    else:
         sök_överallt = None
+    if sök_överallt:
+        sök_överallt_eller_inte = 'söker överallt'
+    else:
+        sök_överallt_eller_inte = 'söker bara uppslagsord'
     lemmata = list(Lemma.objects.filter(lemma__contains = söksträng))
     if sök_överallt:
-        spolar = Data.objects.filter(d__contains = söksträng)
+        spolar = Data.objects.filter(d__contains = söksträng).select_related('lemma')
         lemmata += [spole.lemma for spole in spolar]
     lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: lemma.lemma)
-    context = { 'q' : söksträng, 'lemmata' : lemmata, 'titel' : '%d sökresultat för ”%s”' % (len(lemmata), söksträng) }
+    context = {
+            'q' : söksträng,
+            'lemmata' : lemmata,
+            'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
+        }
 
     return render_template(request, template, context)
 
