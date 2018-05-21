@@ -5,7 +5,7 @@
       {% if checkboxes %}
       <input type="checkbox" name="select-{{ lemma.id }}" class="toselect" />
       {% endif %}
-      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}</a>
+      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</a>
     </li>
 {% endfor %}
 </ul>
@@ -22,6 +22,6 @@
 {% endcomment %}
     <li class="hidden nobullet" id="lemma-0" />
   </ul>
-  <input type="submit" value="Börja skriva ut" action="{% url 'print_on_demand' %}">
+  <input type="submit" value="Välja" action="{% url 'print_on_demand' %}">
 </div>
 {% endif %}

@@ -13,11 +13,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # FIXME Superscripts!
 
-class Lemma(models.Model):
+class Artikel(models.Model):
     lemma = models.CharField(max_length = 100)
-    rank = models.SmallIntegerField()
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    rang = models.SmallIntegerField()
+    skapat = models.DateTimeField(auto_now_add = True)
+    uppdaterat = models.DateTimeField(auto_now = True)
     segments = []
 
     def __str__(self):
@@ -27,7 +27,7 @@ class Lemma(models.Model):
         return self.lemma
 
     def raw_data_set(self):
-        return self.data_set.filter(id__gt = 0).order_by('pos')
+        return self.spole_set.filter(id__gt = 0).order_by('pos')
 
     def resolve_pilcrow(self):
         i = 0
@@ -113,17 +113,17 @@ class Lemma(models.Model):
             currdat = self.raw_data_set().all()[i]
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
-                    landskap.append(Landskap(currdat.d))
+                    landskap.append(Landskap(currdat.text))
                 else:
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        self.new_segments.append(Segment(geotype, ls.abbrev))
                     landskap = []
-                    bits = re.split(u'¶', currdat.d) # För pilcrow i ”hårgård” och ”häringa”
+                    bits = re.split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
-                        maintype = currdat.type
+                        maintype = currdat.typ
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
@@ -133,15 +133,15 @@ class Lemma(models.Model):
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
-                    landskap = [Landskap(currdat.d)]
-                    geotype = currdat.type
+                    landskap = [Landskap(currdat.text)]
+                    geotype = currdat.typ
                     state = 'GEOGRAFI'
                 else:
-                    bits = re.split(u'¶', currdat.d)
+                    bits = re.split(u'¶', currdat.text)
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
-                        maintype = currdat.type
+                        maintype = currdat.typ
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
@@ -192,7 +192,10 @@ class Lemma(models.Model):
 #         outfile.write("\n")
 
         self.collect()
-        outfile.write(("\\hskip-0.5em\\SDL:SO{%s}" % self.lemma))
+        outfile.write("\\hskip-0.5em")
+        if self.rang > 0:
+            outfile.write('\lohi[left]{}{\SDL:SO{%d}}' % self.rang) # TODO Real superscript
+        outfile.write("\\SDL:SO{%s}" % self.lemma)
         setspace = True
         for segment in self.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
             if setspace and not segment.isrightdelim():
@@ -216,31 +219,31 @@ class Lemma(models.Model):
     @staticmethod
     def start_odf(tempfilename):
         odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
-        Lemma.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        Lemma.add_style(odt, 'OK', 'fo:font-size="9pt"')
-        Lemma.add_style(odt, 'G', 'fo:font-size="9pt"')
-        Lemma.add_style(odt, 'DSP', 'fo:font-style="italic"')
-        Lemma.add_style(odt, 'TIP', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'SO', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'OK', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'G', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'DSP', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'TIP', 'fo:font-size="9pt"')
         # IP
-        Lemma.add_style(odt, 'M1', 'fo:font-weight="bold"')
-        Lemma.add_style(odt, 'M2', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'M1', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'M2', 'fo:font-weight="bold"')
         # VH, HH, VR, HR
-        Lemma.add_style(odt, 'REF', 'fo:font-weight="bold"')
-        Lemma.add_style(odt, 'FO', 'fo:font-style="italic"')
-        Lemma.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
-        Lemma.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
+        Artikel.add_style(odt, 'REF', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'FO', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
+        Artikel.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
         # ÖVP. Se nedan!
         # BE, ÖV
         # ÄV, ÄVK se nedan
         # FOT
-        Lemma.add_style(odt, 'GT', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
         # SOV, TI
         # HV, INT, OKT
         # VS, GÖ, GP, UST
-        Lemma.add_style(odt, 'US', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
-        Lemma.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
-        Lemma.add_style(odt, 'SP', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
+        Artikel.add_style(odt, 'SP', 'fo:font-style="italic"')
 
         return odt
 
@@ -254,8 +257,8 @@ class Lemma(models.Model):
 
     def generate_content(self):
         paragraph = Paragraph()
-        paragraph += Span(self.lemma, style_name = 'SO')
-        self.resolve_pilcrow()
+        paragraph += Span(self.lemma, style_name = 'SO') # TODO Homografnumrering!
+        # self.resolve_pilcrow()
         self.collect()
         spacebefore = True
         for segment in self.new_segments:
@@ -272,44 +275,44 @@ class Lemma(models.Model):
 
     @staticmethod
     def add_docx_styles(document): # TODO Keyword arguments?
-        Lemma.add_docx_style(document, 'SO', False, True, 12)
-        Lemma.add_docx_style(document, 'OK', False, False, 9)
-        Lemma.add_docx_style(document, 'G', False, False, 9)
-        Lemma.add_docx_style(document, 'DSP', True, False, 12)
-        Lemma.add_docx_style(document, 'TIP', False, False, 9)
-        Lemma.add_docx_style(document, 'IP', False, False, 12)
-        Lemma.add_docx_style(document, 'M1', False, True, 12)
-        Lemma.add_docx_style(document, 'M2', False, True, 12)
-        Lemma.add_docx_style(document, 'VH', False, False, 12)
-        Lemma.add_docx_style(document, 'HH', False, False, 12)
-        Lemma.add_docx_style(document, 'VR', False, False, 12)
-        Lemma.add_docx_style(document, 'HR', False, False, 12)
-        Lemma.add_docx_style(document, 'REF', False, True, 12)
-        Lemma.add_docx_style(document, 'FO', True, False, 12)
-        Lemma.add_docx_style(document, 'TIK', True, False, 9)
-        Lemma.add_docx_style(document, 'FLV', False, True, 9)
-        Lemma.add_docx_style(document, 'ÖVP', False, False, 12)
-        Lemma.add_docx_style(document, 'BE', False, False, 12)
-        Lemma.add_docx_style(document, 'ÖV', False, False, 12)
-        Lemma.add_docx_style(document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
-        Lemma.add_docx_style(document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
-        Lemma.add_docx_style(document, 'FOT', True, False, 12)
-        Lemma.add_docx_style(document, 'GT', False, False, 9)
-        Lemma.add_docx_style(document, 'SOV', False, True, 12)
+        Artikel.add_docx_style(document, 'SO', False, True, 12)
+        Artikel.add_docx_style(document, 'OK', False, False, 9)
+        Artikel.add_docx_style(document, 'G', False, False, 9)
+        Artikel.add_docx_style(document, 'DSP', True, False, 12)
+        Artikel.add_docx_style(document, 'TIP', False, False, 9)
+        Artikel.add_docx_style(document, 'IP', False, False, 12)
+        Artikel.add_docx_style(document, 'M1', False, True, 12)
+        Artikel.add_docx_style(document, 'M2', False, True, 12)
+        Artikel.add_docx_style(document, 'VH', False, False, 12)
+        Artikel.add_docx_style(document, 'HH', False, False, 12)
+        Artikel.add_docx_style(document, 'VR', False, False, 12)
+        Artikel.add_docx_style(document, 'HR', False, False, 12)
+        Artikel.add_docx_style(document, 'REF', False, True, 12)
+        Artikel.add_docx_style(document, 'FO', True, False, 12)
+        Artikel.add_docx_style(document, 'TIK', True, False, 9)
+        Artikel.add_docx_style(document, 'FLV', False, True, 9)
+        Artikel.add_docx_style(document, 'ÖVP', False, False, 12)
+        Artikel.add_docx_style(document, 'BE', False, False, 12)
+        Artikel.add_docx_style(document, 'ÖV', False, False, 12)
+        Artikel.add_docx_style(document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
+        Artikel.add_docx_style(document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
+        Artikel.add_docx_style(document, 'FOT', True, False, 12)
+        Artikel.add_docx_style(document, 'GT', False, False, 9)
+        Artikel.add_docx_style(document, 'SOV', False, True, 12)
         for style in ('TI', 'HV', 'INT'):
-            Lemma.add_docx_style(document, style)
-        Lemma.add_docx_style(document, 'OKT', False, False, 9)
+            Artikel.add_docx_style(document, style)
+        Artikel.add_docx_style(document, 'OKT', False, False, 9)
         for style in ('VS', 'GÖ', 'GP'):
-            Lemma.add_docx_style(document, style)
-        Lemma.add_docx_style(document, 'UST', True, False, 12)
-        Lemma.add_docx_style(document, 'US', True, False, 12)
+            Artikel.add_docx_style(document, style)
+        Artikel.add_docx_style(document, 'UST', True, False, 12)
+        Artikel.add_docx_style(document, 'US', True, False, 12)
         for style in ('GÖP', 'GTP', 'NYR', 'VB'):
-            Lemma.add_docx_style(document, style)
+            Artikel.add_docx_style(document, style)
         OG = document.styles.add_style('OG', docx.enum.style.WD_STYLE_TYPE.CHARACTER)
         OG.font.strike = True
-        Lemma.add_docx_style(document, 'SP', True, False, 12)
-        Lemma.add_docx_style(document, 'M0', False, True, 18)
-        Lemma.add_docx_style(document, 'M3', True, False, 6)
+        Artikel.add_docx_style(document, 'SP', True, False, 12)
+        Artikel.add_docx_style(document, 'M0', False, True, 18)
+        Artikel.add_docx_style(document, 'M3', True, False, 6)
 
     @staticmethod
     def add_docx_style(document, type, italic = False, bold = False, size = 12):
@@ -323,16 +326,16 @@ class Lemma(models.Model):
 
     def process_docx(self, filename):
         document = docx.Document()
-        Lemma.add_docx_styles(document)
+        Artikel.add_docx_styles(document)
         self.generate_docx_paragraph(document)
         document.save(filename)
 
     def generate_docx_paragraph(self, document):
         self.collect()
         paragraph = document.add_paragraph()
+        if self.rang > 0:
+            paragraph.add_run(str(self.rang), style = 'SO').font.superscript = True
         paragraph.add_run(self.lemma, style = 'SO')
-        if self.rank > 0:
-            paragraph.add_run(str(self.rank), style = 'SO').font.superscript = True
         spacebefore = True
         for segment in self.new_segments:
             type = segment.type.__str__()
@@ -360,14 +363,14 @@ class Lemma(models.Model):
             self.lemma = stickord
             self.save()
         d = [[post_data['type-' + key].strip(), post_data['value-' + key].strip()] for key in order]
-        gtype = Type.objects.get(abbrev = 'g')
+        gtype = Typ.objects.get(kod = 'g')
         for i in range(len(d)):
             bit = d[i]
             try:
-                type = Type.objects.get(abbrev = bit[0])
+                type = Typ.objects.get(kod = bit[0])
             except ObjectDoesNotExist: # FIXME Do something useful!
 # TODO >>> Type.objects.create(abbrev = 'OG', name = 'Ogiltig', id = 63)
-                type = Type.objects.get(abbrev = 'OG')
+                type = Typ.objects.get(kod = 'OG')
             text = bit[1]
             if type == gtype and text.title() in Landskap.short_abbrev.keys():
               print("Got " + text + "! Normalising ...")
@@ -382,7 +385,7 @@ class Lemma(models.Model):
                     if data2 != data:
                         data2.delete()
             else:
-                Data.objects.create(lemma = self, type = type, pos = i, d = text)
+                Spole.objects.create(artikel = self, typ = type, pos = i, text = text)
         self.raw_data_set().filter(pos__gte = len(d)).delete()
 
         print(d)
@@ -394,8 +397,8 @@ class Segment(): # Fjäder!
             self.type = type
             self.text = text
         else: # type is actually a Data object
-            self.type = type.type
-            self.text = type.d
+            self.type = type.typ
+            self.text = type.text
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.text
@@ -450,63 +453,63 @@ class Segment(): # Fjäder!
         else:
             return self.text.strip()
 
-class Type(models.Model):
-    abbrev = models.CharField(max_length = 5)
-    name = models.CharField(max_length = 30)
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+class Typ(models.Model):
+    kod = models.CharField(max_length = 5)
+    namn = models.CharField(max_length = 30)
+    skapat = models.DateTimeField(auto_now_add = True)
+    uppdaterat = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.abbrev.upper()
+        return self.kod.upper()
 
     def __unicode__(self):
-        return self.abbrev.upper()
+        return self.kod.upper()
 
     def isgeo(self):
-        return self.abbrev == 'g'
+        return self.kod == 'g'
 
     def isleftdelim(self):
-        return self.abbrev in ['vh', 'vr']
+        return self.kod in ['vh', 'vr']
 
     def isrightdelim(self):
-        return self.abbrev in ['hh', 'hr', 'ip', 'ko']
+        return self.kod in ['hh', 'hr', 'ip', 'ko']
 
     def ismoment(self):
         return self.ism1() or self.ism2()
 
     def ism1(self):
-        return self.abbrev == 'm1'
+        return self.kod == 'm1'
 
     def ism2(self):
-        return self.abbrev == 'm2'
+        return self.kod == 'm2'
 
     def format(self):
         out = self.__unicode__()
         out += (4 - len(out)) * '\xa0'
         return out
 
-class Data(models.Model):
-    d = models.CharField(max_length = 2000)
+class Spole(models.Model):
+    text = models.CharField(max_length = 2000)
     pos = models.SmallIntegerField()
-    lemma = models.ForeignKey(Lemma)
-    type = models.ForeignKey(Type)
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    artikel = models.ForeignKey(Artikel)
+    typ = models.ForeignKey(Typ)
+    skapat = models.DateTimeField(auto_now_add = True)
+    uppdaterat = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.type.__str__() + ' ' + self.d
+        return self.typ.__str__() + ' ' + self.text
 
     def __unicode__(self):
-        return self.type.__unicode__() + ' ' + self.d
+        return self.typ.__unicode__() + ' ' + self.text
 
     def webstyle(self):
-        self.webstyles[self.type.__unicode__()]
+        self.webstyles[self.typ.__unicode__()]
 
     def printstyle(self):
-        self.printstyles[self.type.__unicode__()]
+        self.printstyles[self.typ.__unicode__()]
 
     def isgeo(self):
-        return self.type.isgeo()
+        return self.typ.isgeo()
 
 class Landskap():
     ordning = [
@@ -582,7 +585,7 @@ class Lexicon():
 
             {\\tfb\\hfill utgiven av Institutet för språk och folkminnen\\hfill}
         """.encode('UTF-8'))
-        for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
+        for lemma in Artikel.objects.filter(id__gt = 0).order_by('lemma'):
             print(lemma.lemma)
             lemma.process(source)
         source.close()

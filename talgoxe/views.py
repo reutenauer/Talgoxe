@@ -29,7 +29,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.contrib.auth import logout
 
-from talgoxe.models import Data, Lemma, Lexicon, Type
+from talgoxe.models import Spole, Artikel, Lexicon, Typ
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
@@ -40,7 +40,7 @@ def render_template(request, template, context):
 @login_required
 def index(request):
     template = loader.get_template('talgoxe/index.html')
-    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma', 'rank')
+    lemmata = Artikel.objects.filter(id__gt = 0).order_by('lemma', 'rang')
     context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
@@ -48,14 +48,14 @@ def index(request):
 def create(request):
     stickord = request.POST['ny_stickord'].strip()
     print("Fick lemma ’%s’" % stickord)
-    företrädare = Lemma.objects.filter(lemma = stickord)
-    maxrank = företrädare.aggregate(Max('rank'))['rank__max']
+    företrädare = Artikel.objects.filter(lemma = stickord)
+    maxrank = företrädare.aggregate(Max('rang'))['rang__max']
     if maxrank == None:
         rank = 0
     elif maxrank == 0:
         print("==== 0 = Hej, numrerar om ett lemma...")
         lemma0 = företrädare.first()
-        lemma0.rank = 1
+        lemma0.rang = 1
         lemma0.save()
         rank = 2
     elif maxrank > 0:
@@ -63,7 +63,7 @@ def create(request):
         rank = maxrank + 1
     else:
         print("==== None")
-    lemma = Lemma.objects.create(lemma = stickord, rank = rank)
+    lemma = Artikel.objects.create(lemma = stickord, rang = rank)
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
 @login_required
@@ -71,19 +71,19 @@ def artikel(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         print(request.POST)
-        lemma = Lemma.objects.get(id = id)
+        lemma = Artikel.objects.get(id = id)
         lemma.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
-    lemmata = Lemma.objects.filter(id__gt = 0).order_by('lemma','rank') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
-    lemma = Lemma.objects.filter(id = id).first()
+    lemmata = Artikel.objects.filter(id__gt = 0).order_by('lemma','rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
+    lemma = Artikel.objects.filter(id = id).first()
     print(id)
     print(lemma.lemma)
-    lemma.resolve_pilcrow()
+    # lemma.resolve_pilcrow()
     lemma.collect()
     if len(lemma.raw_data_set()) == 0:
-        ok = Type.objects.get(abbrev = 'OK')
-        d = Data(type_id = ok.id, d = '', pos = 0)
+        ok = Typ.objects.get(abbrev = 'OK')
+        d = Spole(typ_id = ok.id, text = '', pos = 0)
         input = [d]
     else:
         input = lemma.raw_data_set()
@@ -101,8 +101,8 @@ def artikel(request, id):
 @login_required
 def artiklar(request, id):
     template = loader.get_template('talgoxe/artiklar.html')
-    lemmata = Lemma.objects.order_by('lemma')
-    lemma = Lemma.objects.get(id = id)
+    lemmata = Artikel.objects.order_by('lemma')
+    lemma = Artikel.objects.get(id = id)
     count = lemmata.filter(lemma__lt = lemma.lemma).count()
     simple_lemmata = lemmata.all()[count:count + 10]
     extracted_lemmata = []
@@ -121,7 +121,7 @@ def artiklar(request, id):
 
 @login_required
 def artikel_efter_stickord(request, stickord):
-    lemmata = Lemma.objects.filter(id__gt = 0, lemma = stickord).order_by('rank')
+    lemmata = Artikel.objects.filter(id__gt = 0, lemma = stickord).order_by('rang')
     # TODO: 0!
     if len(lemmata) == 1:
         return HttpResponseRedirect(reverse('artikel', args = (lemmata.first().id,)))
@@ -157,24 +157,24 @@ def print_stuff(request, id = None):
         print(type(id))
         if type(id) == str:
             source.write("\\startcolumns[n=2,balance=no]\n")
-            lemma = Lemma.objects.get(id = id)
+            lemma = Artikel.objects.get(id = id)
             lemma.process(source)
             basename = '%s-%s' % (id, lemma.lemma)
         elif type(id) == list:
-            id = sorted(id, key = lambda id: Lemma.objects.get(id = id).lemma)
+            id = sorted(id, key = lambda id: Artikel.objects.get(id = id).lemma)
             source.write("\\startcolumns[n=2,balance=yes]\n")
             for i in id:
-                lemma = Lemma.objects.get(id = i)
+                lemma = Artikel.objects.get(id = i)
                 lemma.process(source)
                 source.write("\\par")
             if len(id) == 1:
-                basename = '%s-%s' % (id[0], Lemma.objects.get(id = id[0]).lemma)
+                basename = '%s-%s' % (id[0], Artikel.objects.get(id = id[0]).lemma)
             else:
                 basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
         source.write("\\stopcolumns\n")
     else:
         source.write("\\startcolumns[n=2,balance=yes]\n")
-        for lemma in Lemma.objects.filter(id__gt = 0).order_by('lemma'):
+        for lemma in Artikel.objects.filter(id__gt = 0).order_by('lemma'):
             source.write("\\startparagraph\n")
             # source.write("{\\bf %s\\par}" % lemma.lemma)
             lemma.process(source)
@@ -226,19 +226,19 @@ def export_to_odf(request, id):
     print(type(id))
     print(id)
     tempfilename = mktemp('.odt')
-    odf = Lemma.start_odf(tempfilename)
+    odf = Artikel.start_odf(tempfilename)
     if type(id) == str:
-        lemma = Lemma.objects.get(id = id)
+        lemma = Artikel.objects.get(id = id)
         lemma.process_odf(odf)
         finalname = "%s-%s.odt" % (id, lemma.lemma)
     elif type(id) == list:
         for i in id:
-            lemma = Lemma.objects.get(id = i)
+            lemma = Artikel.objects.get(id = i)
             lemma.process_odf(odf)
         finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
         if len(id) == 1:
-            finalname = '%s-%s.odt' % (id[0], Lemma.objects.get(id = id[0]).lemma)
-    Lemma.stop_odf(odf)
+            finalname = '%s-%s.odt' % (id[0], Artikel.objects.get(id = id[0]).lemma)
+    Artikel.stop_odf(odf)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
     system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
     template = loader.get_template('talgoxe/download_odf.html')
@@ -251,16 +251,16 @@ def export_to_docx(request, ids):
   print(ids)
   if len(ids) == 1:
       id = ids[0]
-      lemma = Lemma.objects.get(id = id)
+      lemma = Artikel.objects.get(id = id)
       print(tempfilename)
       docx = lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)
   else:
       filename = 'sdl-utdrag.docx'
       document = Document()
-      Lemma.add_docx_styles(document)
+      Artikel.add_docx_styles(document)
       for i in ids:
-          lemma = Lemma.objects.get(id = i)
+          lemma = Artikel.objects.get(id = i)
           lemma.generate_docx_paragraph(document)
       document.save(tempfilename)
   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
@@ -289,10 +289,10 @@ def search(request):
         sök_överallt_eller_inte = 'söker överallt'
     else:
         sök_överallt_eller_inte = 'söker bara uppslagsord'
-    lemmata = list(Lemma.objects.filter(lemma__contains = söksträng))
+    lemmata = list(Artikel.objects.filter(lemma__contains = söksträng))
     if sök_överallt:
-        spolar = Data.objects.filter(d__contains = söksträng).select_related('lemma')
-        lemmata += [spole.lemma for spole in spolar]
+        spolar = Spole.objects.filter(text__contains = söksträng).select_related('artikel')
+        lemmata += [spole.artikel for spole in spolar]
     lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: lemma.lemma)
     context = {
             'q' : söksträng,
@@ -304,7 +304,7 @@ def search(request):
 
 @login_required
 def article(request, id):
-    lemma = Lemma.objects.get(id = id)
+    lemma = Artikel.objects.get(id = id)
     template = loader.get_template('talgoxe/artikel.html')
     lemma.collect()
     context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments, 'format' : format }
@@ -312,7 +312,7 @@ def article(request, id):
     return render_template(request, template, context)
 
 def partial_article(request, id, format):
-    lemma = Lemma.objects.get(id = id)
+    lemma = Artikel.objects.get(id = id)
     if format == 'html':
         return HttpResponseRedirect(reverse('article', args = (id,)))
     elif format == 'tex':
@@ -338,22 +338,22 @@ def print_on_demand(request):
             bdata = re.match('bokstav-(.)', key)
             if mdata:
                 print(mdata.group(1))
-                lemma = Lemma.objects.get(id = int(mdata.group(1)))
+                lemma = Artikel.objects.get(id = int(mdata.group(1)))
                 # lemma.collect()
                 lemmata.append(lemma)
             elif bdata:
                 print(bdata.group(1))
-                hel_bokstav = Lemma.objects.filter(lemma__startswith = bdata.group(1))
+                hel_bokstav = Artikel.objects.filter(lemma__startswith = bdata.group(1))
                 # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
                 lemmata += hel_bokstav
         print('----')
-        lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rank)) # TODO Make unique
+        lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rang)) # TODO Make unique
         context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata) }
         print("Number of lemmata:")
         print(len(lemmata))
         template = loader.get_template('talgoxe/search.html')
     elif method == 'GET':
-        lemmata = Lemma.objects.order_by('lemma', 'rank')
+        lemmata = Artikel.objects.order_by('lemma', 'rang')
         bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
         context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver }
 

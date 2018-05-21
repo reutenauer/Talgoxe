@@ -17,7 +17,7 @@
       {% for lemma in lemmata %}
         <li class="träff virgin" id="lemma-{{ lemma.id }}">
           <span class="träffelement">▸</span>
-          <span class="träffelement">{{ lemma.lemma }}{% if lemma.rank > 0 %}<sup>{{ lemma.rank }}</sup>{% endif %}</span>
+          <span class="träffelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
           <span class="träffelement hidden" id="artikel-{{ lemma.id }}"></span>
           <a href="{% url 'artikel' lemma.id %}">Redigera</a>
           <p class="hidden" />

@@ -309,7 +309,7 @@ $(document).ready(function() {
         var nbhits = 0;
         $(".ordlistelement").each(function(i, childElement) {
             element = $(childElement).parent();
-            if ($(childElement).html().match(regexp)) { element.show(); nbhits++; }
+            if ($(childElement).html().replace(/.*<\/sup>\s*/, '').match(regexp)) { element.show(); nbhits++; }
             else element.hide();
         });
         if (nbhits == 0) $('#searching-feedback').show();
