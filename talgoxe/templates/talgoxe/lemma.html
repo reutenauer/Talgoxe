@@ -1,6 +1,1 @@
-{% spaceless %}
-    {% if lemma.rang > 0 %}
-        <sup>{{ lemma.rang }}</sup>
-    {% endif %}
-    {{ artikel.lemma }}
-{% endspaceless %}
+{% if lemma.rang > 0 %}<sup>{{ lemma.rang }}</sup>{% endif %}{{ artikel.lemma }}
