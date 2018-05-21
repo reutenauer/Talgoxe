@@ -16,6 +16,8 @@ from django.core.exceptions import ObjectDoesNotExist
 class Lemma(models.Model):
     lemma = models.CharField(max_length = 100)
     rank = models.SmallIntegerField()
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
     segments = []
 
     def __str__(self):
@@ -451,6 +453,8 @@ class Segment(): # Fjäder!
 class Type(models.Model):
     abbrev = models.CharField(max_length = 5)
     name = models.CharField(max_length = 30)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return self.abbrev.upper()
@@ -486,6 +490,8 @@ class Data(models.Model):
     pos = models.SmallIntegerField()
     lemma = models.ForeignKey(Lemma)
     type = models.ForeignKey(Type)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.d
