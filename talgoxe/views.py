@@ -82,7 +82,7 @@ def artikel(request, id):
     # lemma.resolve_pilcrow()
     lemma.collect()
     if len(lemma.raw_data_set()) == 0:
-        ok = Typ.objects.get(abbrev = 'OK')
+        ok = Typ.objects.get(kod = 'OK')
         d = Spole(typ_id = ok.id, text = '', pos = 0)
         input = [d]
     else:
