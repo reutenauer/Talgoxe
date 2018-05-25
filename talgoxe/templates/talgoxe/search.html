@@ -13,7 +13,7 @@
 
   <p id="omordna-artiklar">
     <button id="omordna">Omordna</button>
-    <form action="{% url 'search' %}?q={{ q }}&sök-överallt={{ sök_överallt }}" method="POST" class="hidden" id="omordna-form">
+    <form action="{% url 'search' %}?q={{ q }}&sök-överallt={{ sök_överallt }}" method="POST" {% if not display_omordna %}class="hidden" {% endif %}id="omordna-form">
       {% csrf_token %}
       <ul>
         {% for artikel in lemmata %}

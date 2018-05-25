@@ -275,6 +275,24 @@ def search(request):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         print(request.POST)
+        ordning = []
+        for artikel in request.POST:
+            if re.match('^artikel-', artikel):
+                id = artikel.replace('artikel-', '')
+                print(id)
+                ordning.append(Artikel.objects.get(id = id))
+        print(ordning)
+        lemma = ordning[0].lemma
+        rang = 0
+        for artikel in ordning[1:]:
+            if artikel.lemma == lemma:
+                if artikel.rang != rang:
+                    artikel.rang = rang
+                    artikel.save()
+                rang += 1
+            else:
+                rang = 0
+            lemma = artikel.lemma
     print(request.GET)
     print(request.path)
     template = loader.get_template('talgoxe/search.html')
@@ -302,7 +320,8 @@ def search(request):
             'lemmata' : lemmata,
             'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
             'uri' : uri,
-            'sök_överallt' : sök_överallt
+            'sök_överallt' : sök_överallt,
+            'display_omordna' : request.META['REQUEST_METHOD'] == 'POST'
         }
 
     return render_template(request, template, context)
