@@ -389,3 +389,6 @@ def easylogout(request):
     logout(request)
     template = loader.get_template("talgoxe/logout.html")
     return render_template(request, template, { })
+
+def omordna(request):
+    print(request.POST)
