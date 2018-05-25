@@ -572,7 +572,7 @@ $(document).ready(function() {
 
     $('.flytta-upp').click(flyttaUpp);
 
-    function flyttaUp() {
+    function flyttaUpp() {
         rad = $(this).parent();
         upp = rad.prev();
         upp.before(rad);

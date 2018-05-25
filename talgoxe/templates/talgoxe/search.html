@@ -12,14 +12,16 @@
   </p>
 
   <p id="omordna-artiklar">
-    <button id="omordna">Omordna</span>
-    {% for artikel in lemmata %}
-      <li class="omordna-pilar hidden">
-        <button class="flytta-upp"><strong>↑</strong></button>
-        <button class="flytta-ner"><strong>↓</strong></button>
-        <span id="omordna-artikel-{{ artikel.id }}">{% include "talgoxe/artikel.html" %}</span>
-      </li>
-    {% endfor %}
+    <button id="omordna">Omordna</button>
+    <ul>
+      {% for artikel in lemmata %}
+        <li class="omordna-pilar hidden nobullet" id="omordna-artikel-{{ artikel.id }}">
+          <button class="flytta-upp"><strong>↑</strong></button>
+          <button class="flytta-ner"><strong>↓</strong></button>
+          <span>{% include "talgoxe/lemma.html" %}</span>
+        </li>
+      {% endfor %}
+    </ul>
   </p>
 
   <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
