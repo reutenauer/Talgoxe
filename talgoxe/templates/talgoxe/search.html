@@ -11,9 +11,10 @@
     <a id="skapa-docx">Skapa Word</a>
   </p>
 
-  <form action="{% url 'omordna' %}" method="POST">
-    <p id="omordna-artiklar">
-      <button id="omordna">Omordna</button>
+  <p id="omordna-artiklar">
+    <button id="omordna">Omordna</button>
+    <form action="{% url 'omordna' %}" method="POST">
+      <input type="submit" value="Spara den nya ordningen" id="spara-ny-ordning" class="hidden" />
       <ul>
         {% for artikel in lemmata %}
           <li class="omordna-pilar hidden nobullet">
@@ -24,8 +25,8 @@
           </li>
         {% endfor %}
       </ul>
-    </p>
-  </form>
+    </form>
+  </p>
 
   <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
   <p>

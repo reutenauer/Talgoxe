@@ -567,12 +567,13 @@ $(document).ready(function() {
         console.log(this);
         $('.omordna-artiklar').show();
         $('.omordna-pilar').show();
-        $(this).html('Spara den nya ordningen');
+        $('#spara-ny-ordning').show();
     }
 
     $('.flytta-upp').click(flyttaUpp);
 
-    function flyttaUpp() {
+    function flyttaUpp(event) {
+        event.preventDefault();
         rad = $(this).parent();
         upp = rad.prev();
         upp.before(rad);
@@ -580,7 +581,8 @@ $(document).ready(function() {
 
     $('.flytta-ner').click(flyttaNer);
 
-    function flyttaNer() {
+    function flyttaNer(event) {
+        event.preventDefault();
         rad = $(this).parent();
         ner = rad.next();
         ner.after(rad);
