@@ -14,7 +14,6 @@
   <p id="omordna-artiklar">
     <button id="omordna">Omordna</button>
     <form action="{% url 'omordna' %}" method="POST">
-      <input type="submit" value="Spara den nya ordningen" id="spara-ny-ordning" class="hidden" />
       <ul>
         {% for artikel in lemmata %}
           <li class="omordna-pilar hidden nobullet">
@@ -25,6 +24,7 @@
           </li>
         {% endfor %}
       </ul>
+      <input type="submit" value="Spara den nya ordningen" id="spara-ny-ordning" class="hidden" />
     </form>
   </p>
 
