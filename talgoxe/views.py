@@ -272,14 +272,17 @@ def export_to_docx(request, ids):
 
 @login_required
 def search(request):
+    method = request.META['REQUEST_METHOD']
+    if method == 'POST':
+        print(request.POST)
     print(request.GET)
     print(request.path)
     template = loader.get_template('talgoxe/search.html')
+    uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
     if 'q' in request.GET:
         söksträng = request.GET['q']
         print(söksträng)
     else:
-        uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
     if 'sök-överallt' in request.GET:
         sök_överallt = request.GET['sök-överallt']
@@ -298,6 +301,7 @@ def search(request):
             'q' : söksträng,
             'lemmata' : lemmata,
             'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
+            'uri' : uri,
         }
 
     return render_template(request, template, context)

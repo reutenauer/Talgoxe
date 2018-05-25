@@ -22,5 +22,4 @@ urlpatterns = [
     url(r'print-on-demand/odf', views.print_odf, name = 'print_odf'),
     url(r'print-on-demand/docx', views.print_docx, name = 'print_docx'),
     url(r'logout', views.easylogout, name = 'easylogout'),
-    url(r'omordna', views.omordna, name = 'omordna'),
 ]

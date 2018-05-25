@@ -13,7 +13,8 @@
 
   <p id="omordna-artiklar">
     <button id="omordna">Omordna</button>
-    <form action="{% url 'omordna' %}" method="POST" class="hidden" id="omordna-form">
+    <form action="{{ uri }}" method="POST" class="hidden" id="omordna-form">
+      {% csrf_token %}
       <ul>
         {% for artikel in lemmata %}
           <li class="omordna-pilar nobullet">
