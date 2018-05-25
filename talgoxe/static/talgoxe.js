@@ -565,7 +565,7 @@ $(document).ready(function() {
 
     function omordna() {
         console.log(this);
-        $('.flytta-upp').show();
-        $('.flytta-ner').show();
+        $('.omordna-artiklar').show();
+        $('.omordna-pilar').show();
     }
 });

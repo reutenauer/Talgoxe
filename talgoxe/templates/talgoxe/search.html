@@ -11,16 +11,21 @@
     <a id="skapa-docx">Skapa Word</a>
   </p>
 
-  <p>
-    <span id="omordna">Omordna</span>
+  <p id="omordna-artiklar">
+    <button id="omordna">Omordna</span>
+    {% for artikel in lemmata %}
+      <li class="omordna-pilar hidden">
+        <button class="flytta-upp"><strong>↑</strong></button>
+        <button class="flytta-ner"><strong>↓</strong></button>
+        <span id="omordna-artikel-{{ artikel.id }}">{% include "talgoxe/artikel.html" %}</span>
+      </li>
+    {% endfor %}
   </p>
 
   <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
   <p>
     <ul>
       {% for lemma in lemmata %}
-        <button class="flytta-upp hidden"><strong>↑</strong></button>
-        <button class="flytta-ner hidden"><strong>↓</strong></button>
         <li class="träff virgin" id="lemma-{{ lemma.id }}">
           <span class="träffelement">▸</span>
           <span class="träffelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
