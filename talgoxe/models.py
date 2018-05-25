@@ -378,8 +378,8 @@ class Artikel(models.Model):
               print("  ... to " + text)
             data = self.raw_data_set().filter(pos = i).first()
             if data:
-                data.type = type
-                data.d = text
+                data.typ = type
+                data.text = text
                 data.save()
                 for data2 in self.raw_data_set().filter(pos = i):
                     if data2 != data:

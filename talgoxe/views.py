@@ -293,7 +293,7 @@ def search(request):
     if sök_överallt:
         spolar = Spole.objects.filter(text__contains = söksträng).select_related('artikel')
         lemmata += [spole.artikel for spole in spolar]
-    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: lemma.lemma)
+    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: (lemma.lemma, lemma.rang))
     context = {
             'q' : söksträng,
             'lemmata' : lemmata,
