@@ -285,17 +285,14 @@ def search(request):
         föreArtikel = ordning[0]
         föreRang = 1
         for artikel in ordning[1:]:
+            if artikel.lemma != föreArtikel.lemma and föreRang == 1:
+                föreRang = 0
+            if föreArtikel.rang != föreRang:
+                föreArtikel.rang = föreRang
+                föreArtikel.save()
             if artikel.lemma == föreArtikel.lemma:
-                if föreArtikel.rang != föreRang:
-                    föreArtikel.rang = föreRang
-                    föreArtikel.save()
                 föreRang += 1
             else:
-                if föreRang == 1:
-                    föreRang = 0
-                if föreArtikel.rang != föreRang:
-                    föreArtikel.rang = föreRang
-                    föreArtikel.save()
                 föreRang = 1
             föreArtikel = artikel
     print(request.GET)
