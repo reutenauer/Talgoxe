@@ -11,10 +11,16 @@
     <a id="skapa-docx">Skapa Word</a>
   </p>
 
+  <p>
+    <span id="omordna">Omordna</span>
+  </p>
+
   <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
   <p>
     <ul>
       {% for lemma in lemmata %}
+        <button class="flytta-upp hidden"><strong>↑</strong></button>
+        <button class="flytta-ner hidden"><strong>↓</strong></button>
         <li class="träff virgin" id="lemma-{{ lemma.id }}">
           <span class="träffelement">▸</span>
           <span class="träffelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>

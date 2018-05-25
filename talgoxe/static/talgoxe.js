@@ -565,7 +565,7 @@ $(document).ready(function() {
 
     function omordna() {
         console.log(this);
-        $('.flytta-up').show();
+        $('.flytta-upp').show();
         $('.flytta-ner').show();
-    });
+    }
 });
