@@ -345,14 +345,7 @@ $(document).ready(function() {
         if ($('#visa-alla-text').html() == "Visa alla") {
 
             $('.träff').each(function(i, lemma) {
-                lemma = $(lemma);
-                article = $(lemma.children()[2]);
-                console.log(article);
-                article.removeClass("hidden");
-                lemma.children().first().html('▾');
-                $(lemma.children()[1]).hide()
-                article.show();
-                lemma.children().last().show();
+                showArticle($(lemma));
             });
 
             $('.virgin').each(function(i, element) {
@@ -366,13 +359,7 @@ $(document).ready(function() {
             $('#visa-alla-text').html('Visa alla');
 
             $('.träff').each(function(i, lemma) {
-                console.log(lemma);
-                article = $($(lemma).children()[2]);
-                article.addClass("hidden");
-                article.hide();
-                $(lemma).children().first().html('▸');
-                $($(lemma).children()[1]).show()
-                $(lemma).children().last().hide();
+                hideArticle($(lemma));
             });
         }
     });
