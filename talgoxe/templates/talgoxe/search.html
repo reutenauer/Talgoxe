@@ -13,36 +13,33 @@
 
   <p id="omordna-artiklar">
     <button id="omordna">Omordna</button>
-    <form action="{% url 'search' %}?q={{ q }}&sök-överallt={{ sök_överallt }}" method="POST" {% if not display_omordna %}class="hidden" {% endif %}id="omordna-form">
-      {% csrf_token %}
+  </p>
+
+  <form action="{% url 'search' %}?q={{ q }}&sök-överallt={{ sök_överallt }}" method="POST" id="omordna-form">
+    {% csrf_token %}
+    <p>
+      <input type="submit" value="Spara ordning" id="spara-ordning" class="hidden" />
+      <span id="visa-alla">▸</span>
+      <span id="visa-alla-text">Visa alla</span>
+    </p>
+
+    <p>
       <ul>
-        {% for artikel in lemmata %}
-          <li class="omordna-pilar nobullet">
-            <input type="hidden" name="artikel-{{ artikel.id }}" />
-            <button class="flytta-upp"><strong>↑</strong></button>
-            <button class="flytta-ner"><strong>↓</strong></button>
-            <span>{% include "talgoxe/lemma.html" %}</span>
+        {% for lemma in lemmata %}
+          <li class="träff virgin" id="lemma-{{ lemma.id }}">
+            <button class="flytta-upp hidden"><strong>↑</strong></button>
+            <button class="flytta-ner hidden"><strong>↓</strong></button>
+            <span class="träffelement">▸</span>
+            <span class="träffelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
+            <span class="träffelement hidden" id="artikel-{{ lemma.id }}"></span>
+            <a href="{% url 'artikel' lemma.id %}">Redigera</a>
+            <input type="hidden" name="artikel-{{ lemma.id }}" />
+            <p class="hidden" />
           </li>
         {% endfor %}
       </ul>
-      <input type="submit" value="Spara den nya ordningen" id="spara-ny-ordning" />
-    </form>
-  </p>
-
-  <p><span id="visa-alla">▸</span> <span id="visa-alla-text">Visa alla</span></p>
-  <p>
-    <ul>
-      {% for lemma in lemmata %}
-        <li class="träff virgin" id="lemma-{{ lemma.id }}">
-          <span class="träffelement">▸</span>
-          <span class="träffelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
-          <span class="träffelement hidden" id="artikel-{{ lemma.id }}"></span>
-          <a href="{% url 'artikel' lemma.id %}">Redigera</a>
-          <p class="hidden" />
-        </li>
-      {% endfor %}
-    </ul>
-  </p>
+    </p>
+  </form>
 {% endif %}
 
 {% include "talgoxe/footer.html" %}

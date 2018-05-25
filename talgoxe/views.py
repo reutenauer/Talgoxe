@@ -323,7 +323,6 @@ def search(request):
             'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
             'uri' : uri,
             'sök_överallt' : sök_överallt,
-            'display_omordna' : request.META['REQUEST_METHOD'] == 'POST'
         }
 
     return render_template(request, template, context)
