@@ -560,4 +560,12 @@ $(document).ready(function() {
             element.html("Ladda&nbsp;ner&nbsp;Wordfilen");
         });
     }
+
+    $('#omordna').click(omordna);
+
+    function omordna() {
+        console.log(this);
+        $('.flytta-up').show();
+        $('.flytta-ner').show();
+    });
 });
