@@ -320,7 +320,7 @@ $(document).ready(function() {
         parent.children().last().hide();
     }
 
-    function toggleArticle(element) { /* TODO Make this into toggleArticle and make a real showArticle! */
+    function toggleArticle(element) {
         console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
