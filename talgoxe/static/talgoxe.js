@@ -301,25 +301,35 @@ $(document).ready(function() {
         });
     }
 
-    $('.träff .träffelement').click(function(event) { showArticle($(event.currentTarget).parent()) });
+    $('.träff .träffelement').click(function(event) { toggleArticle($(event.currentTarget).parent()) });
     $('.virgin').click(function(event) { fetchArticle(event.currentTarget); });
 
-    function showArticle(element) { /* TODO Make this into toggleArticle and make a real showArticle! */
+    function showArticle(article) {
+        var parent = article.parent();
+        article.removeClass("hidden");
+        parent.children().first().html('▾');
+        $(parent.children()[1]).hide();
+        article.show();
+        parent.children().last().show();
+    }
+
+    function hideArticle(article) {
+        var parent = article.parent();
+        article.addClass("hidden");
+        parent.children().first().html('▸');
+        $(parent.children()[1]).show();
+        article.hide();
+        parent.children().last().hide();
+    }
+
+    function toggleArticle(element) { /* TODO Make this into toggleArticle and make a real showArticle! */
         console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
         if (article.hasClass("hidden")) {
-            article.removeClass("hidden");
-            element.children().first().html('▾');
-            $(element.children()[1]).hide();
-            article.show();
-            element.children().last().show();
+            showArticle(article);
         } else {
-            article.addClass("hidden");
-            element.children().first().html('▸');
-            $(element.children()[1]).show();
-            article.hide();
-            element.children().last().hide();
+            hideArticle(article);
         }
     }
 
