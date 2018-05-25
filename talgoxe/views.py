@@ -284,7 +284,7 @@ def search(request):
         print(söksträng)
     else:
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
-    if 'sök-överallt' in request.GET:
+    if 'sök-överallt' in request.GET and request.GET['sök-överallt'] != 'None':
         sök_överallt = request.GET['sök-överallt']
     else:
         sök_överallt = None
@@ -302,6 +302,7 @@ def search(request):
             'lemmata' : lemmata,
             'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
             'uri' : uri,
+            'sök_överallt' : sök_överallt
         }
 
     return render_template(request, template, context)
