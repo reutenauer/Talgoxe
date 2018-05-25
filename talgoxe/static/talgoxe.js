@@ -1,4 +1,3 @@
-var searchString = "";
 var lastLemma;
 
 $(document).ready(function() {
@@ -275,31 +274,10 @@ $(document).ready(function() {
     $('#spara').click(submitOrder);
     $('.spara-och-ladda-om').click(submitOrder);
 
-    $('#sok-artikel').on('keyup', function(event) {
-        newSearchString = $(event.currentTarget)[0].value;
-        console.log(newSearchString);
-        /*
-        if (newSearchString != searchString) {
-            searchingFeedback = $('#searching-feedback');
-            searchingFeedback.show();
-            searchingFeedback.html('Letar efter ' + newSearchString + '...');
-            */
-            searchArticles(newSearchString);
-            /*
-            searchingFeedback.html('');
-            searchingFeedback.hide();
-        }
-        */
-        searchString = newSearchString;
-    });
+    $('#sok-artikel').on('keyup', searchArticles);
 
-    $('#sok-artikel-button').click(function(event) {
-        event.preventDefault();
-        searchArticles($("#sok-artikel")[0].value);
-    });
-
-    function searchArticles(string) {
-        console.log("Got search string: " + string);
+    function searchArticles() {
+        string = this.value
         if (string == "") {
             hideEverything();
             return;
