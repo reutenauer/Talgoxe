@@ -282,17 +282,22 @@ def search(request):
                 print(id)
                 ordning.append(Artikel.objects.get(id = id))
         print(ordning)
-        lemma = ordning[0].lemma
-        rang = 0
+        föreArtikel = ordning[0]
+        föreRang = 1
         for artikel in ordning[1:]:
-            if artikel.lemma == lemma:
-                if artikel.rang != rang:
-                    artikel.rang = rang
-                    artikel.save()
-                rang += 1
+            if artikel.lemma == föreArtikel.lemma:
+                if föreArtikel.rang != föreRang:
+                    föreArtikel.rang = föreRang
+                    föreArtikel.save()
+                föreRang += 1
             else:
-                rang = 0
-            lemma = artikel.lemma
+                if föreRang == 1:
+                    föreRang = 0
+                if föreArtikel.rang != föreRang:
+                    föreArtikel.rang = föreRang
+                    föreArtikel.save()
+                föreRang = 1
+            föreArtikel = artikel
     print(request.GET)
     print(request.path)
     template = loader.get_template('talgoxe/search.html')
