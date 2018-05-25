@@ -304,21 +304,19 @@ $(document).ready(function() {
     $('.träff .träffelement').click(function(event) { toggleArticle($(event.currentTarget).parent()) });
     $('.virgin').click(function(event) { fetchArticle(event.currentTarget); });
 
-    function showArticle(article) {
-        var parent = article.parent();
-        article.removeClass("hidden");
+    function showArticle(parent) {
+        $(parent.children()[2]).removeClass("hidden");
         parent.children().first().html('▾');
         $(parent.children()[1]).hide();
-        article.show();
+        $(parent.children()[2]).show();
         parent.children().last().show();
     }
 
-    function hideArticle(article) {
-        var parent = article.parent();
-        article.addClass("hidden");
+    function hideArticle(parent) {
+        $(parent.children()[2]).addClass("hidden");
         parent.children().first().html('▸');
         $(parent.children()[1]).show();
-        article.hide();
+        $(parent.children()[2]).hide();
         parent.children().last().hide();
     }
 
@@ -327,9 +325,9 @@ $(document).ready(function() {
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
         if (article.hasClass("hidden")) {
-            showArticle(article);
+            showArticle(article.parent());
         } else {
-            hideArticle(article);
+            hideArticle(article.parent());
         }
     }
 
