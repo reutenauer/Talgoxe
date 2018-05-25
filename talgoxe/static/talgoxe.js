@@ -565,9 +565,8 @@ $(document).ready(function() {
 
     function omordna() {
         console.log(this);
-        $('.omordna-artiklar').show();
-        $('.omordna-pilar').show();
-        $('#spara-ny-ordning').show();
+        $('#omordna-form').show();
+        $('#omordna-form').removeClass("hidden");
     }
 
     $('.flytta-upp').click(flyttaUpp);
