@@ -539,12 +539,8 @@ $(document).ready(function() {
     function omordna() {
         console.log(this);
         if ($('.flytta-upp').hasClass("hidden")) {
-            $('.flytta-upp').show();
-            $('.flytta-ner').show();
-            $('.flytta-upp').removeClass("hidden");
-            $('.flytta-ner').removeClass("hidden");
-            $('#spara-ordning').removeClass("hidden");
-            $('#spara-ordning').show();
+            $('.flytta-upp, .flytta-ner, #spara-ordning').show();
+            $('.flytta-upp, .flytta-ner, #spara-ordning').removeClass("hidden");
         } else {
             $('.flytta-upp, .flytta-ner, #spara-ordning').hide();
             $('.flytta-upp, .flytta-ner, #spara-ordning').addClass("hidden");
