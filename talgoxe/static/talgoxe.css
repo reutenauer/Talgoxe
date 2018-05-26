@@ -54,7 +54,11 @@ body {
 }
 
 .SO {
-  font-style: bold;
+  font-weight: bold;
+}
+
+.SOV {
+  font-weight: bold;
 }
 
 .OK {
@@ -66,6 +70,10 @@ body {
 }
 
 .G {
+  font-size: x-small;
+}
+
+.GÖ {
   font-size: x-small;
 }
 
