@@ -580,6 +580,8 @@ $(document).ready(function() {
             119 : '~'
         },
         'control' : {
+            65 : 'â',
+            79 : 'ô',
             85 : 'û',
             59 : 'ô',
             68 : 'ð',
@@ -599,19 +601,24 @@ $(document).ready(function() {
         element.selectionStart = element.selectionEnd = cursor + 1;
     }
 
-    var state = 'INITIAL';
     function hanteraTangent(event) {
         console.log(state);
         console.log(event.keyCode);
         console.log(event.which);
-        if (event.keyCode in speciellaTecken.initial && state == 'INITIAL') {
-            event.preventDefault();
-            speciellTecken(this, speciellaTecken.initial[event.keyCode]);
-        } else if (event.keyCode == 17) {
-            state = 'CONTROL';
-        } else if (event.keyCode in speciellaTecken.control && state == 'CONTROL') {
-            event.preventDefault();
-            speciellTecken(this, speciellaTecken.control[event.keyCode]);
+        if (event.ctrlKey) {
+            if (event.keyCode in speciellaTecken.control) {
+                event.preventDefault();
+                speciellTecken(this, speciellaTecken.control[event.keyCode]);
+            }
+        } else {
+            if (event.keyCode in speciellaTecken.initial) {
+                event.preventDefault();
+                speciellTecken(this, speciellaTecken.initial[event.keyCode]);
+            }
         }
+        console.log('--- igen ---');
+        console.log(event.charCode);
+        console.log(event.ctrlKey);
+        console.log('--- ---');
     }
 });
