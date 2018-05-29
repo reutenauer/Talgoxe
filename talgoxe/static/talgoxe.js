@@ -566,13 +566,6 @@ $(document).ready(function() {
     }
 
     $('.d-value').keydown(hanteraTangent);
-    $('.d-value').keyup(hanteraTangentUp);
-
-    function hanteraTangentUp(event) {
-        if (event.keyCode == 17) {
-            state = 'INITIAL';
-        }
-    }
 
     var speciellaTecken = {
         'initial' : {
@@ -602,7 +595,6 @@ $(document).ready(function() {
     }
 
     function hanteraTangent(event) {
-        console.log(state);
         console.log(event.keyCode);
         console.log(event.which);
         if (event.ctrlKey) {
