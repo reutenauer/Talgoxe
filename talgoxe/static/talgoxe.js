@@ -567,11 +567,25 @@ $(document).ready(function() {
 
     var radbytessymbol = '¶';
 
-    $('.d-value').keypress(hanteraTangent);
+    $('.d-value').keydown(hanteraTangent);
 
+    function speciellTecken(element, tecken) {
+        console.log("foo");
+        console.log(element);
+        var text = element.value;
+        textF = text.substring(0, element.selectionStart);
+        var cursor = element.selectionStart;
+        textEfter = text.substring(cursor, text.length);
+        element.value = textF + radbytessymbol + textEfter;
+        element.selectionStart = element.selectionEnd = cursor + 1;
+    }
+
+    var state = 'INITIAL';
     function hanteraTangent(event) {
+        console.log(state);
         console.log(event.keyCode);
-        if (event.keyCode == 123) {
+        console.log(event.which);
+        if (event.keyCode == 123 && state == 'INITIAL') { // 119 F8
             event.preventDefault();
             /*
             console.log(radbytessymbol);
@@ -587,12 +601,12 @@ $(document).ready(function() {
             this.value += radbytessymbol;
             console.log(this);
             */
-            text = this.value;
-            textF = text.substring(0, this.selectionStart);
-            var cursor = this.selectionStart;
-            textEfter = text.substring(cursor, text.length);
-            this.value = textF + radbytessymbol + textEfter;
-            this.selectionStart = this.selectionEnd = cursor + 1;
+            speciellTecken(this, radbytessymbol);
+        } else if (event.keyCode == 17 && state == 'INITIAL') {
+            state = 'CONTROL';
+        } else if (event.keyCode == 222 && state == 'CONTROL') { // 85 u, 59 ö, 68 d, 76 l
+            speciellTecken(this, 'â');
+            state = 'INITIAL';
         }
     }
 });
