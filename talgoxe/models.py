@@ -239,7 +239,8 @@ class Artikel(models.Model):
         Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
         Artikel.add_style(odt, 'SOV', 'fo:font-weight="bold"')
         # TI
-        # HV, INT, OKT
+        # HV, INT
+        Artikel.add_style(odt, 'OKT', 'fo:font-size="9pt"')
         # VS
         Artikel.add_style(odt, 'GÖ', 'fo:font-size="9pt"')
         # GP, UST
