@@ -274,16 +274,39 @@ def export_to_docx(request, ids):
 
 @login_required
 def search(request):
+    method = request.META['REQUEST_METHOD']
+    if method == 'POST':
+        print(request.POST)
+        ordning = []
+        for artikel in request.POST:
+            if re.match('^artikel-', artikel):
+                id = artikel.replace('artikel-', '')
+                print(id)
+                ordning.append(Artikel.objects.get(id = id))
+        print(ordning)
+        föreArtikel = ordning[0]
+        föreRang = 1
+        for artikel in ordning[1:]:
+            if artikel.lemma != föreArtikel.lemma and föreRang == 1:
+                föreRang = 0
+            if föreArtikel.rang != föreRang:
+                föreArtikel.rang = föreRang
+                föreArtikel.save()
+            if artikel.lemma == föreArtikel.lemma:
+                föreRang += 1
+            else:
+                föreRang = 1
+            föreArtikel = artikel
     print(request.GET)
     print(request.path)
     template = loader.get_template('talgoxe/search.html')
+    uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
     if 'q' in request.GET:
         söksträng = request.GET['q']
         print(söksträng)
     else:
-        uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
-    if 'sök-överallt' in request.GET:
+    if 'sök-överallt' in request.GET and request.GET['sök-överallt'] != 'None':
         sök_överallt = request.GET['sök-överallt']
     else:
         sök_överallt = None
@@ -295,11 +318,13 @@ def search(request):
     if sök_överallt:
         spolar = Spole.objects.filter(text__contains = söksträng).select_related('artikel')
         lemmata += [spole.artikel for spole in spolar]
-    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: lemma.lemma)
+    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: (lemma.lemma, lemma.rang))
     context = {
             'q' : söksträng,
             'lemmata' : lemmata,
             'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
+            'uri' : uri,
+            'sök_överallt' : sök_överallt,
         }
 
     return render_template(request, template, context)
@@ -391,3 +416,6 @@ def easylogout(request):
     logout(request)
     template = loader.get_template("talgoxe/logout.html")
     return render_template(request, template, { })
+
+def omordna(request):
+    print(request.POST)

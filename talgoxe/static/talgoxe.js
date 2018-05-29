@@ -1,4 +1,3 @@
-var searchString = "";
 var lastLemma;
 
 $(document).ready(function() {
@@ -16,7 +15,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
@@ -24,6 +23,7 @@ $(document).ready(function() {
         $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
         $('#type-' + counter).change(function(event) { checkType(event); });
         $('#value-' + counter).change(function(event) { checkValue(event); });
+        $('#spara-och-ladda-om-' + counter).click(function(event) { submitOrder(event); });
     }
 
     function submitOrder(event) {
@@ -274,31 +274,10 @@ $(document).ready(function() {
     $('#spara').click(submitOrder);
     $('.spara-och-ladda-om').click(submitOrder);
 
-    $('#sok-artikel').on('keyup', function(event) {
-        newSearchString = $(event.currentTarget)[0].value;
-        console.log(newSearchString);
-        /*
-        if (newSearchString != searchString) {
-            searchingFeedback = $('#searching-feedback');
-            searchingFeedback.show();
-            searchingFeedback.html('Letar efter ' + newSearchString + '...');
-            */
-            searchArticles(newSearchString);
-            /*
-            searchingFeedback.html('');
-            searchingFeedback.hide();
-        }
-        */
-        searchString = newSearchString;
-    });
+    $('#sok-artikel').on('keyup', searchArticles);
 
-    $('#sok-artikel-button').click(function(event) {
-        event.preventDefault();
-        searchArticles($("#sok-artikel")[0].value);
-    });
-
-    function searchArticles(string) {
-        console.log("Got search string: " + string);
+    function searchArticles() {
+        string = this.value
         if (string == "") {
             hideEverything();
             return;
@@ -322,25 +301,33 @@ $(document).ready(function() {
         });
     }
 
-    $('.träff .träffelement').click(function(event) { showArticle($(event.currentTarget).parent()) });
+    $('.träff .träffelement').click(function(event) { toggleArticle($(event.currentTarget).parent()) });
     $('.virgin').click(function(event) { fetchArticle(event.currentTarget); });
 
-    function showArticle(element) { /* TODO Make this into toggleArticle and make a real showArticle! */
+    function showArticle(parent) {
+        $(parent.children()[4]).removeClass("hidden");
+        $(parent.children()[2]).html('▾');
+        $(parent.children()[3]).hide();
+        $(parent.children()[4]).show();
+        parent.children().last().show();
+    }
+
+    function hideArticle(parent) {
+        $(parent.children()[4]).addClass("hidden");
+        $(parent.children()[2]).html('▸');
+        $(parent.children()[3]).show();
+        $(parent.children()[4]).hide();
+        parent.children().last().hide();
+    }
+
+    function toggleArticle(element) {
         console.log(element);
         var artId = element[0].id.replace(/^lemma-/, 'artikel-');
         article = $('#' + artId);
         if (article.hasClass("hidden")) {
-            article.removeClass("hidden");
-            element.children().first().html('▾');
-            $(element.children()[1]).hide();
-            article.show();
-            element.children().last().show();
+            showArticle(article.parent());
         } else {
-            article.addClass("hidden");
-            element.children().first().html('▸');
-            $(element.children()[1]).show();
-            article.hide();
-            element.children().last().hide();
+            hideArticle(article.parent());
         }
     }
 
@@ -358,14 +345,7 @@ $(document).ready(function() {
         if ($('#visa-alla-text').html() == "Visa alla") {
 
             $('.träff').each(function(i, lemma) {
-                lemma = $(lemma);
-                article = $(lemma.children()[2]);
-                console.log(article);
-                article.removeClass("hidden");
-                lemma.children().first().html('▾');
-                $(lemma.children()[1]).hide()
-                article.show();
-                lemma.children().last().show();
+                showArticle($(lemma));
             });
 
             $('.virgin').each(function(i, element) {
@@ -379,13 +359,7 @@ $(document).ready(function() {
             $('#visa-alla-text').html('Visa alla');
 
             $('.träff').each(function(i, lemma) {
-                console.log(lemma);
-                article = $($(lemma).children()[2]);
-                article.addClass("hidden");
-                article.hide();
-                $(lemma).children().first().html('▸');
-                $($(lemma).children()[1]).show()
-                $(lemma).children().last().hide();
+                hideArticle($(lemma));
             });
         }
     });
@@ -558,5 +532,36 @@ $(document).ready(function() {
             element.attr("href", link.trim());
             element.html("Ladda&nbsp;ner&nbsp;Wordfilen");
         });
+    }
+
+    $('#omordna').click(omordna);
+
+    function omordna() {
+        console.log(this);
+        if ($('.flytta-upp').hasClass("hidden")) {
+            $('.flytta-upp, .flytta-ner, #spara-ordning').show();
+            $('.flytta-upp, .flytta-ner, #spara-ordning').removeClass("hidden");
+        } else {
+            $('.flytta-upp, .flytta-ner, #spara-ordning').hide();
+            $('.flytta-upp, .flytta-ner, #spara-ordning').addClass("hidden");
+        }
+    }
+
+    $('.flytta-upp').click(flyttaUpp);
+
+    function flyttaUpp(event) {
+        event.preventDefault();
+        rad = $(this).parent();
+        upp = rad.prev();
+        upp.before(rad);
+    }
+
+    $('.flytta-ner').click(flyttaNer);
+
+    function flyttaNer(event) {
+        event.preventDefault();
+        rad = $(this).parent();
+        ner = rad.next();
+        ner.after(rad);
     }
 });

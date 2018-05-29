@@ -1,5 +1,5 @@
 {% spaceless %}
-<strong>{% include "talgoxe/lemma.html" with artikel=lemma %}</strong>
+<span class="SO">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
 {% with setspace as True %}
     {% for segment in new_segments %}
         {% if not segment.isrightdelim %}

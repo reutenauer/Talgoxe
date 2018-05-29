@@ -237,9 +237,12 @@ class Artikel(models.Model):
         # ÄV, ÄVK se nedan
         # FOT
         Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
-        # SOV, TI
+        Artikel.add_style(odt, 'SOV', 'fo:font-weight="bold"')
+        # TI
         # HV, INT, OKT
-        # VS, GÖ, GP, UST
+        # VS
+        Artikel.add_style(odt, 'GÖ', 'fo:font-size="9pt"')
+        # GP, UST
         Artikel.add_style(odt, 'US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
         Artikel.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
@@ -302,8 +305,9 @@ class Artikel(models.Model):
         for style in ('TI', 'HV', 'INT'):
             Artikel.add_docx_style(document, style)
         Artikel.add_docx_style(document, 'OKT', False, False, 9)
-        for style in ('VS', 'GÖ', 'GP'):
-            Artikel.add_docx_style(document, style)
+        Artikel.add_docx_style(document, 'VS')
+        Artikel.add_docx_style(document, 'GÖ', False, False, 9)
+        Artikel.add_docx_style(document, 'GP')
         Artikel.add_docx_style(document, 'UST', True, False, 12)
         Artikel.add_docx_style(document, 'US', True, False, 12)
         for style in ('GÖP', 'GTP', 'NYR', 'VB'):
@@ -378,8 +382,8 @@ class Artikel(models.Model):
               print("  ... to " + text)
             data = self.raw_data_set().filter(pos = i).first()
             if data:
-                data.type = type
-                data.d = text
+                data.typ = type
+                data.text = text
                 data.save()
                 for data2 in self.raw_data_set().filter(pos = i):
                     if data2 != data:
