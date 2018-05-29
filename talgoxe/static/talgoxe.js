@@ -577,8 +577,12 @@ $(document).ready(function() {
     }
 
     var speciellaTecken = {
-        123 : radbytessymbol,
-        222 : 'â'
+        'initial' : {
+            123 : radbytessymbol,
+        },
+        'control' : {
+            222 : 'â'
+        }
     }
 
     function speciellTecken(element, tecken) {
@@ -597,14 +601,13 @@ $(document).ready(function() {
         console.log(state);
         console.log(event.keyCode);
         console.log(event.which);
-        if (event.keyCode == 123 && state == 'INITIAL') { // 119 F8
+        if (event.keyCode in speciellaTecken.initial && state == 'INITIAL') { // 119 F8
             event.preventDefault();
-            speciellTecken(this, speciellaTecken[event.keyCode]);
-        } else if (event.keyCode == 17 && state == 'INITIAL') {
+            speciellTecken(this, speciellaTecken.initial[event.keyCode]);
+        } else if (event.keyCode == 17) {
             state = 'CONTROL';
-        } else if (event.keyCode == 222 && state == 'CONTROL') { // 85 u, 59 ö, 68 d, 76 l
-            speciellTecken(this, 'â');
-            state = 'INITIAL';
+        } else if (event.keyCode in speciellaTecken.control && state == 'CONTROL') { // 85 u, 59 ö, 68 d, 76 l
+            speciellTecken(this, speciellaTecken.control[event.keyCode]);
         }
     }
 });
