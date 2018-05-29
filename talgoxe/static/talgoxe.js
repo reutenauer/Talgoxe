@@ -564,4 +564,35 @@ $(document).ready(function() {
         ner = rad.next();
         ner.after(rad);
     }
+
+    var radbytessymbol = '¶';
+
+    $('.d-value').keypress(hanteraTangent);
+
+    function hanteraTangent(event) {
+        console.log(event.keyCode);
+        if (event.keyCode == 123) {
+            event.preventDefault();
+            /*
+            console.log(radbytessymbol);
+            var sel = window.getSelection();
+            console.log(sel);
+            console.log(sel.toString());
+            sel.text += radbytessymbol;
+            */
+            /*
+            console.log(event.currentTarget.createTextRange);
+            console.log(this.caretPos);
+            console.log(this.value);
+            this.value += radbytessymbol;
+            console.log(this);
+            */
+            text = this.value;
+            textF = text.substring(0, this.selectionStart);
+            var cursor = this.selectionStart;
+            textEfter = text.substring(cursor, text.length);
+            this.value = textF + radbytessymbol + textEfter;
+            this.selectionStart = this.selectionEnd = cursor + 1;
+        }
+    }
 });
