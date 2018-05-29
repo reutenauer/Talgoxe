@@ -599,21 +599,7 @@ $(document).ready(function() {
         console.log(event.which);
         if (event.keyCode == 123 && state == 'INITIAL') { // 119 F8
             event.preventDefault();
-            /*
-            console.log(radbytessymbol);
-            var sel = window.getSelection();
-            console.log(sel);
-            console.log(sel.toString());
-            sel.text += radbytessymbol;
-            */
-            /*
-            console.log(event.currentTarget.createTextRange);
-            console.log(this.caretPos);
-            console.log(this.value);
-            this.value += radbytessymbol;
-            console.log(this);
-            */
-            speciellTecken(this, radbytessymbol);
+            speciellTecken(this, speciellaTecken[event.keyCode]);
         } else if (event.keyCode == 17 && state == 'INITIAL') {
             state = 'CONTROL';
         } else if (event.keyCode == 222 && state == 'CONTROL') { // 85 u, 59 ö, 68 d, 76 l
