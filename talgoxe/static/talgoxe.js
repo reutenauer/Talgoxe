@@ -568,6 +568,18 @@ $(document).ready(function() {
     var radbytessymbol = '¶';
 
     $('.d-value').keydown(hanteraTangent);
+    $('.d-value').keyup(hanteraTangentUp);
+
+    function hanteraTangentUp(event) {
+        if (event.keyCode == 17) {
+            state = 'INITIAL';
+        }
+    }
+
+    var speciellaTecken = {
+        123 : radbytessymbol,
+        222 : 'â'
+    }
 
     function speciellTecken(element, tecken) {
         console.log("foo");
@@ -576,7 +588,7 @@ $(document).ready(function() {
         textF = text.substring(0, element.selectionStart);
         var cursor = element.selectionStart;
         textEfter = text.substring(cursor, text.length);
-        element.value = textF + radbytessymbol + textEfter;
+        element.value = textF + tecken + textEfter;
         element.selectionStart = element.selectionEnd = cursor + 1;
     }
 
