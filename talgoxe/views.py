@@ -4,6 +4,7 @@ from tempfile import mkdtemp, mktemp
 from os import system, chdir
 import io
 import os
+from os.path import join
 import re
 from collections import OrderedDict, deque
 from docx import Document
@@ -240,9 +241,10 @@ def export_to_odf(request, id):
             finalname = '%s-%s.odt' % (id[0], Artikel.objects.get(id = id[0]).lemma)
     Artikel.stop_odf(odf)
     staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-    system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
+    os.rename(tempfilename, join(staticpath, finalname))
+    # system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
     template = loader.get_template('talgoxe/download_odf.html')
-    context = { 'filepath' : 'ord/%s' % finalname }
+    context = { 'filepath' : join('ord', finalname) }
     return render_template(request, template, context)
 
 def export_to_docx(request, ids):
@@ -264,9 +266,9 @@ def export_to_docx(request, ids):
           lemma.generate_docx_paragraph(document)
       document.save(tempfilename)
   staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-  system('mv %s %s/"%s"' % (tempfilename, staticpath, filename))
+  os.rename(tempfilename, join(staticpath, filename))
   template = loader.get_template('talgoxe/download_odf.html')
-  context = { 'filepath' : 'ord/%s' % filename }
+  context = {'filepath': join('ord', filename)}
 
   return render_template(request, template, context)
 
