@@ -610,6 +610,7 @@ $(document).ready(function() {
         } else if (event.keyCode == 17) {
             state = 'CONTROL';
         } else if (event.keyCode in speciellaTecken.control && state == 'CONTROL') {
+            event.preventDefault();
             speciellTecken(this, speciellaTecken.control[event.keyCode]);
         }
     }
