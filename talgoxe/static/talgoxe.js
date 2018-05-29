@@ -565,8 +565,6 @@ $(document).ready(function() {
         ner.after(rad);
     }
 
-    var radbytessymbol = '¶';
-
     $('.d-value').keydown(hanteraTangent);
     $('.d-value').keyup(hanteraTangentUp);
 
@@ -578,9 +576,14 @@ $(document).ready(function() {
 
     var speciellaTecken = {
         'initial' : {
-            123 : radbytessymbol,
+            123 : '¶',
+            119 : '~'
         },
         'control' : {
+            85 : 'û',
+            59 : 'ô',
+            68 : 'ð',
+            76 : '£',
             222 : 'â'
         }
     }
@@ -601,12 +604,12 @@ $(document).ready(function() {
         console.log(state);
         console.log(event.keyCode);
         console.log(event.which);
-        if (event.keyCode in speciellaTecken.initial && state == 'INITIAL') { // 119 F8
+        if (event.keyCode in speciellaTecken.initial && state == 'INITIAL') {
             event.preventDefault();
             speciellTecken(this, speciellaTecken.initial[event.keyCode]);
         } else if (event.keyCode == 17) {
             state = 'CONTROL';
-        } else if (event.keyCode in speciellaTecken.control && state == 'CONTROL') { // 85 u, 59 ö, 68 d, 76 l
+        } else if (event.keyCode in speciellaTecken.control && state == 'CONTROL') {
             speciellTecken(this, speciellaTecken.control[event.keyCode]);
         }
     }
