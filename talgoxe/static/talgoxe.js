@@ -592,10 +592,10 @@ $(document).ready(function() {
         console.log("foo");
         console.log(element);
         var text = element.value;
-        textF = text.substring(0, element.selectionStart);
+        textFöre = text.substring(0, element.selectionStart);
         var cursor = element.selectionStart;
         textEfter = text.substring(cursor, text.length);
-        element.value = textF + tecken + textEfter;
+        element.value = textFöre + tecken + textEfter;
         element.selectionStart = element.selectionEnd = cursor + 1;
     }
 
