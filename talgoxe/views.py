@@ -48,22 +48,17 @@ def index(request):
 @login_required # FIXME Något om användaren faktiskt är utloggad?
 def create(request):
     stickord = request.POST['ny_stickord'].strip()
-    print("Fick lemma ’%s’" % stickord)
     företrädare = Artikel.objects.filter(lemma = stickord)
     maxrank = företrädare.aggregate(Max('rang'))['rang__max']
     if maxrank == None:
         rank = 0
     elif maxrank == 0:
-        print("==== 0 = Hej, numrerar om ett lemma...")
         lemma0 = företrädare.first()
         lemma0.rang = 1
         lemma0.save()
         rank = 2
     elif maxrank > 0:
-        print("==== 1+")
         rank = maxrank + 1
-    else:
-        print("==== None")
     lemma = Artikel.objects.create(lemma = stickord, rang = rank)
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
@@ -71,15 +66,12 @@ def create(request):
 def artikel(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
-        print(request.POST)
         lemma = Artikel.objects.get(id = id)
         lemma.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
     lemmata = Artikel.objects.filter(id__gt = 0).order_by('lemma','rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
     lemma = Artikel.objects.filter(id = id).first()
-    print(id)
-    print(lemma.lemma)
     # lemma.resolve_pilcrow()
     lemma.collect()
     if len(lemma.raw_data_set()) == 0:
@@ -134,7 +126,6 @@ def artikel_efter_stickord(request, stickord):
         return render_template(request, template, context)
 
 def print_stuff(request, id = None):
-    print(id)
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = os.path.join(tempdir, 'sdl.tex')
     import locale
@@ -153,9 +144,6 @@ def print_stuff(request, id = None):
         """)
 
     if id:
-        print(type)
-        print(id)
-        print(type(id))
         if type(id) == str:
             source.write("\\startcolumns[n=2,balance=no]\n")
             lemma = Artikel.objects.get(id = id)
@@ -192,7 +180,6 @@ def print_stuff(request, id = None):
     return run_context(request, tempdir,  basename)
 
 def run_context(request, tempdir, basename):
-    print(tempdir)
     chdir(tempdir)
     os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
     os.environ['TMPDIR'] = '/tmp'
@@ -203,7 +190,6 @@ def run_context(request, tempdir, basename):
     logger = logging.getLogger('django')
     logger.log(logging.DEBUG, output.read())
     ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
-    print("Copying sdl.pdf to %s" % ordpdfpath)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
     logfile = open(os.path.join(tempdir, 'sdl.log'))
     log = logfile.read()
@@ -224,8 +210,6 @@ def printing(request):
     return HttpResponse('<p>Preparing to print!</p>');
 
 def export_to_odf(request, id):
-    print(type(id))
-    print(id)
     tempfilename = mktemp('.odt')
     odf = Artikel.start_odf(tempfilename)
     if type(id) == str:
@@ -249,12 +233,9 @@ def export_to_odf(request, id):
 
 def export_to_docx(request, ids):
   tempfilename = mktemp('.docx')
-  print("ids:")
-  print(ids)
   if len(ids) == 1:
       id = ids[0]
       lemma = Artikel.objects.get(id = id)
-      print(tempfilename)
       docx = lemma.process_docx(tempfilename)
       filename = '%s-%s.docx' % (id, lemma.lemma)
   else:
@@ -276,14 +257,11 @@ def export_to_docx(request, ids):
 def search(request):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
-        print(request.POST)
         ordning = []
         for artikel in request.POST:
             if re.match('^artikel-', artikel):
                 id = artikel.replace('artikel-', '')
-                print(id)
                 ordning.append(Artikel.objects.get(id = id))
-        print(ordning)
         föreArtikel = ordning[0]
         föreRang = 1
         for artikel in ordning[1:]:
@@ -297,13 +275,10 @@ def search(request):
             else:
                 föreRang = 1
             föreArtikel = artikel
-    print(request.GET)
-    print(request.path)
     template = loader.get_template('talgoxe/search.html')
     uri = "%s://%s%s" % (request.scheme, request.META['HTTP_HOST'], request.path)
     if 'q' in request.GET:
         söksträng = request.GET['q']
-        print(söksträng)
     else:
         return render_template(request, template, { 'q' : 'NULL', 'uri' : uri })
     if 'sök-överallt' in request.GET and request.GET['sök-överallt'] != 'None':
@@ -357,27 +332,20 @@ def print_on_demand(request):
     method = request.META['REQUEST_METHOD']
     template = loader.get_template('talgoxe/print_on_demand.html')
     if method == 'POST':
-        print(request.POST)
         lemmata = []
-        print('----')
         for key in request.POST:
             mdata = re.match('selected-(\d+)', key)
             bdata = re.match('bokstav-(.)', key)
             if mdata:
-                print(mdata.group(1))
                 lemma = Artikel.objects.get(id = int(mdata.group(1)))
                 # lemma.collect()
                 lemmata.append(lemma)
             elif bdata:
-                print(bdata.group(1))
                 hel_bokstav = Artikel.objects.filter(lemma__startswith = bdata.group(1))
                 # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
                 lemmata += hel_bokstav
-        print('----')
         lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rang)) # TODO Make unique
         context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata) }
-        print("Number of lemmata:")
-        print(len(lemmata))
         template = loader.get_template('talgoxe/search.html')
     elif method == 'GET':
         lemmata = Artikel.objects.order_by('lemma', 'rang')
@@ -388,7 +356,6 @@ def print_on_demand(request):
 
 @login_required
 def print_pdf(request):
-    print(request.GET)
     ids = []
     # for id in request.GET:
         # value = map(lambda s: s.strip(), request.GET[id].split(','))
@@ -405,7 +372,6 @@ def print_pdf(request):
 
 @login_required
 def print_odf(request):
-    print(request.GET)
     return export_to_odf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
 
 @login_required
@@ -416,6 +382,3 @@ def easylogout(request):
     logout(request)
     template = loader.get_template("talgoxe/logout.html")
     return render_template(request, template, { })
-
-def omordna(request):
-    print(request.POST)
