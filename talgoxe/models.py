@@ -48,8 +48,8 @@ class Artikel(models.Model):
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
-        while i < self.raw_data_set().count():
-            currdat = self.raw_data_set().all()[i]
+        while i < self.spole_set.count():
+            currdat = self.spole_set.order_by('pos').all()[i]
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
@@ -66,7 +66,7 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
+                                self.new_segments.append(Segment(self.spole_set.filter('pos').all()[i]))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
                     state = 'INITIAL'
