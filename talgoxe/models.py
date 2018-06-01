@@ -49,7 +49,7 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
         while i < self.spole_set.count():
-            currdat = self.spole_set.order_by('pos').all()[i]
+            currdat = self.spole_set.get(pos = i)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
@@ -66,7 +66,7 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.spole_set.filter('pos').all()[i]))
+                                self.new_segments.append(Segment(self.spole_set.get(pos = i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
                     state = 'INITIAL'
@@ -84,7 +84,7 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
+                                self.new_segments.append(Segment(self.spole_set.get(pos = i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
@@ -290,17 +290,17 @@ class Artikel(models.Model):
             text = bit[1]
             if type == gtype and text.title() in Landskap.short_abbrev.keys():
               text = Landskap.short_abbrev[text.title()]
-            data = self.raw_data_set().filter(pos = i).first()
+            data = self.spole_set.get(pos = i)
             if data:
                 data.typ = type
                 data.text = text
                 data.save()
-                for data2 in self.raw_data_set().filter(pos = i):
+                for data2 in self.spole_set.get(pos = i):
                     if data2 != data:
                         data2.delete()
             else:
                 Spole.objects.create(artikel = self, typ = type, pos = i, text = text)
-        self.raw_data_set().filter(pos__gte = len(d)).delete()
+        self.spole_set.filter(pos__gte = len(d)).delete()
 
 class Segment(): # Fjäder!
     def __init__(self, type, text = None):
