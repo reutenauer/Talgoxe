@@ -92,27 +92,6 @@ def artikel(request, id):
     return render_template(request, template, context)
 
 @login_required
-def artiklar(request, id):
-    template = loader.get_template('talgoxe/artiklar.html')
-    lemmata = Artikel.objects.order_by('lemma')
-    lemma = Artikel.objects.get(id = id)
-    count = lemmata.filter(lemma__lt = lemma.lemma).count()
-    simple_lemmata = lemmata.all()[count:count + 10]
-    extracted_lemmata = []
-    for simple_lemma in simple_lemmata:
-        simple_lemma.collect()
-        extracted_lemmata += [simple_lemma]
-    context = {
-        'lemma': lemma,
-        'lemmata': lemmata,
-        'rank': count,
-        'extracted_lemmata': extracted_lemmata,
-        'pagetitle': "%s följ. – Svenskt dialektlexikon" % lemma.lemma,
-    }
-
-    return render_template(request, template, context)
-
-@login_required
 def artikel_efter_stickord(request, stickord):
     lemmata = Artikel.objects.filter(id__gt = 0, lemma = stickord).order_by('rang')
     # TODO: 0!
@@ -197,12 +176,6 @@ def run_context(request, tempdir, basename):
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s.pdf' % basename }
     return render_template(request, template, context)
-
-def print_artikel(request, id):
-    return print_stuff(request, id)
-
-def print_lexicon(request):
-    return print_stuff(request)
 
 def printing(request):
     lexicon = Lexicon()
@@ -356,14 +329,6 @@ def print_on_demand(request):
 
 @login_required
 def print_pdf(request):
-    ids = []
-    # for id in request.GET:
-        # value = map(lambda s: s.strip(), request.GET[id].split(','))
-        # ids.append([id, deque(map(lambda s: s.strip(), request.GET[id].split(',')))])
-        # value = list(map(lambda s: s.strip(), request.GET[id].split(',')))
-        # ids.append([id, value])
-    # list(map(lambda s: s.strip(), request.GET['ids'].split(',')))
-    retvalue = ""
     tex = io.StringIO()
     return print_stuff(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
     template = loader.get_template("talgoxe/download_custom_pdf.html")
