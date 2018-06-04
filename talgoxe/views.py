@@ -96,7 +96,7 @@ def artikel_efter_stickord(request, stickord):
     lemmata = Artikel.objects.filter(id__gt = 0, lemma = stickord).order_by('rang')
     # TODO: 0!
     if len(lemmata) == 1:
-        return HttpResponseRedirect(reverse('artikel', args = (lemmata.first().id,)))
+        return HttpResponseRedirect(reverse('redigera', args = (lemmata.first().id,)))
     else:
         template = loader.get_template('talgoxe/stickord.html')
         context = {
