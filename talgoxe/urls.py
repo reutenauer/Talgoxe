@@ -4,16 +4,13 @@ from django.conf.urls import url
 
 from . import views
 
-stickord_regexp = r'^stickord/(?P<stickord>[0-9.M?, TSOHF2a-zåäö()-]+)'
 urlpatterns = [
     url(r'^$', views.index, name = 'index'),
     url('create', views.create, name = 'create'),
     url(r'^(?P<id>\d+)$', views.artikel, name = 'artikel'),
-    url(stickord_regexp, views.artikel_efter_stickord, name = 'stickord'),
-    url(r'^(?P<id>\d+)/odf', views.export_to_odf, name = 'export_to_odf'),
+    url(r'^stickord/(?P<stickord>.+)$', views.artikel_efter_stickord, name = 'stickord'),
     url(r'^search$', views.search, name = 'search'),
     url(r'^artikel/(?P<id>\d+)?$', views.article, name = 'article'),
-    url(r'^artikel/partial/(?P<id>\d+)\.(?P<format>\w+)$', views.partial_article, name = 'article_partial'),
     url(r'print-on-demand$', views.print_on_demand, name = 'print_on_demand'),
     url(r'print-on-demand/pdf', views.print_pdf, name = 'print_pdf'),
     url(r'print-on-demand/odf', views.print_odf, name = 'print_odf'),

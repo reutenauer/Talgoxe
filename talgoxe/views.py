@@ -270,20 +270,6 @@ def article(request, id):
 
     return render_template(request, template, context)
 
-def partial_article(request, id, format):
-    lemma = Artikel.objects.get(id = id)
-    if format == 'html':
-        return HttpResponseRedirect(reverse('article', args = (id,)))
-    elif format == 'tex':
-        output = io.StringIO()
-        lemma.process(output)
-        tex = output.getvalue()
-        output.close()
-
-        return HttpResponse(tex)
-    elif format == 'odf':
-        return HttpResponse(lemma.serialise())
-
 @login_required
 def print_on_demand(request):
     method = request.META['REQUEST_METHOD']

@@ -18,7 +18,7 @@
         {% if segment.ismoment and segment.display %}
             <span class="{{ segment.type }}">{{ segment.text.format }}</span>
         {% else %}
-            {% if segment.type.abbrev == 'ref' %}
+            {% if segment.type.kod == 'ref' %}
                 <span class="{{ segment.type }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
             {% else %}
                 <span class="{{ segment.type }}">{{ segment.format }}</span>
