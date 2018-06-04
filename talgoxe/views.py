@@ -63,7 +63,7 @@ def create(request):
     return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
 
 @login_required
-def artikel(request, id):
+def redigera(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         lemma = Artikel.objects.get(id = id)
@@ -262,7 +262,7 @@ def search(request):
     return render_template(request, template, context)
 
 @login_required
-def article(request, id):
+def artikel(request, id):
     lemma = Artikel.objects.get(id = id)
     template = loader.get_template('talgoxe/artikel.html')
     lemma.collect()
