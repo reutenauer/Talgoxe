@@ -474,17 +474,3 @@ class Landskap():
 
     def __str__(self):
         return self.abbrev
-
-class Lexicon():
-    def process(self):
-        tempdir = mkdtemp('', 'SDL')
-        source = file(tempdir + '/sdl.tex', 'w')
-        source.write("""
-            \starttext
-            {\\tfc\\hfill Sveriges dialektlexikon\\hfill}
-
-            {\\tfb\\hfill utgiven av Institutet för språk och folkminnen\\hfill}
-        """.encode('UTF-8'))
-        for artikel in Artikel.objects.filter(id__gt = 0).order_by('lemma'):
-            artikel.process(source)
-        source.close()

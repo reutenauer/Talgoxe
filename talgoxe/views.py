@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.contrib.auth import logout
 
-from talgoxe.models import Spole, Artikel, Lexicon, Typ
+from talgoxe.models import Spole, Artikel, Typ
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
@@ -104,7 +104,7 @@ def artikel_efter_stickord(request, stickord):
         }
         return render_template(request, template, context)
 
-def print_stuff(request, id = None):
+def export_to_pdf(request, ids):
     tempdir = mkdtemp('', 'SDLartikel')
     sourcename = os.path.join(tempdir, 'sdl.tex')
     import locale
@@ -113,8 +113,7 @@ def print_stuff(request, id = None):
     source = open(sourcename, 'w')
     source.write("\\mainlanguage[sv]")
     source.write("\\setupbodyfont[pagella, 12pt]\n")
-    if id:
-        source.write("\\setuppagenumbering[state=stop]\n")
+    source.write("\\setuppagenumbering[state=stop]\n")
     with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
         source.write(file.read())
 
@@ -122,33 +121,23 @@ def print_stuff(request, id = None):
         \\starttext
         """)
 
-    if id:
-        if type(id) == str:
-            source.write("\\startcolumns[n=2,balance=no]\n")
-            lemma = Artikel.objects.get(id = id)
-            lemma.process(source)
-            basename = '%s-%s' % (id, lemma.lemma)
-        elif type(id) == list:
-            id = sorted(id, key = lambda id: Artikel.objects.get(id = id).lemma)
-            source.write("\\startcolumns[n=2,balance=yes]\n")
-            for i in id:
-                lemma = Artikel.objects.get(id = i)
-                lemma.process(source)
-                source.write("\\par")
-            if len(id) == 1:
-                basename = '%s-%s' % (id[0], Artikel.objects.get(id = id[0]).lemma)
-            else:
-                basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
-        source.write("\\stopcolumns\n")
-    else:
+    if type(ids) == str:
+        source.write("\\startcolumns[n=2,balance=no]\n")
+        lemma = Artikel.objects.get(id = ids)
+        lemma.process(source)
+        basename = '%s-%s' % (id, lemma.lemma)
+    elif type(ids) == list:
+        ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
         source.write("\\startcolumns[n=2,balance=yes]\n")
-        for lemma in Artikel.objects.filter(id__gt = 0).order_by('lemma'):
-            source.write("\\startparagraph\n")
-            # source.write("{\\bf %s\\par}" % lemma.lemma)
+        for i in ids:
+            lemma = Artikel.objects.get(id = i)
             lemma.process(source)
-            source.write("\\stopparagraph\n")
-        source.write("\\stopcolumns")
-        basename = 'sdl'
+            source.write("\\par")
+        if len(ids) == 1:
+            basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
+        else:
+            basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
+    source.write("\\stopcolumns\n")
 
     source.write("\\stoptext\n")
     source.close()
@@ -176,11 +165,6 @@ def run_context(request, tempdir, basename):
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s.pdf' % basename }
     return render_template(request, template, context)
-
-def printing(request):
-    lexicon = Lexicon()
-    lexicon.process()
-    return HttpResponse('<p>Preparing to print!</p>');
 
 def export_to_odf(request, id):
     tempfilename = mktemp('.odt')
@@ -329,11 +313,7 @@ def print_on_demand(request):
 
 @login_required
 def print_pdf(request):
-    tex = io.StringIO()
-    return print_stuff(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
-    template = loader.get_template("talgoxe/download_custom_pdf.html")
-    context = { }
-    return render_template(request, template, context)
+    return export_to_pdf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
 
 @login_required
 def print_odf(request):
