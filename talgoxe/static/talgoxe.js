@@ -24,6 +24,7 @@ $(document).ready(function() {
         $('#type-' + counter).change(function(event) { checkType(event); });
         $('#value-' + counter).change(function(event) { checkValue(event); });
         $('#value-' + counter).keydown(hanteraTangent);
+        /* $('#row-up-' + counter).click(); */ // TODO Attach appropriate events
         $('#spara-och-ladda-om-' + counter).click(function(event) { submitOrder(event); });
     }
 
