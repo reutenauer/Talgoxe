@@ -23,6 +23,7 @@ $(document).ready(function() {
         $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
         $('#type-' + counter).change(function(event) { checkType(event); });
         $('#value-' + counter).change(function(event) { checkValue(event); });
+        $('#value-' + counter).keydown(hanteraTangent);
         $('#spara-och-ladda-om-' + counter).click(function(event) { submitOrder(event); });
     }
 
