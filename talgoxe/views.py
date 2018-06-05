@@ -60,7 +60,7 @@ def create(request):
     elif maxrank > 0:
         rank = maxrank + 1
     lemma = Artikel.objects.create(lemma = stickord, rang = rank)
-    return HttpResponseRedirect(reverse('artikel', args = (lemma.id,)))
+    return HttpResponseRedirect(reverse('redigera', args = (lemma.id,)))
 
 @login_required
 def redigera(request, id):
