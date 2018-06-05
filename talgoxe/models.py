@@ -298,9 +298,6 @@ class Artikel(models.Model):
                 data.typ = type
                 data.text = text
                 data.save()
-                for data2 in self.get_spole(i):
-                    if data2 != data:
-                        data2.delete()
             else:
                 Spole.objects.create(artikel = self, typ = type, pos = i, text = text)
         self.spole_set.filter(pos__gte = len(d)).delete()
