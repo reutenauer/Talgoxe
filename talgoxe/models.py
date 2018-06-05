@@ -24,7 +24,10 @@ class Artikel(models.Model):
         return self.lemma
 
     def get_spole(self, i):
-        return self.spole_set.order_by('pos').all()[i] # Man kan missa vissa värden av pos, så .get(pos = i)funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
+        if i < self.spole_set.count():
+            return self.spole_set.order_by('pos').all()[i] # Man kan missa vissa värden av pos, så .get(pos = i)funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
+        else:
+            return None
 
     def resolve_moments(self, segment):
         if segment.ism1():
