@@ -209,7 +209,7 @@ a#skapa-odf, a#skapa-docx {
   background: green;
 }
 
-.d-type, .addRow, .removeRow, .moveRowUp, .moveRowDown, .moveMomentUp, .moveMomentDown, .spara-och-ladda-om {
+.d-type, .add-row, .remove-row, .move-row-up, .move-row-down, .move-moment-up, .move-moment-down, .spara-och-ladda-om {
   vertical-align: top;
 }
 

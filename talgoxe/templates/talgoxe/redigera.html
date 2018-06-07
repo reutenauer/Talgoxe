@@ -21,13 +21,13 @@
       {% spaceless %}
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.typ.format }}" id="type-{{ d.pos }}" class="d-type">
       <textarea {% if d.typ.kod == 'm1' or d.typ.kod == 'm2' %}class="hidden"{% endif %} rows="1" style="width: 55%" name="value-{{ d.pos }}" id="value-{{ d.pos }}" class="d-value">{{ d.text }}</textarea>
-      <button class="addRow" id="add-row-{{ d.pos }}" tabindex="-1"><strong>+</strong></button>
-      <button class="removeRow" id="remove-row-{{ d.pos }}" tabindex="-1"><strong>-</strong></button>
-      <button class="moveRowUp" id="row-up-{{ d.pos }}" tabindex="-1"><strong>↑</strong></button>
-      <button class="moveRowDown" id="row-down-{{ d.pos }}" tabindex="-1"><strong>↓</strong></button>
+      <button class="add-row" id="add-row-{{ d.pos }}" tabindex="-1"><strong>+</strong></button>
+      <button class="remove-row" id="remove-row-{{ d.pos }}" tabindex="-1"><strong>-</strong></button>
+      <button class="move-row-up" id="row-up-{{ d.pos }}" tabindex="-1"><strong>↑</strong></button>
+      <button class="move-row-down" id="row-down-{{ d.pos }}" tabindex="-1"><strong>↓</strong></button>
       {% if d.typ.kod == 'm1' or d.typ.kod == 'm2' %}
-      <button class="moveMomentUp" id="moment-up-{{ d.pos }}" tabindex="-1"><strong>⇑</strong></button>
-      <button class="moveMomentDown" id="moment-down-{{ d.pos }}" tabindex="-1"><strong>⇓</strong></button>
+      <button class="move-moment-up" id="moment-up-{{ d.pos }}" tabindex="-1"><strong>⇑</strong></button>
+      <button class="move-moment-down" id="moment-down-{{ d.pos }}" tabindex="-1"><strong>⇓</strong></button>
       {# Andra möjligheter: ⇧ U+21E7 ⇩ U+21E9 #}
       {% endif %}
       <input type="submit" class="spara-och-ladda-om" value="💾" tabindex="-1" />

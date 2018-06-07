@@ -1,8 +1,8 @@
 var lastLemma;
 
 $(document).ready(function() {
-    if ($('.addRow').length > 0) {
-        lastId = $('.addRow').last()[0].id;
+    if ($('.add-row').length > 0) {
+        lastId = $('.add-row').last()[0].id;
         console.log(lastId);
         counter = Number(lastId.replace('add-row-', ''))
     } else {
@@ -15,7 +15,7 @@ $(document).ready(function() {
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="add-row" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="remove-row" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="move-row-up" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="move-row-down" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
         buttonId = '#add-row-' + counter;
         console.log("Registering the event on id " + buttonId);
         $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     function submitOrder(event) {
         ids = [];
-        $('.addRow').each(function(event, data) {
+        $('.add-row').each(function(event, data) {
             ids.push(data.id.replace('add-row-', ''));
             console.log(data.id.replace('add-row-', ''));
         });
@@ -38,12 +38,12 @@ $(document).ready(function() {
         $('#spara').after('<input type="hidden" name="order" value="' + ids.join() + '">');
     }
 
-    $('.addRow').click(function(event) {
+    $('.add-row').click(function(event) {
         event.preventDefault();
         addRow(event);
     });
 
-    $('.removeRow').click(function(event) {
+    $('.remove-row').click(function(event) {
         event.preventDefault();
         removeRow(event);
     });
@@ -60,20 +60,20 @@ $(document).ready(function() {
         }
     }
 
-    $('.moveRowUp').click(function(event) {
+    $('.move-row-up').click(function(event) {
         console.log("Hej, här är jag.");
         event.preventDefault();
         moveUp($(event.currentTarget).parent());
     });
 
-    $('.moveRowDown').click(function(event) {
+    $('.move-row-down').click(function(event) {
         event.preventDefault();
         moveDown($(event.currentTarget).parent());
     });
 
-    $('.moveMomentUp').click(moveMomentUp);
+    $('.move-moment-up').click(moveMomentUp);
 
-    $('.moveMomentDown').click(moveMomentDown);
+    $('.move-moment-down').click(moveMomentDown);
 
     function moveUp(element) {
         prev = element.prev();
@@ -111,8 +111,8 @@ $(document).ready(function() {
           element.hide();
           addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
           pos = event.currentTarget.id.replace(/^type-/, '');
-          addAfter.after('<button class="moveMomentDown" id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
-          addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
+          addAfter.after('<button class="move-moment-down" id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
+          addAfter.after('<button class="move-moment-up" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
         } else if ($.inArray(type, types) >= 0) {
             element = $(event.currentTarget.id.replace(/^type-/, '#moment-up-'));
             console.log("element?");
