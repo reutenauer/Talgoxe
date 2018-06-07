@@ -10,22 +10,21 @@ $(document).ready(function() {
     }
 
     function addRow(event) {
+        event.preventDefault();
         console.log(event.currentTarget.id);
         dpos = event.currentTarget.id.replace('add-row-', '');
         counter++
         newRowId = counter
         console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
         $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="add-row" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="remove-row" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="move-row-up" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="move-row-down" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
-        buttonId = '#add-row-' + counter;
-        console.log("Registering the event on id " + buttonId);
-        $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
-        removeButtonId = '#remove-row-' + counter;
-        $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
-        $('#type-' + counter).change(function(event) { checkType(event); });
-        $('#value-' + counter).change(function(event) { checkValue(event); });
+        $('#add-row-' + counter).click(addRow);
+        $('#remove-row-' + counter).click(removeRow);
+        $('#type-' + counter).change(checkType);
+        $('#value-' + counter).change(checkValue);
         $('#value-' + counter).keydown(hanteraTangent);
-        /* $('#row-up-' + counter).click(); */ // TODO Attach appropriate events
-        $('#spara-och-ladda-om-' + counter).click(function(event) { submitOrder(event); });
+        $('#row-up-' + counter).click(moveUp);
+        $('#row-down-' + counter).click(moveDown);
+        $('#spara-och-ladda-om-' + counter).click(submitOrder);
     }
 
     function submitOrder(event) {
@@ -35,20 +34,15 @@ $(document).ready(function() {
             console.log(data.id.replace('add-row-', ''));
         });
         console.log(ids.join());
-        $('#spara').after('<input type="hidden" name="order" value="' + ids.join() + '">');
+        $(this).after('<input type="hidden" name="order" value="' + ids.join() + '">');
     }
 
-    $('.add-row').click(function(event) {
-        event.preventDefault();
-        addRow(event);
-    });
+    $('.add-row').click(addRow);
 
-    $('.remove-row').click(function(event) {
-        event.preventDefault();
-        removeRow(event);
-    });
+    $('.remove-row').click(removeRow);
 
     function removeRow(event) {
+        event.preventDefault();
         console.log("Trying to remove a row ...");
         var id = event.currentTarget.id.replace(/^remove-row-/, '')
         console.log("id is " + id);
@@ -60,33 +54,29 @@ $(document).ready(function() {
         }
     }
 
-    $('.move-row-up').click(function(event) {
-        console.log("Hej, här är jag.");
-        event.preventDefault();
-        moveUp($(event.currentTarget).parent());
-    });
+    $('.move-row-up').click(moveUp);
 
-    $('.move-row-down').click(function(event) {
-        event.preventDefault();
-        moveDown($(event.currentTarget).parent());
-    });
+    $('.move-row-down').click(moveDown);
 
     $('.move-moment-up').click(moveMomentUp);
 
     $('.move-moment-down').click(moveMomentDown);
 
-    function moveUp(element) {
+    function moveUp(event) {
+        event.preventDefault();
+        element = $(event.currentTarget).parent();
         prev = element.prev();
         prev.first().before(element.first());
     }
 
-    function moveDown(element) {
-        // id = element[0].id.replace('data-', '');
+    function moveDown(event) {
+        event.preventDefault();
+        element = $(event.currentTarget).parent();
         next = element.next();
         next.first().after(element.first());
     }
 
-    $('.d-type').change(function(event) { checkType(event); });
+    $('.d-type').change(checkType);
 
     /* TODO Hämsta listor (typer och landskap) från någon ändepunkt på servern */
     types = [
@@ -242,7 +232,7 @@ $(document).ready(function() {
     }
     */
 
-    $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
+    $('.d-value').change(checkValue); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
     landskap = {
         'sk' : 'skåne', 'bl' : 'blek', 'öl' : 'öland', 'sm' : 'smål', 'ha' : 'hall',
@@ -273,7 +263,6 @@ $(document).ready(function() {
         }
     }
 
-    $('#spara').click(submitOrder);
     $('.spara-och-ladda-om').click(submitOrder);
 
     $('#sok-artikel').on('keyup', searchArticles);
