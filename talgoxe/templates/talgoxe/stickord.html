@@ -1,9 +1,9 @@
 {% include "talgoxe/header.html" %}
 
-{% for lemma in lemmata %}
 <ul>
-  <li class="nobullet"><a href="{% url 'artikel' lemma.id %}">{{ lemma.lemma }}<sup>{{ lemma.rank }}</sup></a></li>
-</ul>
+{% for lemma in lemmata %}
+  <li class="nobullet"><a href="{% url 'redigera' lemma.id %}">{% include "talgoxe/lemma.html" with artikel=lemma %}</a></li>
 {% endfor %}
+</ul>
 
 {% include "talgoxe/footer.html" %}

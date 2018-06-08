@@ -1,90 +1,73 @@
 var lastLemma;
 
 $(document).ready(function() {
-    if ($('.addRow').length > 0) {
-        lastId = $('.addRow').last()[0].id;
-        console.log(lastId);
+    if ($('.add-row').length > 0) {
+        lastId = $('.add-row').last()[0].id;
         counter = Number(lastId.replace('add-row-', ''))
     } else {
         counter = 0;
     }
 
     function addRow(event) {
-        console.log(event.currentTarget.id);
+        event.preventDefault();
         dpos = event.currentTarget.id.replace('add-row-', '');
         counter++
         newRowId = counter
-        console.log("Adding a row after d.pos " + dpos + " with counter " + counter + " ...");
-        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="addRow" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="removeRow" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="moveRowUp" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="moveRowDown" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
-        buttonId = '#add-row-' + counter;
-        console.log("Registering the event on id " + buttonId);
-        $(buttonId).click(function(ev) { ev.preventDefault(); addRow(ev); });
-        removeButtonId = '#remove-row-' + counter;
-        $(removeButtonId).click(function(ev) { ev.preventDefault(); removeRow(ev); });
-        $('#type-' + counter).change(function(event) { checkType(event); });
-        $('#value-' + counter).change(function(event) { checkValue(event); });
-        $('#spara-och-ladda-om-' + counter).click(function(event) { submitOrder(event); });
+        $('#data-' + dpos).after('<li id="data-' + counter + '"><input type="text" size="3" name="type-' + counter + '" id="type-' + counter + '" class="d-type"><textarea rows="1" style="width: 55%" name="value-' + counter + '" id="value-' + counter + '" class="d-value" /><button class="add-row" id="add-row-' + counter + '" tabindex="-1"><strong>+</strong></button><button class="remove-row" id="remove-row-' + counter + '" tabindex="-1"><strong>-</strong></button><button class="move-row-up" id="row-up-' + counter + '" tabindex="-1"><strong>↑</strong></button><button class="move-row-down" id="row-down-' + counter + '" tabindex="-1"><strong>↓</strong></button><input type="submit" id="spara-och-ladda-om-' + counter + '" class="spara-och-ladda-om" value="💾" tabindex="-1" /></li>');
+        $('#add-row-' + counter).click(addRow);
+        $('#remove-row-' + counter).click(removeRow);
+        $('#type-' + counter).change(checkType);
+        $('#value-' + counter).change(checkValue);
+        $('#value-' + counter).keydown(hanteraTangent);
+        $('#row-up-' + counter).click(moveUp);
+        $('#row-down-' + counter).click(moveDown);
+        $('#spara-och-ladda-om-' + counter).click(submitOrder);
     }
 
     function submitOrder(event) {
         ids = [];
-        $('.addRow').each(function(event, data) {
+        $('.add-row').each(function(event, data) {
             ids.push(data.id.replace('add-row-', ''));
-            console.log(data.id.replace('add-row-', ''));
         });
-        console.log(ids.join());
-        $('#spara').after('<input type="hidden" name="order" value="' + ids.join() + '">');
+        $(this).after('<input type="hidden" name="order" value="' + ids.join() + '">');
     }
 
-    $('.addRow').click(function(event) {
-        event.preventDefault();
-        addRow(event);
-    });
+    $('.add-row').click(addRow);
 
-    $('.removeRow').click(function(event) {
-        event.preventDefault();
-        removeRow(event);
-    });
+    $('.remove-row').click(removeRow);
 
     function removeRow(event) {
-        console.log("Trying to remove a row ...");
+        event.preventDefault();
         var id = event.currentTarget.id.replace(/^remove-row-/, '')
-        console.log("id is " + id);
-        console.log($('#type-' + id)[0].value == '');
-        console.log($('#value-' + id)[0].value == '');
         if ($('#type-' + id)[0].value.trim() == '' && $('#value-' + id)[0].value.trim() == '') $(event.currentTarget).parent().remove();
         else if (confirm("Är du säker?")) {
             $(event.currentTarget).parent().remove();
         }
     }
 
-    $('.moveRowUp').click(function(event) {
-        console.log("Hej, här är jag.");
+    $('.move-row-up').click(moveUp);
+
+    $('.move-row-down').click(moveDown);
+
+    $('.move-moment-up').click(moveMomentUp);
+
+    $('.move-moment-down').click(moveMomentDown);
+
+    function moveUp(event) {
         event.preventDefault();
-        moveUp($(event.currentTarget).parent());
-    });
-
-    $('.moveRowDown').click(function(event) {
-        event.preventDefault();
-        moveDown($(event.currentTarget).parent());
-    });
-
-    $('.moveMomentUp').click(moveMomentUp);
-
-    $('.moveMomentDown').click(moveMomentDown);
-
-    function moveUp(element) {
+        element = $(event.currentTarget).parent();
         prev = element.prev();
         prev.first().before(element.first());
     }
 
-    function moveDown(element) {
-        // id = element[0].id.replace('data-', '');
+    function moveDown(event) {
+        event.preventDefault();
+        element = $(event.currentTarget).parent();
         next = element.next();
         next.first().after(element.first());
     }
 
-    $('.d-type').change(function(event) { checkType(event); });
+    $('.d-type').change(checkType);
 
     /* TODO Hämsta listor (typer och landskap) från någon ändepunkt på servern */
     types = [
@@ -98,35 +81,26 @@ $(document).ready(function() {
 
     /* TODO Check type before! Need to re-add textarea if changing from M1 or M2 to sth. else */
     function checkType(event) {
-        type = $(event.currentTarget)[0].value.trim().toLowerCase();
+        var radNummer = this.id.replace(/^type-/, '');
+        var type = this.value.trim().toLowerCase();
         if (type == 'm1' || type == 'm2') {
-          console.log("type = " + type);
-          id2 = event.currentTarget.id.replace(/^type-/, '#value-');
-          console.log("Looking for element with ID " + id2);
-          element = $(id2);
-          console.log("Target object:");
-          console.log(element);
-          element.hide();
-          addAfter = $(event.currentTarget.id.replace(/^type-/, '#row-down-'));
-          pos = event.currentTarget.id.replace(/^type-/, '');
-          addAfter.after('<button class="moveMomentDown" id="moment-down-' + pos + '" tabindex="-1"><strong>⇓</strong></button>');
-          addAfter.after('<button class="moveMomentUp" id="moment-up-' + pos + '" tabindex="-1"><strong>⇑</strong></button>');
-        } else if ($.inArray(type, types) >= 0) {
-            element = $(event.currentTarget.id.replace(/^type-/, '#moment-up-'));
-            console.log("element?");
-            if (element.attr("id")) {
-              console.log("yes");
-              console.log(element);
-              console.log(element.attr("id"));
-              element.remove();
-              $(event.currentTarget.id.replace(/^type-/, '#moment-down-')).remove();
-              $(event.currentTarget.id.replace(/^type-/, '#value-')).show();
-              $('#moment-up-' + pos).click(moveMomentUp);
-              $('#moment-down-' + pos).click(moveMomentDown);
-            } else console.log("no");
-            $(event.currentTarget).removeClass("red");
+          var valueRuta = $('#value-' + radNummer);
+          valueRuta.hide();
+          var addAfter = $('#row-down-' + radNummer);
+          addAfter.after('<button class="move-moment-down" id="moment-down-' + radNummer + '" tabindex="-1"><strong>⇓</strong></button>');
+          addAfter.after('<button class="move-moment-up" id="moment-up-' + radNummer + '" tabindex="-1"><strong>⇑</strong></button>');
+        } else if (types.indexOf(type, types) >= 0) {
+            var momentUp = $('#moment-up-' + radNummer);
+            if (momentUp.attr("id")) {
+              momentUp.remove();
+              $('#moment-down-' + radNummer).remove();
+              $('#value-' + radNummer).show();
+              $('#moment-up-' + radNummer).click(moveMomentUp);
+              $('#moment-down-' + radNummer).click(moveMomentDown);
+            }
+            $(this).removeClass("red");
         } else {
-            $(event.currentTarget).addClass("red");
+            $(this).addClass("red");
         }
     }
 
@@ -231,7 +205,7 @@ $(document).ready(function() {
     function rowType(row) {
         console.log(row);
         console.log(row.length);
-        return $(row[0].id.replace(/^data-/, '#type-'))[0].value.trim();
+        return $(row[0].id.replace(/^data-/, '#type-'))[0].value.trim().toUpperCase();
     }
 
     /*
@@ -240,38 +214,38 @@ $(document).ready(function() {
     }
     */
 
-    $('.d-value').change(function(event) { checkValue(event); }); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
+    $('.d-value').change(checkValue); // TODO Klura ut varför .focusout har precis samma effekt (avfyras inte om ingen ändring)
 
     landskap = {
-        'sk' : 'skåne', 'bl' : 'blek', 'öl' : 'öland', 'sm' : 'smål', 'ha' : 'hall',
-        'vg' : 'västg', 'bo' : 'boh', 'dsl' : 'dalsl', 'gl' : 'gotl', 'ög' : 'östg',
-        'götal' : 'götal', 'sdm' : 'sörml', 'nk' : 'närke', 'vrm' : 'värml', 'ul' : 'uppl',
-        'vstm' : 'västm', 'dal' : 'dal', 'sveal' : 'sveal', 'gst' : 'gästr', 'hsl' : 'häls',
-        'hrj' : 'härj' , 'mp' : 'med', 'jl' : 'jämtl', 'åm' : 'ång', 'vb' : 'västb',
-        'lpl' : 'lappl', 'nb' : 'norrb', 'norrl' : 'norrl'
+        'Sk' : 'Skåne', 'Bl' : 'Blek', 'Öl' : 'Öland', 'Sm' : 'Smål', 'Ha' : 'Hall',
+        'Vg' : 'Västg', 'Bo' : 'Boh', 'Dsl' : 'Dalsl', 'Gl' : 'Gotl', 'Ög' : 'Östg',
+        'Götal' : 'Götal', 'Sdm' : 'Sörml', 'Nk' : 'Närke', 'Vrm' : 'Värml', 'Ul' : 'Uppl',
+        'Vstm' : 'Västm', 'Dal' : 'Dal', 'Sveal' : 'Sveal', 'Gst' : 'Gästr', 'Hsl' : 'Häls',
+        'Hrj' : 'Härj' , 'Mp' : 'Med', 'Jl' : 'Jämtl', 'Åm' : 'Ång', 'Vb' : 'Västb',
+        'Lpl' : 'Lappl', 'Nb' : 'Norrb', 'Norrl' : 'Norrl'
     };
     longLandskap = [];
-    for (key in landskap) { longLandskap.push(landskap[key]); }
+    for (key in landskap) longLandskap.push(landskap[key]);
+
+    String.prototype.toTitleCase = function() {
+        return this.substring(0, 1).toUpperCase() + this.substring(1).toLowerCase();
+    }
 
     function checkValue(event) {
-        value = $(event.currentTarget);
-        valueValue = value[0].value.trim().toLowerCase();
-        row = value.parent();
-        type = row.children()[0].value.trim().toLowerCase();
-        if (type == 'g') {
-            if (valueValue in landskap) {
-                value[0].value = landskap[valueValue];
-                value.removeClass("red");
-            } else if ($.inArray(valueValue, longLandskap) >= 0) {
-            /* if (['häls', 'västb'].includes(valueValue)) { */
-                value.removeClass("red");
+        var type = rowType($(this).parent());
+        if (type == 'G') {
+            var namn = this.value.trim().toTitleCase();
+            if (namn in landskap) {
+                this.value = landskap[namn];
+                $(this).removeClass("red");
+            } else if (longLandskap.indexOf(namn) >= 0) {
+                $(this).removeClass("red");
             } else {
-                value.addClass("red");
+                $(this).addClass("red");
             }
         }
     }
 
-    $('#spara').click(submitOrder);
     $('.spara-och-ladda-om').click(submitOrder);
 
     $('#sok-artikel').on('keyup', searchArticles);

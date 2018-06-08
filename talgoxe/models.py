@@ -23,69 +23,11 @@ class Artikel(models.Model):
     def __str__(self):
         return self.lemma
 
-    def __unicode__(self):
-        return self.lemma
-
-    def raw_data_set(self):
-        return self.spole_set.filter(id__gt = 0).order_by('pos')
-
-    def resolve_pilcrow(self):
-        i = 0
-        currmoment1 = []
-        currmoment2 = []
-        self.segments = []
-        state = 'INITIAL'
-        gtype = None
-        while i < self.raw_data_set().count():
-            currseg = self.raw_data_set().all()[i]
-            if state == 'GEOGRAFI':
-                if currseg.type.__unicode__() == u'G':
-                    landskap.append(Landskap(currseg.d))
-                else: # Sort and flush
-                    sorted_landskap = sorted(landskap, key = Landskap.key)
-                    landskap = []
-                    for ls in sorted_landskap:
-                        currmoment2.append(Segment(gtype, ls.abbrev))
-                    currmoment2.append(Segment(currseg.type, currseg.d))
-                    state = 'INITIAL'
-            else:
-                if currseg.type.__unicode__() == u'M1':
-                    currmoment1.append(currmoment2)
-                    self.segments.append(currmoment1)
-                    currmoment1 = []
-                    currmoment2 = []
-                elif currseg.type.__unicode__() == u'M2':
-                    currmoment1.append(currmoment2)
-                    currmoment2 = []
-                elif currseg.type.__unicode__() == u'G':
-                    gtype = currseg.type
-                    state = 'GEOGRAFI'
-                    landskap = [Landskap(currseg.d)]
-                elif currseg.type.__unicode__() == u'VH':
-                    currmoment2.append(Segment(currseg.type, '['))
-                elif currseg.type.__unicode__() == u'HH':
-                    currmoment2.append(Segment(currseg.type, ']'))
-                elif currseg.type.__unicode__() == u'VR':
-                    currmoment2.append(Segment(currseg.type, '('))
-                elif currseg.type.__unicode__() == u'HR':
-                    currmoment2.append(Segment(currseg.type, ')'))
-                else:
-                    subsegs = re.split(u'¶', currseg.d)
-                    if len(subsegs) == 1:
-                        currmoment2.append(Segment(currseg.type, subsegs[0]))
-                    else:
-                        maintype = currseg.type
-                        print(subsegs)
-                        currmoment2.append(Segment(maintype, subsegs[0]))
-                        for j in range(1, len(subsegs)):
-                            i += 1
-                            subseg = self.raw_data_set().all()[i]
-                            currmoment2.append(Segment(subseg.type, subseg.d))
-                            if subsegs[j]:
-                                currmoment2.append(Segment(maintype, subsegs[j]))
-            i += 1
-        currmoment1.append(currmoment2)
-        self.segments.append(currmoment1)
+    def get_spole(self, i):
+        if i < self.spole_set.count():
+            return self.spole_set.order_by('pos').all()[i] # Man kan missa vissa värden av pos, så .get(pos = i)funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
+        else:
+            return None
 
     def resolve_moments(self, segment):
         if segment.ism1():
@@ -109,8 +51,8 @@ class Artikel(models.Model):
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
-        while i < self.raw_data_set().count():
-            currdat = self.raw_data_set().all()[i]
+        while i < self.spole_set.count():
+            currdat = self.get_spole(i)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
@@ -127,7 +69,7 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
+                                self.new_segments.append(Segment(self.get_spole(i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
                     state = 'INITIAL'
@@ -145,7 +87,7 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.raw_data_set().all()[i]))
+                                self.new_segments.append(Segment(self.get_spole(i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
@@ -164,33 +106,6 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
 
     def process(self, outfile):
-#         self.resolve_pilcrow()
-#         outfile.write(('\\hskip-1em\\SDL:SO{%s} ' % self.lemma).encode('UTF-8'))
-#         prevseg = self.segments[0][0][0]
-#         for m1 in range(len(self.segments)):
-#             moment1 = self.segments[m1]
-#             if m1 > 0 and len(self.segments) > 1:
-#                 sec = Segment('M1', '%d' % m1)
-#                 if prevseg:
-#                     prevseg.output(outfile, sec)
-#                 prevseg = sec
-#             for m2 in range(len(moment1)):
-#                 moment2 = moment1[m2]
-#                 if m2 > 0 and len(moment1) > 1:
-#                     outfile.write('\SDL:M2{%c} ' % (96 + m2))
-#                     sec = Segment('M2', '%c' % (96 + m2))
-#                     if prevseg:
-#                         prevseg.output(outfile, sec)
-#                     prevseg = sec
-#                 for seg in moment2:
-#                     if prevseg:
-#                         prevseg.output(outfile, seg)
-#                     prevseg = seg
-#                 prevseg.output(outfile, prevseg) # FIXME Remove potential final space
-#         outfile.write("\n")
-# 
-#         outfile.write("\n")
-
         self.collect()
         outfile.write("\\hskip-0.5em")
         if self.rang > 0:
@@ -204,7 +119,7 @@ class Artikel(models.Model):
                 setspace = False
             else:
                 setspace = True
-            type = segment.type.__unicode__()
+            type = segment.type.__str__()
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             outfile.write(('\\SDL:%s{%s}' % (type, text)))
 
@@ -262,7 +177,6 @@ class Artikel(models.Model):
     def generate_content(self):
         paragraph = Paragraph()
         paragraph += Span(self.lemma, style_name = 'SO') # TODO Homografnumrering!
-        # self.resolve_pilcrow()
         self.collect()
         spacebefore = True
         for segment in self.new_segments:
@@ -378,22 +292,15 @@ class Artikel(models.Model):
                 type = Typ.objects.get(kod = 'OG')
             text = bit[1]
             if type == gtype and text.title() in Landskap.short_abbrev.keys():
-              print("Got " + text + "! Normalising ...")
               text = Landskap.short_abbrev[text.title()]
-              print("  ... to " + text)
-            data = self.raw_data_set().filter(pos = i).first()
+            data = self.get_spole(i)
             if data:
                 data.typ = type
                 data.text = text
                 data.save()
-                for data2 in self.raw_data_set().filter(pos = i):
-                    if data2 != data:
-                        data2.delete()
             else:
                 Spole.objects.create(artikel = self, typ = type, pos = i, text = text)
-        self.raw_data_set().filter(pos__gte = len(d)).delete()
-
-        print(d)
+        self.spole_set.filter(pos__gte = len(d)).delete()
 
 class Segment(): # Fjäder!
     def __init__(self, type, text = None):
@@ -407,9 +314,6 @@ class Segment(): # Fjäder!
 
     def __str__(self):
         return self.type.__str__() + ' ' + self.text
-
-    def __unicode__(self):
-        return self.type.__unicode__() + ' ' + self.text
 
     def isgeo(self):
         return self.type.isgeo()
@@ -445,15 +349,15 @@ class Segment(): # Fjäder!
     # TODO Method hyphornot()
 
     def format(self):
-        if self.type.__unicode__().upper() == 'VH':
+        if self.type.__str__().upper() == 'VH':
             return '['
-        elif self.type.__unicode__().upper() == 'HH':
+        elif self.type.__str__().upper() == 'HH':
             return ']'
-        elif self.type.__unicode__().upper() == 'VR':
+        elif self.type.__str__().upper() == 'VR':
             return '('
-        elif self.type.__unicode__().upper() == 'HR':
+        elif self.type.__str__().upper() == 'HR':
             return ')'
-        elif self.type.__unicode__().upper() == 'ÄV':
+        elif self.type.__str__().upper() == 'ÄV':
             return 'äv.'
         else:
             return self.text.strip()
@@ -465,9 +369,6 @@ class Typ(models.Model):
     uppdaterat = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.kod.upper()
-
-    def __unicode__(self):
         return self.kod.upper()
 
     def isgeo(self):
@@ -489,7 +390,7 @@ class Typ(models.Model):
         return self.kod == 'm2'
 
     def format(self):
-        out = self.__unicode__()
+        out = self.__str__()
         out += (4 - len(out)) * '\xa0'
         return out
 
@@ -504,14 +405,11 @@ class Spole(models.Model):
     def __str__(self):
         return self.typ.__str__() + ' ' + self.text
 
-    def __unicode__(self):
-        return self.typ.__unicode__() + ' ' + self.text
-
     def webstyle(self):
-        self.webstyles[self.typ.__unicode__()]
+        self.webstyles[self.typ.__str__()]
 
     def printstyle(self):
-        self.printstyles[self.typ.__unicode__()]
+        self.printstyles[self.typ.__str__()]
 
     def isgeo(self):
         return self.typ.isgeo()
@@ -576,21 +474,3 @@ class Landskap():
 
     def __str__(self):
         return self.abbrev
-
-    def __unicode__(self):
-        return self.abbrev
-
-class Lexicon():
-    def process(self):
-        tempdir = mkdtemp('', 'SDL')
-        source = file(tempdir + '/sdl.tex', 'w')
-        source.write("""
-            \starttext
-            {\\tfc\\hfill Sveriges dialektlexikon\\hfill}
-
-            {\\tfb\\hfill utgiven av Institutet för språk och folkminnen\\hfill}
-        """.encode('UTF-8'))
-        for lemma in Artikel.objects.filter(id__gt = 0).order_by('lemma'):
-            print(lemma.lemma)
-            lemma.process(source)
-        source.close()

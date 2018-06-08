@@ -5,7 +5,7 @@
       {% if checkboxes %}
       <input type="checkbox" name="select-{{ lemma.id }}" class="toselect" />
       {% endif %}
-      <a href="{% url 'artikel' lemma.id %}" class="ordlistelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</a>
+      <a href="{% url 'redigera' lemma.id %}" class="ordlistelement">{% include "talgoxe/lemma.html" with artikel=lemma %}</a>
     </li>
 {% endfor %}
 </ul>
