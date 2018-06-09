@@ -195,7 +195,7 @@ def export_to_docx(request, ids):
   return render_template(request, template, context)
 
 @login_required
-def search(request):
+def search(request): # TODO Fixa lista över artiklar när man POSTar efter omordning
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
         ordning = []
