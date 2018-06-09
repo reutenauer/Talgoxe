@@ -41,7 +41,7 @@ def render_template(request, template, context):
 @login_required
 def index(request):
     template = loader.get_template('talgoxe/index.html')
-    lemmata = Artikel.objects.filter(id__gt = 0).order_by('lemma', 'rang')
+    lemmata = Artikel.objects.order_by('lemma', 'rang')
     context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
@@ -70,11 +70,10 @@ def redigera(request, id):
         lemma.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
-    lemmata = Artikel.objects.filter(id__gt = 0).order_by('lemma','rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
-    lemma = Artikel.objects.filter(id = id).first()
-    # lemma.resolve_pilcrow()
+    lemmata = Artikel.objects.order_by('lemma', 'rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
+    lemma = Artikel.objects.get(id = id)
     lemma.collect()
-    if lemma.spole_set.count() == 0:
+    if lemma.spole_set.count() == 0: # Artikeln skapades just
         ok = Typ.objects.get(kod = 'OK')
         d = Spole(typ_id = ok.id, text = '', pos = 0)
         input = [d]
@@ -129,8 +128,8 @@ def export_to_pdf(request, ids):
     elif type(ids) == list:
         ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
         source.write("\\startcolumns[n=2,balance=yes]\n")
-        for i in ids:
-            lemma = Artikel.objects.get(id = i)
+        for id in ids:
+            lemma = Artikel.objects.get(id = id)
             lemma.process(source)
             source.write("\\par")
         if len(ids) == 1:

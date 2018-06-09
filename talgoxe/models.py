@@ -29,6 +29,9 @@ class Artikel(models.Model):
         else:
             return None
 
+    def spolar(self):
+        return self.spole_set.order_by('pos').all()
+
     def resolve_moments(self, segment):
         if segment.ism1():
             if len(self.moments['M2']) > 1:

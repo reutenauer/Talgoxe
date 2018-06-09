@@ -16,7 +16,7 @@
 {% csrf_token %}
 <ul>
 <li>SO&nbsp;&nbsp;: <input type="text" name="stickord" value="{{ lemma }}" size="16"> <input type="submit" value="Spara och ladda om 💾" class="spara-och-ladda-om" tabindex="-1"></li>
-{% for d in input %}
+{% for d in lemma.spolar %}
     <li id="data-{{ d.pos }}">
       {% spaceless %}
       <input type="text" size="3" name="type-{{ d.pos }}" value="{{ d.typ.format }}" id="type-{{ d.pos }}" class="d-type">
