@@ -30,7 +30,12 @@ class Artikel(models.Model):
             return None
 
     def spolar(self):
-        return self.spole_set.order_by('pos').all()
+        if self.spole_set.count() == 0: # Artikeln skapades just, vi fejkar en första spole
+            ok = Typ.objects.get(kod = 'OK')
+            spole = Spole(typ = ok, text = '', pos = 0)
+            return [spole]
+        else:
+            return self.spole_set.order_by('pos').all()
 
     def resolve_moments(self, segment):
         if segment.ism1():

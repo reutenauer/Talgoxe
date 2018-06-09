@@ -49,43 +49,34 @@ def index(request):
 def create(request):
     stickord = request.POST['ny_stickord'].strip()
     företrädare = Artikel.objects.filter(lemma = stickord)
-    maxrank = företrädare.aggregate(Max('rang'))['rang__max']
-    if maxrank == None:
-        rank = 0
-    elif maxrank == 0:
+    maxrang = företrädare.aggregate(Max('rang'))['rang__max']
+    if maxrang == None:
+        rang = 0
+    elif maxrang == 0:
         lemma0 = företrädare.first()
         lemma0.rang = 1
         lemma0.save()
-        rank = 2
-    elif maxrank > 0:
-        rank = maxrank + 1
-    lemma = Artikel.objects.create(lemma = stickord, rang = rank)
+        rang = 2
+    elif maxrang > 0:
+        rang = maxrang + 1
+    lemma = Artikel.objects.create(lemma = stickord, rang = rang)
     return HttpResponseRedirect(reverse('redigera', args = (lemma.id,)))
 
 @login_required
 def redigera(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
-        lemma = Artikel.objects.get(id = id)
-        lemma.update(request.POST)
+        artikel = Artikel.objects.get(id = id)
+        artikel.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
-    lemmata = Artikel.objects.order_by('lemma', 'rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
-    lemma = Artikel.objects.get(id = id)
-    lemma.collect()
-    if lemma.spole_set.count() == 0: # Artikeln skapades just
-        ok = Typ.objects.get(kod = 'OK')
-        d = Spole(typ_id = ok.id, text = '', pos = 0)
-        input = [d]
-    else:
-        input = lemma.spole_set.order_by('pos').all()
+    artiklar = Artikel.objects.order_by('lemma', 'rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
+    artikel = Artikel.objects.get(id = id)
+    artikel.collect()
     context = {
-        'input': input,
-        'segments': lemma.segments,
-        'lemma': lemma,
-        'lemmata': lemmata,
-        'new_segments': lemma.new_segments,
-        'pagetitle': "%s – redigera i Svenskt dialektlexikon" % lemma.lemma,
+        'lemma': artikel,
+        'lemmata': artiklar,
+        'pagetitle': "%s – redigera i Svenskt dialektlexikon" % artikel.lemma,
     }
 
     return render_template(request, template, context)
@@ -120,22 +111,16 @@ def export_to_pdf(request, ids):
         \\starttext
         """)
 
-    if type(ids) == str:
-        source.write("\\startcolumns[n=2,balance=no]\n")
-        lemma = Artikel.objects.get(id = ids)
+    ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
+    source.write("\\startcolumns[n=2,balance=yes]\n")
+    for id in ids:
+        lemma = Artikel.objects.get(id = id)
         lemma.process(source)
-        basename = '%s-%s' % (id, lemma.lemma)
-    elif type(ids) == list:
-        ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
-        source.write("\\startcolumns[n=2,balance=yes]\n")
-        for id in ids:
-            lemma = Artikel.objects.get(id = id)
-            lemma.process(source)
-            source.write("\\par")
-        if len(ids) == 1:
-            basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
-        else:
-            basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
+        source.write("\\par")
+    if len(ids) == 1:
+        basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
+    else:
+        basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
     source.write("\\stopcolumns\n")
 
     source.write("\\stoptext\n")
@@ -262,10 +247,10 @@ def search(request):
 
 @login_required
 def artikel(request, id):
-    lemma = Artikel.objects.get(id = id)
+    artikel = Artikel.objects.get(id = id)
     template = loader.get_template('talgoxe/artikel.html')
-    lemma.collect()
-    context = { 'lemma' : lemma, 'new_segments' : lemma.new_segments, 'format' : format }
+    artikel.collect()
+    context = { 'lemma' : artikel, 'format' : format }
 
     return render_template(request, template, context)
 
