@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.contrib.auth import logout
 
-from talgoxe.models import Spole, Artikel, Typ
+from talgoxe.models import Spole, Artikel, Typ, Exporter
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
@@ -170,28 +170,6 @@ def export_to_odf(request, id):
     context = { 'filepath' : join('ord', finalname) }
     return render_template(request, template, context)
 
-def export_to_docx(request, ids):
-  tempfilename = mktemp('.docx')
-  if len(ids) == 1:
-      id = ids[0]
-      lemma = Artikel.objects.get(id = id)
-      docx = lemma.process_docx(tempfilename)
-      filename = '%s-%s.docx' % (id, lemma.lemma)
-  else:
-      filename = 'sdl-utdrag.docx'
-      document = Document()
-      Artikel.add_docx_styles(document)
-      for i in ids:
-          lemma = Artikel.objects.get(id = i)
-          lemma.generate_docx_paragraph(document)
-      document.save(tempfilename)
-  staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
-  rename(tempfilename, join(staticpath, filename))
-  template = loader.get_template('talgoxe/download_odf.html')
-  context = {'filepath': join('ord', filename)}
-
-  return render_template(request, template, context)
-
 @login_required
 def search(request): # TODO Fixa lista över artiklar när man POSTar efter omordning
     method = request.META['REQUEST_METHOD']
@@ -289,7 +267,9 @@ def print_odf(request):
 
 @login_required
 def print_docx(request):
-    return export_to_docx(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    template = loader.get_template('talgoxe/download_odf.html')
+    context = Exporter.export_to_docx(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    return render_template(request, template, context)
 
 def easylogout(request):
     logout(request)

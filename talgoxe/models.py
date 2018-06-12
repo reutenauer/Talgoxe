@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from os import rename
+from os.path import abspath, dirname, join
 import re
-from tempfile import mkdtemp
+from tempfile import mkdtemp, mktemp
 
 import ezodf
 from ezodf import newdoc, Heading, Paragraph, Span
@@ -482,3 +484,25 @@ class Landskap():
 
     def __str__(self):
         return self.abbrev
+
+class Exporter:
+    @staticmethod
+    def export_to_docx(ids):
+      tempfilename = mktemp('.docx')
+      if len(ids) == 1:
+          id = ids[0]
+          lemma = Artikel.objects.get(id = id)
+          docx = lemma.process_docx(tempfilename)
+          filename = '%s-%s.docx' % (id, lemma.lemma)
+      else:
+          filename = 'sdl-utdrag.docx'
+          document = Document()
+          Artikel.add_docx_styles(document)
+          for i in ids:
+              lemma = Artikel.objects.get(id = i)
+              lemma.generate_docx_paragraph(document)
+          document.save(tempfilename)
+      staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
+      rename(tempfilename, join(staticpath, filename))
+
+      return {'filepath': join('ord', filename)}
