@@ -487,6 +487,28 @@ class Landskap():
 
 class Exporter:
     @staticmethod
+    def export_to_odf(id):
+        tempfilename = mktemp('.odt')
+        odf = Artikel.start_odf(tempfilename)
+        if type(id) == str:
+            lemma = Artikel.objects.get(id = id)
+            lemma.process_odf(odf)
+            finalname = "%s-%s.odt" % (id, lemma.lemma)
+        elif type(id) == list:
+            for i in id:
+                lemma = Artikel.objects.get(id = i)
+                lemma.process_odf(odf)
+            finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
+            if len(id) == 1:
+                finalname = '%s-%s.odt' % (id[0], Artikel.objects.get(id = id[0]).lemma)
+        Artikel.stop_odf(odf)
+        staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
+        rename(tempfilename, join(staticpath, finalname))
+        # system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
+
+        return { 'filepath' : join('ord', finalname) }
+
+    @staticmethod
     def export_to_docx(ids):
       tempfilename = mktemp('.docx')
       if len(ids) == 1:
