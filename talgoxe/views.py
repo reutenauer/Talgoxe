@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from tempfile import mkdtemp, mktemp
-from os import system, chdir
+import logging
+from os import system, chdir, popen, rename, environ
+from os.path import join, dirname, abspath
 import io
-import os
-from os.path import join
 import re
 from collections import OrderedDict, deque
 from docx import Document
@@ -96,7 +96,7 @@ def artikel_efter_stickord(request, stickord):
 
 def export_to_pdf(request, ids):
     tempdir = mkdtemp('', 'SDLartikel')
-    sourcename = os.path.join(tempdir, 'sdl.tex')
+    sourcename = join(tempdir, 'sdl.tex')
     import locale
     locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
     loc = locale.getpreferredencoding('False')
@@ -104,7 +104,7 @@ def export_to_pdf(request, ids):
     source.write("\\mainlanguage[sv]")
     source.write("\\setupbodyfont[pagella, 12pt]\n")
     source.write("\\setuppagenumbering[state=stop]\n")
-    with io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
+    with io.open(join(dirname(abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
         source.write(file.read())
 
     source.write("""
@@ -133,17 +133,15 @@ def export_to_pdf(request, ids):
 
 def run_context(request, tempdir, basename):
     chdir(tempdir)
-    os.environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, os.environ['PATH'])
-    os.environ['TMPDIR'] = '/tmp'
-    path = os.environ['PATH']
-    from os import popen
+    environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
+    environ['TMPDIR'] = '/tmp'
+    path = environ['PATH']
     output = popen("context --batchmode sdl.tex")
-    import logging
     logger = logging.getLogger('django')
     logger.log(logging.DEBUG, output.read())
-    ordpdfpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
+    ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
-    logfile = open(os.path.join(tempdir, 'sdl.log'))
+    logfile = open(join(tempdir, 'sdl.log'))
     log = logfile.read()
     logfile.close()
     template = loader.get_template('talgoxe/download_pdf.html')
@@ -165,8 +163,8 @@ def export_to_odf(request, id):
         if len(id) == 1:
             finalname = '%s-%s.odt' % (id[0], Artikel.objects.get(id = id[0]).lemma)
     Artikel.stop_odf(odf)
-    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-    os.rename(tempfilename, join(staticpath, finalname))
+    staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
+    rename(tempfilename, join(staticpath, finalname))
     # system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
     template = loader.get_template('talgoxe/download_odf.html')
     context = { 'filepath' : join('ord', finalname) }
@@ -187,8 +185,8 @@ def export_to_docx(request, ids):
           lemma = Artikel.objects.get(id = i)
           lemma.generate_docx_paragraph(document)
       document.save(tempfilename)
-  staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-  os.rename(tempfilename, join(staticpath, filename))
+  staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
+  rename(tempfilename, join(staticpath, filename))
   template = loader.get_template('talgoxe/download_odf.html')
   context = {'filepath': join('ord', filename)}
 
