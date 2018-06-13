@@ -509,20 +509,26 @@ class Exporter:
         return { 'filepath' : join('ord', finalname) }
 
     @staticmethod
-    def export_to_docx(ids):
-      tempfilename = mktemp('.docx')
+    def export(ids, format):
+      tempfilename = mktemp('.%s' % format)
       if len(ids) == 1:
           id = ids[0]
           lemma = Artikel.objects.get(id = id)
-          docx = lemma.process_docx(tempfilename)
-          filename = '%s-%s.docx' % (id, lemma.lemma)
+          if format == 'docx':
+              document = lemma.process_docx(tempfilename)
+          else:
+              raise "Unsupported"
+          filename = '%s-%s.%s' % (id, lemma.lemma, format)
       else:
-          filename = 'sdl-utdrag.docx'
+          filename = 'sdl-utdrag.%s' % format
           document = Document()
           Artikel.add_docx_styles(document)
           for i in ids:
               lemma = Artikel.objects.get(id = i)
-              lemma.generate_docx_paragraph(document)
+              if format == 'docx':
+                  lemma.generate_docx_paragraph(document)
+              else:
+                  raise "Unsupported"
           document.save(tempfilename)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
