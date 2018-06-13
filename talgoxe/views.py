@@ -241,7 +241,7 @@ def print_pdf(request):
 
 @login_required
 def print_odf(request):
-    template = loader.get_template('talgoxe/download_odf.html')
+    template = loader.get_template('talgoxe/download_document.html')
     context = Exporter.export_to_odf(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
     return render_template(request, template, context)
 
