@@ -94,48 +94,6 @@ def artikel_efter_stickord(request, stickord):
         }
         return render_template(request, template, context)
 
-def export_to_pdf(request, ids):
-    tempdir = mkdtemp('', 'SDLartikel')
-    sourcename = join(tempdir, 'sdl.tex')
-    import locale
-    locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
-    loc = locale.getpreferredencoding('False')
-    source = open(sourcename, 'w')
-    source.write("\\mainlanguage[sv]")
-    source.write("\\setupbodyfont[pagella, 12pt]\n")
-    source.write("\\setuppagenumbering[state=stop]\n")
-    with io.open(join(dirname(abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
-        source.write(file.read())
-
-    source.write("""
-        \\starttext
-        """)
-
-    ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
-    source.write("\\startcolumns[n=2,balance=yes]\n")
-    for id in ids:
-        lemma = Artikel.objects.get(id = id)
-        lemma.process(source)
-        source.write("\\par")
-    if len(ids) == 1:
-        basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
-    else:
-        basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
-    source.write("\\stopcolumns\n")
-
-    source.write("\\stoptext\n")
-    source.close()
-
-    chdir(tempdir)
-    environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
-    environ['TMPDIR'] = '/tmp'
-    popen("context --batchmode sdl.tex").read()
-    ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '%s.pdf' % basename)
-    rename(join(tempdir, 'sdl.pdf'), ordpdfpath)
-    template = loader.get_template('talgoxe/download_pdf.html')
-    context = { 'filepath' : 'ord/%s.pdf' % basename }
-    return render_template(request, template, context)
-
 @login_required
 def search(request): # TODO Fixa lista över artiklar när man POSTar efter omordning
     method = request.META['REQUEST_METHOD']

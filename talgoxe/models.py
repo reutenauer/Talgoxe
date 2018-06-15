@@ -117,24 +117,6 @@ class Artikel(models.Model):
                 self.moments['M2'][m2].display = True
         self.moments = { 'M1': [], 'M2': [] }
 
-    def process(self, outfile):
-        self.collect()
-        outfile.write("\\hskip-0.5em")
-        if self.rang > 0:
-            outfile.write('\lohi[left]{}{\SDL:SO{%d}}' % self.rang) # TODO Real superscript
-        outfile.write("\\SDL:SO{%s}" % self.lemma)
-        setspace = True
-        for segment in self.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
-            if setspace and not segment.isrightdelim():
-                outfile.write(' ') # FIXME But not if previous segment is left delim!
-            if segment.isleftdelim():
-                setspace = False
-            else:
-                setspace = True
-            type = segment.type.__str__()
-            text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
-            outfile.write(('\\SDL:%s{%s}' % (type, text)))
-
     def serialise(self):
         paragraph = self.generate_content()
         return etree.tostring(paragraph.xmlnode)
@@ -361,6 +343,64 @@ class Exporter:
         self.generate_paragraph = generators[format]
         self.save_document = savers[format]
 
+    def generate_pdf_paragraph(self, artikel):
+        artikel.collect()
+        self.document.write("\\hskip-0.5em")
+        if artikel.rang > 0:
+            self.document.write('\lohi[left]{}{\SDL:SO{%d}}' % artikel.rang) # TODO Real superscript
+        self.document.write("\\SDL:SO{%s}" % artikel.lemma)
+        setspace = True
+        for segment in artikel.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
+            if setspace and not segment.isrightdelim():
+                self.document.write(' ') # FIXME But not if previous segment is left delim!
+            if segment.isleftdelim():
+                setspace = False
+            else:
+                setspace = True
+            type = segment.type.__str__()
+            text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
+            self.document.write(('\\SDL:%s{%s}' % (type, text)))
+
+    def start_pdf(self):
+        sourcename = join(tempdir, 'sdl.tex')
+        import locale
+        locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
+        loc = locale.getpreferredencoding('False')
+        source = open(sourcename, 'w')
+        source.write("\\mainlanguage[sv]")
+        source.write("\\setupbodyfont[pagella, 12pt]\n")
+        source.write("\\setuppagenumbering[state=stop]\n")
+        with io.open(join(dirname(abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
+            source.write(file.read())
+
+        source.write("""
+            \\starttext
+            """)
+
+        ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
+        source.write("\\startcolumns[n=2,balance=yes]\n")
+        for id in ids:
+            lemma = Artikel.objects.get(id = id)
+            lemma.process(source)
+            source.write("\\par")
+        if len(ids) == 1:
+            basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
+        else:
+            basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
+        source.write("\\stopcolumns\n")
+
+        source.write("\\stoptext\n")
+        source.close()
+
+        chdir(tempdir)
+        environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
+        environ['TMPDIR'] = '/tmp'
+        popen("context --batchmode sdl.tex").read()
+        ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '%s.pdf' % basename)
+        rename(join(tempdir, 'sdl.pdf'), ordpdfpath)
+
+        return 'ord/%s.pdf' % basename 
+
     def add_odf_style(self, type, xmlchunk):
         self.document.inject_style("""
             <style:style style:name="%s" style:family="text">
@@ -502,6 +542,7 @@ class Exporter:
 
     def export(self, ids):
         self.filename = mktemp('.%s' % self.format)
+        self.dirname = mkdtemp('', 'SDLartikel')
         document = self.start_document()
         if len(ids) == 1:
             artikel = Artikel.objects.get(id = ids[0])
