@@ -14,6 +14,9 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # FIXME Superscripts!
 
+class UnsupportedFormat(Exception):
+  pass
+
 class Artikel(models.Model):
     lemma = models.CharField(max_length = 100)
     rang = models.SmallIntegerField()

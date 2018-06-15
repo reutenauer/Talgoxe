@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.contrib.auth import logout
 
-from talgoxe.models import Spole, Artikel, Typ, Exporter
+from talgoxe.models import Spole, Artikel, Typ, Exporter, UnsupportedFormat
 
 def render_template(request, template, context):
     if VERSION[1] == 7:
@@ -240,13 +240,9 @@ def print_pdf(request):
     return export_to_pdf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
 
 @login_required
-def print_odf(request):
-    template = loader.get_template('talgoxe/download_document.html')
-    context = Exporter.export_to_odf(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
-    return render_template(request, template, context)
-
-@login_required
 def print(request, format):
+    if format not in ['odf', 'docx']:
+        raise UnsupportedFormat(format)
     template = loader.get_template('talgoxe/download_document.html')
     exporter = Exporter(format)
     filepath = exporter.export(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
