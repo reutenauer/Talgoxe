@@ -131,7 +131,7 @@ def search(request): # TODO Fixa lista över artiklar när man POSTar efter omor
     context = {
             'q' : söksträng,
             'lemmata' : lemmata,
-            'titel' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
+            'pagetitle' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
             'uri' : uri,
             'sök_överallt' : sök_överallt,
         }
@@ -164,12 +164,12 @@ def print_on_demand(request):
                 hel_bokstav = Artikel.objects.filter(lemma__startswith = bdata.group(1))
                 lemmata += hel_bokstav
         lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rang)) # TODO Make unique
-        context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata) }
+        context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata), 'pagetitle' : '%d artiklar' % len(lemmata) }
         template = loader.get_template('talgoxe/search.html')
     elif method == 'GET':
         lemmata = Artikel.objects.order_by('lemma', 'rang')
         bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
-        context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver }
+        context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver, 'pagetitle' : '%d artiklar' % lemmata.count() }
 
     return render_template(request, template, context)
 
