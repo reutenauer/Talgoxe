@@ -429,7 +429,6 @@ class Exporter:
         return { 'filepath' : join('ord', finalname) }
 
     def __init__(self, format):
-        print("__init__(): format = %s" % format)
         self.format = format
         initialisers = {
             'docx' : self.start_docx,
@@ -478,49 +477,49 @@ class Exporter:
                     spacebefore = True
 
     def add_docx_styles(self): # TODO Keyword arguments?
-        self.add_docx_style(self.document, 'SO', False, True, 12)
-        self.add_docx_style(self.document, 'OK', False, False, 9)
-        self.add_docx_style(self.document, 'G', False, False, 9)
-        self.add_docx_style(self.document, 'DSP', True, False, 12)
-        self.add_docx_style(self.document, 'TIP', False, False, 9)
-        self.add_docx_style(self.document, 'IP', False, False, 12)
-        self.add_docx_style(self.document, 'M1', False, True, 12)
-        self.add_docx_style(self.document, 'M2', False, True, 12)
-        self.add_docx_style(self.document, 'VH', False, False, 12)
-        self.add_docx_style(self.document, 'HH', False, False, 12)
-        self.add_docx_style(self.document, 'VR', False, False, 12)
-        self.add_docx_style(self.document, 'HR', False, False, 12)
-        self.add_docx_style(self.document, 'REF', False, True, 12)
-        self.add_docx_style(self.document, 'FO', True, False, 12)
-        self.add_docx_style(self.document, 'TIK', True, False, 9)
-        self.add_docx_style(self.document, 'FLV', False, True, 9)
-        self.add_docx_style(self.document, 'ÖVP', False, False, 12)
-        self.add_docx_style(self.document, 'BE', False, False, 12)
-        self.add_docx_style(self.document, 'ÖV', False, False, 12)
-        self.add_docx_style(self.document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
-        self.add_docx_style(self.document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
-        self.add_docx_style(self.document, 'FOT', True, False, 12)
-        self.add_docx_style(self.document, 'GT', False, False, 9)
-        self.add_docx_style(self.document, 'SOV', False, True, 12)
+        self.add_docx_style('SO', False, True, 12)
+        self.add_docx_style('OK', False, False, 9)
+        self.add_docx_style('G', False, False, 9)
+        self.add_docx_style('DSP', True, False, 12)
+        self.add_docx_style('TIP', False, False, 9)
+        self.add_docx_style('IP', False, False, 12)
+        self.add_docx_style('M1', False, True, 12)
+        self.add_docx_style('M2', False, True, 12)
+        self.add_docx_style('VH', False, False, 12)
+        self.add_docx_style('HH', False, False, 12)
+        self.add_docx_style('VR', False, False, 12)
+        self.add_docx_style('HR', False, False, 12)
+        self.add_docx_style('REF', False, True, 12)
+        self.add_docx_style('FO', True, False, 12)
+        self.add_docx_style('TIK', True, False, 9)
+        self.add_docx_style('FLV', False, True, 9)
+        self.add_docx_style('ÖVP', False, False, 12)
+        self.add_docx_style('BE', False, False, 12)
+        self.add_docx_style('ÖV', False, False, 12)
+        self.add_docx_style('ÄV', False, False, 12) # FIXME Skriv “även” :-)
+        self.add_docx_style('ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
+        self.add_docx_style('FOT', True, False, 12)
+        self.add_docx_style('GT', False, False, 9)
+        self.add_docx_style('SOV', False, True, 12)
         for style in ('TI', 'HV', 'INT'):
-            self.add_docx_style(self.document, style)
-        self.add_docx_style(self.document, 'OKT', False, False, 9)
-        self.add_docx_style(self.document, 'VS')
-        self.add_docx_style(self.document, 'GÖ', False, False, 9)
-        self.add_docx_style(self.document, 'GP')
-        self.add_docx_style(self.document, 'UST', True, False, 12)
-        self.add_docx_style(self.document, 'US', True, False, 12)
+            self.add_docx_style(style)
+        self.add_docx_style('OKT', False, False, 9)
+        self.add_docx_style('VS')
+        self.add_docx_style('GÖ', False, False, 9)
+        self.add_docx_style('GP')
+        self.add_docx_style('UST', True, False, 12)
+        self.add_docx_style('US', True, False, 12)
         for style in ('GÖP', 'GTP', 'NYR', 'VB'):
-            self.add_docx_style(self.document, style)
+            self.add_docx_style(style)
         OG = self.document.styles.add_style('OG', docx.enum.style.WD_STYLE_TYPE.CHARACTER)
         OG.font.strike = True
-        self.add_docx_style(self.document, 'SP', True, False, 12)
-        self.add_docx_style(self.document, 'M0', False, True, 18)
-        self.add_docx_style(self.document, 'M3', True, False, 6)
+        self.add_docx_style('SP', True, False, 12)
+        self.add_docx_style('M0', False, True, 18)
+        self.add_docx_style('M3', True, False, 6)
 
-    def add_docx_style(self, document, type, italic = False, bold = False, size = 12):
-        style = document.styles.add_style(type, docx.enum.style.WD_STYLE_TYPE.CHARACTER)
-        style.base_style = document.styles['Default Paragraph Font']
+    def add_docx_style(self, type, italic = False, bold = False, size = 12):
+        style = self.document.styles.add_style(type, docx.enum.style.WD_STYLE_TYPE.CHARACTER)
+        style.base_style = self.document.styles['Default Paragraph Font']
         if italic:
             style.font.italic = True
         if bold:
@@ -528,7 +527,6 @@ class Exporter:
         style.font.size = docx.shared.Pt(size)
 
     def export(self, ids):
-      print("format = %s" % self.format)
       tempfilename = mktemp('.%s' % self.format)
       document = self.start_document()
       if len(ids) == 1:
