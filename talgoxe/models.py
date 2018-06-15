@@ -133,74 +133,6 @@ class Artikel(models.Model):
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             outfile.write(('\\SDL:%s{%s}' % (type, text)))
 
-    @staticmethod
-    def add_style(opendoc, type, xmlchunk):
-        opendoc.inject_style("""
-            <style:style style:name="%s" style:family="text">
-                <style:text-properties %s />
-            </style:style>
-            """ % (type, xmlchunk))
-
-    @staticmethod
-    def start_odf(tempfilename):
-        odt = ezodf.newdoc(doctype = 'odt', filename = tempfilename)
-        Artikel.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'OK', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'G', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'DSP', 'fo:font-style="italic"')
-        Artikel.add_style(odt, 'TIP', 'fo:font-size="9pt"')
-        # IP
-        Artikel.add_style(odt, 'M1', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'M2', 'fo:font-weight="bold"')
-        # VH, HH, VR, HR
-        Artikel.add_style(odt, 'REF', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'FO', 'fo:font-style="italic"')
-        Artikel.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
-        Artikel.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
-        # ÖVP. Se nedan!
-        # BE, ÖV
-        # ÄV, ÄVK se nedan
-        # FOT
-        Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'SOV', 'fo:font-weight="bold"')
-        # TI
-        # HV, INT
-        Artikel.add_style(odt, 'OKT', 'fo:font-size="9pt"')
-        # VS
-        Artikel.add_style(odt, 'GÖ', 'fo:font-size="9pt"')
-        # GP, UST
-        Artikel.add_style(odt, 'US', 'fo:font-style="italic"')
-        # GÖP, GTP, NYR, VB
-        Artikel.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
-        Artikel.add_style(odt, 'SP', 'fo:font-style="italic"')
-
-        return odt
-
-    def process_odf(self, odt):
-        paragraph = self.generate_content()
-        odt.body += paragraph
-
-    @staticmethod
-    def stop_odf(odt):
-        odt.save()
-
-    def generate_content(self):
-        paragraph = Paragraph()
-        paragraph += Span(self.lemma, style_name = 'SO') # TODO Homografnumrering!
-        self.collect()
-        spacebefore = True
-        for segment in self.new_segments:
-            type = segment.type.__str__()
-            if not type == 'KO':
-                if spacebefore and not segment.isrightdelim():
-                    paragraph += Span(' ')
-                paragraph += Span(segment.format(), style_name = type)
-                if segment.isleftdelim():
-                    spacebefore = False
-                else:
-                    spacebefore = True
-        return paragraph
-
     def serialise(self):
         paragraph = self.generate_content()
         return etree.tostring(paragraph.xmlnode)
@@ -424,7 +356,71 @@ class Exporter:
         self.generate_paragraph = generators[format]
         self.save_document = savers[format]
 
-    def start_docx(self):
+    def add_odf_style(opendoc, type, xmlchunk):
+        opendoc.inject_style("""
+            <style:style style:name="%s" style:family="text">
+                <style:text-properties %s />
+            </style:style>
+            """ % (type, xmlchunk))
+
+    def start_odf(filename):
+        self.document = ezodf.newdoc(doctype = 'odt', filename = filename)
+        Artikel.add_style(odt, 'SO', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'OK', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'G', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'DSP', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'TIP', 'fo:font-size="9pt"')
+        # IP
+        Artikel.add_style(odt, 'M1', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'M2', 'fo:font-weight="bold"')
+        # VH, HH, VR, HR
+        Artikel.add_style(odt, 'REF', 'fo:font-weight="bold"')
+        Artikel.add_style(odt, 'FO', 'fo:font-style="italic"')
+        Artikel.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
+        Artikel.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
+        # ÖVP. Se nedan!
+        # BE, ÖV
+        # ÄV, ÄVK se nedan
+        # FOT
+        Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
+        Artikel.add_style(odt, 'SOV', 'fo:font-weight="bold"')
+        # TI
+        # HV, INT
+        Artikel.add_style(odt, 'OKT', 'fo:font-size="9pt"')
+        # VS
+        Artikel.add_style(odt, 'GÖ', 'fo:font-size="9pt"')
+        # GP, UST
+        Artikel.add_style(odt, 'US', 'fo:font-style="italic"')
+        # GÖP, GTP, NYR, VB
+        Artikel.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
+        Artikel.add_style(odt, 'SP', 'fo:font-style="italic"')
+
+    def process_odf(self, odt):
+        paragraph = self.generate_content()
+        odt.body += paragraph
+
+    def stop_odf(self, filename):
+        self.document.save()
+
+    def generate_odf_paragraph(self):
+        paragraph = Paragraph()
+        paragraph += Span(self.lemma, style_name = 'SO') # TODO Homografnumrering!
+        self.collect()
+        spacebefore = True
+        for segment in self.new_segments:
+            type = segment.type.__str__()
+            if not type == 'KO':
+                if spacebefore and not segment.isrightdelim():
+                    paragraph += Span(' ')
+                paragraph += Span(segment.format(), style_name = type)
+                if segment.isleftdelim():
+                    spacebefore = False
+                else:
+                    spacebefore = True
+        return paragraph
+
+
+    def start_docx(self, filename):
         self.document = docx.Document()
         self.add_docx_styles()
         return self.document
@@ -506,7 +502,7 @@ class Exporter:
 
     def export(self, ids):
       tempfilename = mktemp('.%s' % self.format)
-      document = self.start_document()
+      document = self.start_document(tempfilename)
       if len(ids) == 1:
           artikel = Artikel.objects.get(id = ids[0])
           self.generate_paragraph(artikel)
