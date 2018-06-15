@@ -10,7 +10,6 @@ from collections import OrderedDict, deque
 from docx import Document
 
 from django.utils.datastructures import MultiValueDictKeyError
-from django.conf import settings
 
 from django.shortcuts import render, redirect
 
@@ -187,7 +186,7 @@ def print_pdf(request):
 
 @login_required
 def print(request, format):
-    if format not in ['odf', 'docx']:
+    if format not in ['pdf', 'odf', 'docx']:
         raise UnsupportedFormat(format)
     template = loader.get_template('talgoxe/download_document.html')
     exporter = Exporter(format)

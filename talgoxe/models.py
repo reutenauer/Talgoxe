@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from os import rename
+from os import chdir, popen, rename, environ
 from os.path import abspath, dirname, join
 import re
 from tempfile import mkdtemp, mktemp
@@ -10,6 +10,7 @@ from lxml import etree
 import docx
 
 from django.db import models
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 # FIXME Superscripts!
@@ -325,16 +326,19 @@ class Exporter:
     def __init__(self, format):
         self.format = format
         initialisers = {
+            'pdf' : self.start_pdf,
             'odf' : self.start_odf,
             'docx' : self.start_docx,
         }
 
         generators = {
+            'pdf' : self.generate_pdf_paragraph,
             'odf' : self.generate_odf_paragraph,
             'docx' : self.generate_docx_paragraph,
         }
 
         savers = {
+            'pdf' : self.save_pdf,
             'odf' : self.save_odf,
             'docx' : self.save_docx,
         }
@@ -362,44 +366,28 @@ class Exporter:
             self.document.write(('\\SDL:%s{%s}' % (type, text)))
 
     def start_pdf(self):
-        sourcename = join(tempdir, 'sdl.tex')
-        import locale
-        locale.setlocale(locale.LC_CTYPE, 'sv_SE.UTF-8')
-        loc = locale.getpreferredencoding('False')
-        source = open(sourcename, 'w')
-        source.write("\\mainlanguage[sv]")
-        source.write("\\setupbodyfont[pagella, 12pt]\n")
-        source.write("\\setuppagenumbering[state=stop]\n")
-        with io.open(join(dirname(abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
-            source.write(file.read())
+        self.document = open(self.filename.replace('.pdf', '.tex'), 'w')
+        self.document.write("\\mainlanguage[sv]")
+        self.document.write("\\setupbodyfont[pagella, 12pt]\n")
+        self.document.write("\\setuppagenumbering[state=stop]\n")
+        with open(join(dirname(abspath(__file__)), 'lib', 'sdl-setup.tex'), 'r', encoding = 'UTF-8') as file:
+            self.document.write(file.read())
 
-        source.write("""
+        self.document.write("""
             \\starttext
             """)
 
-        ids = sorted(ids, key = lambda id: Artikel.objects.get(id = id).lemma)
-        source.write("\\startcolumns[n=2,balance=yes]\n")
-        for id in ids:
-            lemma = Artikel.objects.get(id = id)
-            lemma.process(source)
-            source.write("\\par")
-        if len(ids) == 1:
-            basename = '%s-%s' % (ids[0], Artikel.objects.get(id = ids[0]).lemma)
-        else:
-            basename = 'sdl-utdrag' # FIXME Needs timestamp osv.
-        source.write("\\stopcolumns\n")
+        self.document.write("\\startcolumns[n=2,balance=yes]\n")
 
-        source.write("\\stoptext\n")
-        source.close()
+    def save_pdf(self):
+        self.document.write("\\stopcolumns\n")
+        self.document.write("\\stoptext\n")
+        self.document.close()
 
-        chdir(tempdir)
+        chdir(self.dirname)
         environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
         environ['TMPDIR'] = '/tmp'
         popen("context --batchmode sdl.tex").read()
-        ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '%s.pdf' % basename)
-        rename(join(tempdir, 'sdl.pdf'), ordpdfpath)
-
-        return 'ord/%s.pdf' % basename 
 
     def add_odf_style(self, type, xmlchunk):
         self.document.inject_style("""
@@ -541,9 +529,9 @@ class Exporter:
         style.font.size = docx.shared.Pt(size)
 
     def export(self, ids):
-        self.filename = mktemp('.%s' % self.format)
         self.dirname = mkdtemp('', 'SDLartikel')
-        document = self.start_document()
+        self.filename = join(self.dirname, 'sdl.%s' % self.format)
+        self.start_document()
         if len(ids) == 1:
             artikel = Artikel.objects.get(id = ids[0])
             self.generate_paragraph(artikel)
