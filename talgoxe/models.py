@@ -253,34 +253,6 @@ class Artikel(models.Model):
             style.font.bold = True
         style.font.size = docx.shared.Pt(size)
 
-    def process_docx(self, filename):
-        document = docx.Document()
-        Artikel.add_docx_styles(document)
-        self.generate_docx_paragraph(document)
-        document.save(filename)
-
-    def generate_docx_paragraph(self, document):
-        self.collect()
-        paragraph = document.add_paragraph()
-        if self.rang > 0:
-            paragraph.add_run(str(self.rang), style = 'SO').font.superscript = True
-        paragraph.add_run(self.lemma, style = 'SO')
-        spacebefore = True
-        for segment in self.new_segments:
-            type = segment.type.__str__()
-            if not type == 'KO':
-                if spacebefore and not segment.isrightdelim():
-                    paragraph.add_run(' ', style = document.styles[type])
-                if type == 'ÖVP': # TODO Något bättre
-                    run = '(' + segment.format() + ')'
-                else:
-                    run = segment.format()
-                paragraph.add_run(run, style = document.styles[type])
-                if segment.isleftdelim():
-                    spacebefore = False
-                else:
-                    spacebefore = True
-
     def serialise(self):
         paragraph = self.generate_content()
         return etree.tostring(paragraph.xmlnode)
@@ -509,9 +481,13 @@ class Exporter:
         return { 'filepath' : join('ord', finalname) }
 
     def __init__(self, format):
+        print("__init__(): format = %s" % format)
         self.format = format
         initialisers = {
             'docx' : self.start_docx,
+        }
+        generators = {
+            'docx' : self.generate_docx_paragraph,
         }
         concluders = {
             'docx' : self.stop_docx,
@@ -526,26 +502,43 @@ class Exporter:
     def stop_docx(self, filename):
         self.document.save(filename)
 
+    def generate_docx_paragraph(self, artikel):
+        artikel.collect()
+        paragraph = self.document.add_paragraph()
+        if artikel.rang > 0:
+            paragraph.add_run(str(artikel.rang), style = 'SO').font.superscript = True
+        paragraph.add_run(artikel.lemma, style = 'SO')
+        spacebefore = True
+        for segment in artikel.new_segments:
+            type = segment.type.__str__()
+            if not type == 'KO':
+                if spacebefore and not segment.isrightdelim():
+                    paragraph.add_run(' ', style = self.document.styles[type])
+                if type == 'ÖVP': # TODO Något bättre
+                    run = '(' + segment.format() + ')'
+                else:
+                    run = segment.format()
+                paragraph.add_run(run, style = self.document.styles[type])
+                if segment.isleftdelim():
+                    spacebefore = False
+                else:
+                    spacebefore = True
+
     def export(self, ids):
-      tempfilename = mktemp('.%s' % format)
+      print("format = %s" % self.format)
+      tempfilename = mktemp('.%s' % self.format)
       document = self.start_document()
       if len(ids) == 1:
-          lemma = Artikel.objects.get(id = ids[0])
-          if format == 'docx':
-              lemma.generate_docx_paragraph(document)
-          else:
-              raise "Unsupported"
-          filename = '%s-%s.%s' % (id, lemma.lemma, format)
+          artikel = Artikel.objects.get(id = ids[0])
+          self.generate_docx_paragraph(artikel)
+          filename = '%s-%s.%s' % (ids[0], artikel.lemma, self.format)
       else:
-          filename = 'sdl-utdrag.%s' % format # FIXME Unikt namn osv.
+          filename = 'sdl-utdrag.%s' % self.format # FIXME Unikt namn osv.
           for id in ids:
-              lemma = Artikel.objects.get(id = id)
-              if format == 'docx':
-                  lemma.generate_docx_paragraph(document)
-              else:
-                  raise "Unsupported"
+              artikel = Artikel.objects.get(id = id)
+              artikel.generate_docx_paragraph(artikel)
       self.stop_docx(tempfilename)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
 
-      return {'filepath': join('ord', filename)}
+      return { 'filepath': join('ord', filename) }
