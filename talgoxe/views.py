@@ -125,25 +125,12 @@ def export_to_pdf(request, ids):
 
     source.write("\\stoptext\n")
     source.close()
-    resourcefile = open(sourcename)
-    resource = resourcefile.read()
-    resourcefile.close()
 
-    return run_context(request, tempdir,  basename)
-
-def run_context(request, tempdir, basename):
     chdir(tempdir)
     environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
     environ['TMPDIR'] = '/tmp'
-    path = environ['PATH']
-    output = popen("context --batchmode sdl.tex")
-    logger = logging.getLogger('django')
-    logger.log(logging.DEBUG, output.read())
     ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
     system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
-    logfile = open(join(tempdir, 'sdl.log'))
-    log = logfile.read()
-    logfile.close()
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s.pdf' % basename }
     return render_template(request, template, context)
