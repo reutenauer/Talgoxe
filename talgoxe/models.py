@@ -363,8 +363,8 @@ class Exporter:
             </style:style>
             """ % (type, xmlchunk))
 
-    def start_odf(filename):
-        self.document = ezodf.newdoc(doctype = 'odt', filename = filename)
+    def start_odf(self):
+        self.document = ezodf.newdoc(doctype = 'odt', filename = self.filename)
         Artikel.add_style(odt, 'SO', 'fo:font-weight="bold"')
         Artikel.add_style(odt, 'OK', 'fo:font-size="9pt"')
         Artikel.add_style(odt, 'G', 'fo:font-size="9pt"')
@@ -399,7 +399,7 @@ class Exporter:
         paragraph = self.generate_content()
         odt.body += paragraph
 
-    def stop_odf(self, filename):
+    def stop_odf(self):
         self.document.save()
 
     def generate_odf_paragraph(self):
@@ -420,13 +420,13 @@ class Exporter:
         return paragraph
 
 
-    def start_docx(self, filename):
+    def start_docx(self):
         self.document = docx.Document()
         self.add_docx_styles()
         return self.document
 
-    def save_docx(self, filename):
-        self.document.save(filename)
+    def save_docx(self):
+        self.document.save(self.filename)
 
     def generate_docx_paragraph(self, artikel):
         artikel.collect()
@@ -502,7 +502,8 @@ class Exporter:
 
     def export(self, ids):
       tempfilename = mktemp('.%s' % self.format)
-      document = self.start_document(tempfilename)
+      self.filename = tempfilename
+      document = self.start_document()
       if len(ids) == 1:
           artikel = Artikel.objects.get(id = ids[0])
           self.generate_paragraph(artikel)
@@ -512,7 +513,7 @@ class Exporter:
           for id in ids:
               artikel = Artikel.objects.get(id = id)
               self.generate_paragraph(artikel)
-      self.save_document(tempfilename)
+      self.save_document()
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
 
