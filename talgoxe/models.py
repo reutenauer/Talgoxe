@@ -406,28 +406,6 @@ class Landskap():
         return self.abbrev
 
 class Exporter:
-    @staticmethod
-    def export_to_odf(id):
-        tempfilename = mktemp('.odt')
-        odf = Artikel.start_odf(tempfilename)
-        if type(id) == str:
-            lemma = Artikel.objects.get(id = id)
-            lemma.process_odf(odf)
-            finalname = "%s-%s.odt" % (id, lemma.lemma)
-        elif type(id) == list:
-            for i in id:
-                lemma = Artikel.objects.get(id = i)
-                lemma.process_odf(odf)
-            finalname = 'sdl-utdrag.odt' # FIXME Unikt namn osv.
-            if len(id) == 1:
-                finalname = '%s-%s.odt' % (id[0], Artikel.objects.get(id = id[0]).lemma)
-        Artikel.stop_odf(odf)
-        staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
-        rename(tempfilename, join(staticpath, finalname))
-        # system('mv %s %s/"%s"' % (tempfilename, staticpath, finalname))
-
-        return { 'filepath' : join('ord', finalname) }
-
     def __init__(self, format):
         self.format = format
         initialisers = {
@@ -537,7 +515,7 @@ class Exporter:
           filename = 'sdl-utdrag.%s' % self.format # FIXME Unikt namn osv.
           for id in ids:
               artikel = Artikel.objects.get(id = id)
-              artikel.generate_paragraph(artikel)
+              self.generate_paragraph(artikel)
       self.save_document(tempfilename)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
