@@ -526,7 +526,7 @@ class Exporter:
           id = ids[0]
           lemma = Artikel.objects.get(id = id)
           if format == 'docx':
-              document = lemma.generate_docx_paragraph(tempfilename)
+              lemma.generate_docx_paragraph(document)
           else:
               raise "Unsupported"
           filename = '%s-%s.%s' % (id, lemma.lemma, format)
