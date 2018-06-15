@@ -259,10 +259,6 @@ class Artikel(models.Model):
         self.generate_docx_paragraph(document)
         document.save(filename)
 
-    @staticmethod
-    def stop_docx(filename, document):
-        document.save(filename)
-
     def generate_docx_paragraph(self, document):
         self.collect()
         paragraph = document.add_paragraph()
@@ -514,19 +510,25 @@ class Exporter:
 
     def __init__(self, format):
         self.format = format
-
-    initialisers = {
-        'docx' : 'start_docx',
-    }
+        initialisers = {
+            'docx' : self.start_docx,
+        }
+        concluders = {
+            'docx' : self.stop_docx,
+        }
+        self.start_document = initialisers[format]
 
     def start_docx(self):
-        document = docx.Document()
-        Artikel.add_docx_styles(document)
-        return document
+        self.document = docx.Document()
+        Artikel.add_docx_styles(self.document)
+        return self.document
 
-    def export(ids):
+    def stop_docx(self, filename):
+        self.document.save(filename)
+
+    def export(self, ids):
       tempfilename = mktemp('.%s' % format)
-      document = self.start_docx(tempfilename)
+      document = self.start_document()
       if len(ids) == 1:
           lemma = Artikel.objects.get(id = ids[0])
           if format == 'docx':
@@ -542,7 +544,7 @@ class Exporter:
                   lemma.generate_docx_paragraph(document)
               else:
                   raise "Unsupported"
-      Artikel.stop_docx(tempfilename, document)
+      self.stop_docx(tempfilename)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
 
