@@ -254,7 +254,7 @@ class Artikel(models.Model):
         style.font.size = docx.shared.Pt(size)
 
     @staticmethod
-    def start_docx(self, filename):
+    def start_docx(filename):
         document = docx.Document()
         Artikel.add_docx_styles(document)
         return document
@@ -266,7 +266,7 @@ class Artikel(models.Model):
         document.save(filename)
 
     @staticmethod
-    def stop_docx(self, filename)
+    def stop_docx(filename, document):
         document.save(filename)
 
     def generate_docx_paragraph(self, document):
@@ -521,7 +521,7 @@ class Exporter:
     @staticmethod
     def export(ids, format):
       tempfilename = mktemp('.%s' % format)
-      document = Artikel.start_docx(filename)
+      document = Artikel.start_docx(tempfilename)
       if len(ids) == 1:
           id = ids[0]
           lemma = Artikel.objects.get(id = id)
@@ -538,7 +538,7 @@ class Exporter:
                   lemma.generate_docx_paragraph(document)
               else:
                   raise "Unsupported"
-          document.save(tempfilename)
+      Artikel.stop_docx(tempfilename, document)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
 
