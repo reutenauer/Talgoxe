@@ -6,7 +6,6 @@ import re
 from tempfile import mkdtemp, mktemp
 
 import ezodf
-from ezodf import newdoc, Heading, Paragraph, Span
 from lxml import etree
 import docx
 
@@ -341,14 +340,17 @@ class Exporter:
     def __init__(self, format):
         self.format = format
         initialisers = {
+            'odf' : self.start_odf,
             'docx' : self.start_docx,
         }
 
         generators = {
+            'odf' : self.generate_odf_paragraph,
             'docx' : self.generate_docx_paragraph,
         }
 
         savers = {
+            'odf' : self.save_odf,
             'docx' : self.save_docx,
         }
 
@@ -356,8 +358,8 @@ class Exporter:
         self.generate_paragraph = generators[format]
         self.save_document = savers[format]
 
-    def add_odf_style(opendoc, type, xmlchunk):
-        opendoc.inject_style("""
+    def add_odf_style(self, type, xmlchunk):
+        self.document.inject_style("""
             <style:style style:name="%s" style:family="text">
                 <style:text-properties %s />
             </style:style>
@@ -365,60 +367,55 @@ class Exporter:
 
     def start_odf(self):
         self.document = ezodf.newdoc(doctype = 'odt', filename = self.filename)
-        Artikel.add_style(odt, 'SO', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'OK', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'G', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'DSP', 'fo:font-style="italic"')
-        Artikel.add_style(odt, 'TIP', 'fo:font-size="9pt"')
+        self.add_odf_style('SO', 'fo:font-weight="bold"')
+        self.add_odf_style('OK', 'fo:font-size="9pt"')
+        self.add_odf_style('G', 'fo:font-size="9pt"')
+        self.add_odf_style('DSP', 'fo:font-style="italic"')
+        self.add_odf_style('TIP', 'fo:font-size="9pt"')
         # IP
-        Artikel.add_style(odt, 'M1', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'M2', 'fo:font-weight="bold"')
+        self.add_odf_style('M1', 'fo:font-weight="bold"')
+        self.add_odf_style('M2', 'fo:font-weight="bold"')
         # VH, HH, VR, HR
-        Artikel.add_style(odt, 'REF', 'fo:font-weight="bold"')
-        Artikel.add_style(odt, 'FO', 'fo:font-style="italic"')
-        Artikel.add_style(odt, 'TIK', 'fo:font-style="italic" fo:font-size="9pt"')
-        Artikel.add_style(odt, 'FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
+        self.add_odf_style('REF', 'fo:font-weight="bold"')
+        self.add_odf_style('FO', 'fo:font-style="italic"')
+        self.add_odf_style('TIK', 'fo:font-style="italic" fo:font-size="9pt"')
+        self.add_odf_style('FLV', 'fo:font-weight="bold" fo:font-size="9pt"')
         # ÖVP. Se nedan!
         # BE, ÖV
         # ÄV, ÄVK se nedan
         # FOT
-        Artikel.add_style(odt, 'GT', 'fo:font-size="9pt"')
-        Artikel.add_style(odt, 'SOV', 'fo:font-weight="bold"')
+        self.add_odf_style('GT', 'fo:font-size="9pt"')
+        self.add_odf_style('SOV', 'fo:font-weight="bold"')
         # TI
         # HV, INT
-        Artikel.add_style(odt, 'OKT', 'fo:font-size="9pt"')
+        self.add_odf_style('OKT', 'fo:font-size="9pt"')
         # VS
-        Artikel.add_style(odt, 'GÖ', 'fo:font-size="9pt"')
+        self.add_odf_style('GÖ', 'fo:font-size="9pt"')
         # GP, UST
-        Artikel.add_style(odt, 'US', 'fo:font-style="italic"')
+        self.add_odf_style('US', 'fo:font-style="italic"')
         # GÖP, GTP, NYR, VB
-        Artikel.add_style(odt, 'OG', 'style:text-line-through-style="solid"')
-        Artikel.add_style(odt, 'SP', 'fo:font-style="italic"')
+        self.add_odf_style('OG', 'style:text-line-through-style="solid"')
+        self.add_odf_style('SP', 'fo:font-style="italic"')
 
-    def process_odf(self, odt):
-        paragraph = self.generate_content()
-        odt.body += paragraph
-
-    def stop_odf(self):
+    def save_odf(self):
         self.document.save()
 
-    def generate_odf_paragraph(self):
-        paragraph = Paragraph()
-        paragraph += Span(self.lemma, style_name = 'SO') # TODO Homografnumrering!
-        self.collect()
+    def generate_odf_paragraph(self, artikel):
+        artikel.collect()
+        paragraph = ezodf.Paragraph()
+        paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
         spacebefore = True
-        for segment in self.new_segments:
+        for segment in artikel.new_segments:
             type = segment.type.__str__()
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
-                    paragraph += Span(' ')
-                paragraph += Span(segment.format(), style_name = type)
+                    paragraph += ezodf.Span(' ')
+                paragraph += ezodf.Span(segment.format(), style_name = type)
                 if segment.isleftdelim():
                     spacebefore = False
                 else:
                     spacebefore = True
-        return paragraph
-
+        self.document.body += paragraph
 
     def start_docx(self):
         self.document = docx.Document()
@@ -514,6 +511,6 @@ class Exporter:
               self.generate_paragraph(artikel)
       self.save_document()
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
-      rename(tempfilename, join(staticpath, filename))
+      rename(self.filename, join(staticpath, filename))
 
       return join('ord', filename)
