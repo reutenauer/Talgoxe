@@ -209,6 +209,12 @@ class Segment(): # Fjäder!
         else:
             return self.text.strip()
 
+class Fjäder(Typ):
+    def __init__(self, typ, text = None):
+        if text == None:
+            self.typ = typ.kod
+            self.text = 
+
 class Typ(models.Model):
     kod = models.CharField(max_length = 5)
     namn = models.CharField(max_length = 30)
