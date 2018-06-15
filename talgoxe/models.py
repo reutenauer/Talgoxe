@@ -501,8 +501,7 @@ class Exporter:
         style.font.size = docx.shared.Pt(size)
 
     def export(self, ids):
-      tempfilename = mktemp('.%s' % self.format)
-      self.filename = tempfilename
+      self.filename = mktemp('.%s' % self.format)
       document = self.start_document()
       if len(ids) == 1:
           artikel = Artikel.objects.get(id = ids[0])
