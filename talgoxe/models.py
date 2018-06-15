@@ -498,19 +498,19 @@ class Exporter:
         style.font.size = docx.shared.Pt(size)
 
     def export(self, ids):
-      self.filename = mktemp('.%s' % self.format)
-      document = self.start_document()
-      if len(ids) == 1:
-          artikel = Artikel.objects.get(id = ids[0])
-          self.generate_paragraph(artikel)
-          filename = '%s-%s.%s' % (ids[0], artikel.lemma, self.format)
-      else:
-          filename = 'sdl-utdrag.%s' % self.format # FIXME Unikt namn osv.
-          for id in ids:
-              artikel = Artikel.objects.get(id = id)
-              self.generate_paragraph(artikel)
-      self.save_document()
-      staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
-      rename(self.filename, join(staticpath, filename))
+        self.filename = mktemp('.%s' % self.format)
+        document = self.start_document()
+        if len(ids) == 1:
+            artikel = Artikel.objects.get(id = ids[0])
+            self.generate_paragraph(artikel)
+            filename = '%s-%s.%s' % (ids[0], artikel.lemma, self.format)
+        else:
+            filename = 'sdl-utdrag.%s' % self.format # FIXME Unikt namn osv.
+            for id in ids:
+                artikel = Artikel.objects.get(id = id)
+                self.generate_paragraph(artikel)
+        self.save_document()
+        staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
+        rename(self.filename, join(staticpath, filename))
 
-      return join('ord', filename)
+        return join('ord', filename)
