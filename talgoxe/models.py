@@ -449,10 +449,10 @@ class Exporter:
 
     def start_docx(self):
         self.document = docx.Document()
-        add_docx_styles(self.document)
+        self.add_docx_styles()
         return self.document
 
-    def stop_docx(self, filename):
+    def save_docx(self, filename):
         self.document.save(filename)
 
     def generate_docx_paragraph(self, artikel):
@@ -477,48 +477,48 @@ class Exporter:
                 else:
                     spacebefore = True
 
-    def add_docx_styles(document): # TODO Keyword arguments?
-        Artikel.add_docx_style(document, 'SO', False, True, 12)
-        Artikel.add_docx_style(document, 'OK', False, False, 9)
-        Artikel.add_docx_style(document, 'G', False, False, 9)
-        Artikel.add_docx_style(document, 'DSP', True, False, 12)
-        Artikel.add_docx_style(document, 'TIP', False, False, 9)
-        Artikel.add_docx_style(document, 'IP', False, False, 12)
-        Artikel.add_docx_style(document, 'M1', False, True, 12)
-        Artikel.add_docx_style(document, 'M2', False, True, 12)
-        Artikel.add_docx_style(document, 'VH', False, False, 12)
-        Artikel.add_docx_style(document, 'HH', False, False, 12)
-        Artikel.add_docx_style(document, 'VR', False, False, 12)
-        Artikel.add_docx_style(document, 'HR', False, False, 12)
-        Artikel.add_docx_style(document, 'REF', False, True, 12)
-        Artikel.add_docx_style(document, 'FO', True, False, 12)
-        Artikel.add_docx_style(document, 'TIK', True, False, 9)
-        Artikel.add_docx_style(document, 'FLV', False, True, 9)
-        Artikel.add_docx_style(document, 'ÖVP', False, False, 12)
-        Artikel.add_docx_style(document, 'BE', False, False, 12)
-        Artikel.add_docx_style(document, 'ÖV', False, False, 12)
-        Artikel.add_docx_style(document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
-        Artikel.add_docx_style(document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
-        Artikel.add_docx_style(document, 'FOT', True, False, 12)
-        Artikel.add_docx_style(document, 'GT', False, False, 9)
-        Artikel.add_docx_style(document, 'SOV', False, True, 12)
+    def add_docx_styles(self): # TODO Keyword arguments?
+        self.add_docx_style(self.document, 'SO', False, True, 12)
+        self.add_docx_style(self.document, 'OK', False, False, 9)
+        self.add_docx_style(self.document, 'G', False, False, 9)
+        self.add_docx_style(self.document, 'DSP', True, False, 12)
+        self.add_docx_style(self.document, 'TIP', False, False, 9)
+        self.add_docx_style(self.document, 'IP', False, False, 12)
+        self.add_docx_style(self.document, 'M1', False, True, 12)
+        self.add_docx_style(self.document, 'M2', False, True, 12)
+        self.add_docx_style(self.document, 'VH', False, False, 12)
+        self.add_docx_style(self.document, 'HH', False, False, 12)
+        self.add_docx_style(self.document, 'VR', False, False, 12)
+        self.add_docx_style(self.document, 'HR', False, False, 12)
+        self.add_docx_style(self.document, 'REF', False, True, 12)
+        self.add_docx_style(self.document, 'FO', True, False, 12)
+        self.add_docx_style(self.document, 'TIK', True, False, 9)
+        self.add_docx_style(self.document, 'FLV', False, True, 9)
+        self.add_docx_style(self.document, 'ÖVP', False, False, 12)
+        self.add_docx_style(self.document, 'BE', False, False, 12)
+        self.add_docx_style(self.document, 'ÖV', False, False, 12)
+        self.add_docx_style(self.document, 'ÄV', False, False, 12) # FIXME Skriv “även” :-)
+        self.add_docx_style(self.document, 'ÄVK', True, False, 12) # FIXME Skriv även även här ;-)
+        self.add_docx_style(self.document, 'FOT', True, False, 12)
+        self.add_docx_style(self.document, 'GT', False, False, 9)
+        self.add_docx_style(self.document, 'SOV', False, True, 12)
         for style in ('TI', 'HV', 'INT'):
-            Artikel.add_docx_style(document, style)
-        Artikel.add_docx_style(document, 'OKT', False, False, 9)
-        Artikel.add_docx_style(document, 'VS')
-        Artikel.add_docx_style(document, 'GÖ', False, False, 9)
-        Artikel.add_docx_style(document, 'GP')
-        Artikel.add_docx_style(document, 'UST', True, False, 12)
-        Artikel.add_docx_style(document, 'US', True, False, 12)
+            self.add_docx_style(self.document, style)
+        self.add_docx_style(self.document, 'OKT', False, False, 9)
+        self.add_docx_style(self.document, 'VS')
+        self.add_docx_style(self.document, 'GÖ', False, False, 9)
+        self.add_docx_style(self.document, 'GP')
+        self.add_docx_style(self.document, 'UST', True, False, 12)
+        self.add_docx_style(self.document, 'US', True, False, 12)
         for style in ('GÖP', 'GTP', 'NYR', 'VB'):
-            Artikel.add_docx_style(document, style)
-        OG = document.styles.add_style('OG', docx.enum.style.WD_STYLE_TYPE.CHARACTER)
+            self.add_docx_style(self.document, style)
+        OG = self.document.styles.add_style('OG', docx.enum.style.WD_STYLE_TYPE.CHARACTER)
         OG.font.strike = True
-        Artikel.add_docx_style(document, 'SP', True, False, 12)
-        Artikel.add_docx_style(document, 'M0', False, True, 18)
-        Artikel.add_docx_style(document, 'M3', True, False, 6)
+        self.add_docx_style(self.document, 'SP', True, False, 12)
+        self.add_docx_style(self.document, 'M0', False, True, 18)
+        self.add_docx_style(self.document, 'M3', True, False, 6)
 
-    def add_docx_style(document, type, italic = False, bold = False, size = 12):
+    def add_docx_style(self, document, type, italic = False, bold = False, size = 12):
         style = document.styles.add_style(type, docx.enum.style.WD_STYLE_TYPE.CHARACTER)
         style.base_style = document.styles['Default Paragraph Font']
         if italic:
@@ -540,7 +540,7 @@ class Exporter:
           for id in ids:
               artikel = Artikel.objects.get(id = id)
               artikel.generate_paragraph(artikel)
-      self.stop_document(tempfilename)
+      self.save_document(tempfilename)
       staticpath = join(dirname(abspath(__file__)), 'static', 'ord')
       rename(tempfilename, join(staticpath, filename))
 
