@@ -265,7 +265,7 @@ class Fjäder(Spole):
     def __init__(self, spole):
         self.__spole__ = spole
 
-    def __getattr__(captured_attribute):
+    def __getattr__(self, captured_attribute):
         original_attribute = getattr(self.__spole__, captured_attribute)
         def wrapper_method(*args, **kwargs):
             if type(captured_attribute) == str:
