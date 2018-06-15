@@ -253,10 +253,20 @@ class Artikel(models.Model):
             style.font.bold = True
         style.font.size = docx.shared.Pt(size)
 
+    @staticmethod
+    def start_docx(self, filename):
+        document = docx.Document()
+        Artikel.add_docx_styles(document)
+        return document
+
     def process_docx(self, filename):
         document = docx.Document()
         Artikel.add_docx_styles(document)
         self.generate_docx_paragraph(document)
+        document.save(filename)
+
+    @staticmethod
+    def stop_docx(self, filename)
         document.save(filename)
 
     def generate_docx_paragraph(self, document):
@@ -511,18 +521,17 @@ class Exporter:
     @staticmethod
     def export(ids, format):
       tempfilename = mktemp('.%s' % format)
+      document = Artikel.start_docx(filename)
       if len(ids) == 1:
           id = ids[0]
           lemma = Artikel.objects.get(id = id)
           if format == 'docx':
-              document = lemma.process_docx(tempfilename)
+              document = lemma.generate_docx_paragraph(tempfilename)
           else:
               raise "Unsupported"
           filename = '%s-%s.%s' % (id, lemma.lemma, format)
       else:
-          filename = 'sdl-utdrag.%s' % format
-          document = Document()
-          Artikel.add_docx_styles(document)
+          filename = 'sdl-utdrag.%s' % format # FIXME Unikt namn osv.
           for i in ids:
               lemma = Artikel.objects.get(id = i)
               if format == 'docx':
