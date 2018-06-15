@@ -253,12 +253,6 @@ class Artikel(models.Model):
             style.font.bold = True
         style.font.size = docx.shared.Pt(size)
 
-    @staticmethod
-    def start_docx(filename):
-        document = docx.Document()
-        Artikel.add_docx_styles(document)
-        return document
-
     def process_docx(self, filename):
         document = docx.Document()
         Artikel.add_docx_styles(document)
@@ -521,9 +515,14 @@ class Exporter:
     def __init__(self, format):
         self.format = format
 
-    exporters = {
-        'docx' : export_to_odf,
+    initialisers = {
+        'docx' : 'start_docx',
     }
+
+    def start_docx(self):
+        document = docx.Document()
+        Artikel.add_docx_styles(document)
+        return document
 
     def export(ids):
       tempfilename = mktemp('.%s' % format)
