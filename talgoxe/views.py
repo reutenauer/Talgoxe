@@ -249,7 +249,9 @@ def print_odf(request):
 def print(request, format):
     template = loader.get_template('talgoxe/download_document.html')
     exporter = Exporter(format)
-    context = exporter.export(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    filepath = exporter.export(list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
+    context = { 'filepath' : filepath }
+
     return render_template(request, template, context)
 
 def easylogout(request):
