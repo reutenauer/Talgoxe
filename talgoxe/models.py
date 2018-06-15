@@ -348,7 +348,6 @@ class Exporter:
         self.save_document = savers[format]
 
     def generate_pdf_paragraph(self, artikel):
-        artikel.collect()
         self.document.write("\\hskip-0.5em")
         if artikel.rang > 0:
             self.document.write('\lohi[left]{}{\SDL:SO{%d}}' % artikel.rang) # TODO Real superscript
@@ -432,7 +431,6 @@ class Exporter:
         self.document.save()
 
     def generate_odf_paragraph(self, artikel):
-        artikel.collect()
         paragraph = ezodf.Paragraph()
         paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
         spacebefore = True
@@ -457,7 +455,6 @@ class Exporter:
         self.document.save(self.filename)
 
     def generate_docx_paragraph(self, artikel):
-        artikel.collect()
         paragraph = self.document.add_paragraph()
         if artikel.rang > 0:
             paragraph.add_run(str(artikel.rang), style = 'SO').font.superscript = True
@@ -534,12 +531,14 @@ class Exporter:
         self.start_document()
         if len(ids) == 1:
             artikel = Artikel.objects.get(id = ids[0])
+            artikel.collect()
             self.generate_paragraph(artikel)
             filename = '%s-%s.%s' % (ids[0], artikel.lemma, self.format)
         else:
             filename = 'sdl-utdrag.%s' % self.format # FIXME Unikt namn osv.
             for id in ids:
                 artikel = Artikel.objects.get(id = id)
+                artikel.collect()
                 self.generate_paragraph(artikel)
         self.save_document()
         staticpath = join(dirname(abspath(__file__)), 'static', 'ord')

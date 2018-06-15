@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from tempfile import mkdtemp, mktemp
-import logging
-from os import system, chdir, popen, rename, environ
-from os.path import join, dirname, abspath
-import io
 import re
-from collections import OrderedDict, deque
-from docx import Document
+from collections import OrderedDict
 
 from django.utils.datastructures import MultiValueDictKeyError
 
@@ -168,7 +162,6 @@ def print_on_demand(request):
                 lemmata.append(lemma)
             elif bdata:
                 hel_bokstav = Artikel.objects.filter(lemma__startswith = bdata.group(1))
-                # deque(map(lambda lemma: lemma.collect(), hel_bokstav), maxlen = 0)
                 lemmata += hel_bokstav
         lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rang)) # TODO Make unique
         context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata) }
@@ -179,10 +172,6 @@ def print_on_demand(request):
         context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver }
 
     return render_template(request, template, context)
-
-@login_required
-def print_pdf(request):
-    return export_to_pdf(request, list(map(lambda s: s.strip(), request.GET['ids'].split(','))))
 
 @login_required
 def print(request, format):
