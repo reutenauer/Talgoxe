@@ -209,12 +209,6 @@ class Segment(): # Fjäder!
         else:
             return self.text.strip()
 
-class Fjäder(Typ):
-    def __init__(self, typ, text = None):
-        if text == None:
-            self.typ = typ.kod
-            self.text = 
-
 class Typ(models.Model):
     kod = models.CharField(max_length = 5)
     namn = models.CharField(max_length = 30)
@@ -266,6 +260,20 @@ class Spole(models.Model):
 
     def isgeo(self):
         return self.typ.isgeo()
+
+class Fjäder(Spole):
+    def dummy(self):
+        print("I’m a dummy method.")
+
+    def __getattr__(captured_attribute):
+        original_attribute = getattr(self.__spole__, captured_attribute)
+        def wrapper_method(*args, **kwargs):
+            if type(captured_attribute) == str:
+                result = original_attribute()
+            else:
+                result = original_attribute(*args, **kwargs)
+            return result
+        return wrapper_method
 
 class Landskap():
     ordning = [
