@@ -129,8 +129,10 @@ def export_to_pdf(request, ids):
     chdir(tempdir)
     environ['PATH'] = "%s:%s" % (settings.CONTEXT_PATH, environ['PATH'])
     environ['TMPDIR'] = '/tmp'
-    ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '"%s".pdf' % basename)
-    system(("cp sdl.pdf %s" % ordpdfpath).encode('UTF-8'))
+    output = popen("context --batchmode sdl.tex")
+    output.read()
+    ordpdfpath = join(dirname(abspath(__file__)), 'static', 'ord', '%s.pdf' % basename)
+    rename(join(tempdir, 'sdl.pdf'), ordpdfpath)
     template = loader.get_template('talgoxe/download_pdf.html')
     context = { 'filepath' : 'ord/%s.pdf' % basename }
     return render_template(request, template, context)
