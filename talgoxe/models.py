@@ -518,13 +518,18 @@ class Exporter:
 
         return { 'filepath' : join('ord', finalname) }
 
-    @staticmethod
-    def export(ids, format):
+    def __init__(self, format):
+        self.format = format
+
+    exporters = {
+        'docx' : export_to_odf,
+    }
+
+    def export(ids):
       tempfilename = mktemp('.%s' % format)
-      document = Artikel.start_docx(tempfilename)
+      document = self.start_docx(tempfilename)
       if len(ids) == 1:
-          id = ids[0]
-          lemma = Artikel.objects.get(id = id)
+          lemma = Artikel.objects.get(id = ids[0])
           if format == 'docx':
               lemma.generate_docx_paragraph(document)
           else:
@@ -532,8 +537,8 @@ class Exporter:
           filename = '%s-%s.%s' % (id, lemma.lemma, format)
       else:
           filename = 'sdl-utdrag.%s' % format # FIXME Unikt namn osv.
-          for i in ids:
-              lemma = Artikel.objects.get(id = i)
+          for id in ids:
+              lemma = Artikel.objects.get(id = id)
               if format == 'docx':
                   lemma.generate_docx_paragraph(document)
               else:
