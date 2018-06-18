@@ -55,7 +55,7 @@ class Artikel(models.Model):
             self.moments['M2'].append(segment)
 
     def append_segment(self, data):
-        segment = Segment(data)
+        segment = Fjäder(data)
         self.resolve_moments(segment)
         self.new_segments.append(segment)
 
