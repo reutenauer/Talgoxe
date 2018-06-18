@@ -262,11 +262,11 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
 class Fjäder(Spole):
-    def __init__(self, spole, text):
-        if type(spole) == Spole:
-            self.__spole__ = spole
-        else: # spole är egentligen en Typ
+    def __init__(self, spole, text = None):
+        if text: # spole är egentligen en Typ
             self.__spole__ = Spole(spole, text)
+        else:
+            self.__spole__ = spole
 
     def __getattr__(self, captured_attribute):
         original_attribute = getattr(self.__spole__, captured_attribute)
@@ -274,6 +274,7 @@ class Fjäder(Spole):
             if type(captured_attribute) == str:
                 result = original_attribute
             else:
+                print(captured_attribute)
                 result = original_attribute(*args, **kwargs)
             return result
         return wrapper_method
