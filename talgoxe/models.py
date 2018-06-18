@@ -502,7 +502,7 @@ class Exporter:
         paragraph.add_run(artikel.lemma, style = 'SO')
         spacebefore = True
         for segment in artikel.new_segments:
-            type = segment.type.__str__()
+            type = segment.type().__str__()
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
                     paragraph.add_run(' ', style = self.document.styles[type])
