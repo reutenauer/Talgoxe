@@ -19,6 +19,7 @@ class UnsupportedFormat(Exception):
   pass
 
 class Artikel(models.Model):
+    # TODO Meta with ordering = ('lemma', 'rang')?
     lemma = models.CharField(max_length = 100)
     rang = models.SmallIntegerField()
     skapat = models.DateTimeField(auto_now_add = True)
@@ -262,29 +263,20 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
 class Fjäder(Spole):
+    class Meta:
+        proxy = True
+
+    def copy_type(self, typ):
+        self.typ_id = typ.id
+
     def __init__(self, spole, text = None):
         if text: # spole är egentligen en Typ
-            self.__spole__ = Spole(spole, text)
+            # self.typ = spole
+            self.text = text
         else:
-            self.__spole__ = spole
-
-    # Ur https://stackoverflow.com/a/46052931/46495
-    def __getattr__(self, captured_attribute):
-        print(captured_attribute)
-        original_attribute = getattr(self.__spole__, 'typ')
-        if type(captured_attribute) == str:
-            result = original_attribute
-        else:
-            result = None
-        original_attribute = getattr(self.__spole__, captured_attribute)
-        def wrapper_method(*args, **kwargs):
-            if not result:
-                print('--- DEBUG ---')
-                print(captured_attribute)
-                print('--- EODEBUG ---')
-                result = original_attribute(*args, **kwargs)
-            return result
-        return wrapper_method
+            # self.typ = spole.typ
+            self.copy_type(spole.typ)
+            self.text = spole.text
 
 class Landskap():
     ordning = [
