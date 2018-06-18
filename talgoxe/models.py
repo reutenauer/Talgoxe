@@ -271,6 +271,24 @@ class Fjäder(Spole):
             self.typ = spole.typ
             self.text = spole.text
 
+    def isgeo(self):
+        return self.typ.kod == 'g'
+
+    def isleftdelim(self):
+        return self.typ.kod in ['vh', 'vr']
+
+    def isrightdelim(self):
+        return self.typ.kod in ['hh', 'hr', 'ip', 'ko'] # TOOD Nåogt om text =~ /^,/ ?
+
+    def ismoment(self):
+        return self.ism1() or self.ism2()
+
+    def ism1(self):
+        return self.typ.kod == 'm1'
+
+    def ism2(self):
+        return self.typ.kod == 'm2'
+
 class Landskap():
     ordning = [
         u'Skåne', u'Blek', u'Öland', u'Smål', u'Hall', u'Västg', u'Boh', u'Dalsl', u'Gotl', u'Östg', # 0-9
