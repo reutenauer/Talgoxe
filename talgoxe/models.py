@@ -262,8 +262,11 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
 class Fjäder(Spole):
-    def __init__(self, spole):
-        self.__spole__ = spole
+    def __init__(self, spole, text):
+        if type(spole) == Spole:
+            self.__spole__ = spole
+        else: # spole är egentligen en Typ
+            self.__spole__ = Spole(spole, text)
 
     def __getattr__(self, captured_attribute):
         original_attribute = getattr(self.__spole__, captured_attribute)
