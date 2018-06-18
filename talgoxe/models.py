@@ -268,13 +268,20 @@ class Fjäder(Spole):
         else:
             self.__spole__ = spole
 
+    # Ur https://stackoverflow.com/a/46052931/46495
     def __getattr__(self, captured_attribute):
+        print(captured_attribute)
+        original_attribute = getattr(self.__spole__, 'typ')
+        if type(captured_attribute) == str:
+            result = original_attribute
+        else:
+            result = None
         original_attribute = getattr(self.__spole__, captured_attribute)
         def wrapper_method(*args, **kwargs):
-            if type(captured_attribute) == str:
-                result = original_attribute
-            else:
+            if not result:
+                print('--- DEBUG ---')
                 print(captured_attribute)
+                print('--- EODEBUG ---')
                 result = original_attribute(*args, **kwargs)
             return result
         return wrapper_method
