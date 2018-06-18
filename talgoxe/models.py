@@ -401,7 +401,7 @@ class Exporter:
                 setspace = False
             else:
                 setspace = True
-            type = segment.type.__str__()
+            type = segment.type().__str__()
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             self.document.write(('\\SDL:%s{%s}' % (type, text)))
 
@@ -476,7 +476,7 @@ class Exporter:
         paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
         spacebefore = True
         for segment in artikel.new_segments:
-            type = segment.type.__str__()
+            type = segment.type().__str__()
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
                     paragraph += ezodf.Span(' ')
