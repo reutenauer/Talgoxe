@@ -292,6 +292,23 @@ class Fjäder:
     def ism2(self):
         return self.typ.kod == 'm2'
 
+    def format(self): # FIXME Också för P:er från ÖVP?
+        if self.typ.kod == 'vr':
+            return '('
+        elif self.typ.kod == 'hr':
+            return ')'
+        elif self.typ.kod == 'vh':
+            return '['
+        elif self.typ.kod == 'hh':
+            return ']'
+        elif self.typ.kod == 'äv':
+            return 'äv.'
+        else:
+            return self.text.strip()
+
+    def type(self): # FIXME Remove later!
+        return self.typ.kod.upper()
+
 class Landskap():
     ordning = [
         u'Skåne', u'Blek', u'Öland', u'Smål', u'Hall', u'Västg', u'Boh', u'Dalsl', u'Gotl', u'Östg', # 0-9
