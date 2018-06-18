@@ -2,6 +2,7 @@
 <span class="SO">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
 {% with True as setspace %}
     {% for segment in lemma.new_segments %}
+        [{{ segment.typ }}:{{ segment.text }}]
         {% if not segment.isrightdelim %}
         {% if setspace and not segment.isrightdelim %}
             <span>⁠ ⁠</span>

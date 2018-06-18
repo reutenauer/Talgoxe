@@ -67,13 +67,14 @@ class Artikel(models.Model):
         landskap = []
         while i < self.spole_set.count():
             currdat = self.get_spole(i)
+            print(currdat, state)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
                 else:
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
-                       self.new_segments.append(Segment(geotype, ls.abbrev))
+                       self.new_segments.append(Fjäder(geotype, ls.abbrev))
                     landskap = []
                     bits = re.split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
@@ -105,6 +106,7 @@ class Artikel(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
+        print('landskap? ' + str(landskap))
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
@@ -264,6 +266,7 @@ class Spole(models.Model):
 
 class Fjäder:
     def __init__(self, spole, text = None):
+        self.display = True # FIXME Men inte för KO!
         if text: # spole är egentligen en Typ
             self.typ = spole
             self.text = text
