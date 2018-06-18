@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import re
 from collections import OrderedDict
-
-from django.utils.datastructures import MultiValueDictKeyError
-
-from django.shortcuts import render, redirect
-
-# Create your views here.
+from re import match
 
 from django import VERSION
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.template import loader, Context, RequestContext
+from django.utils.datastructures import MultiValueDictKeyError
+
 if VERSION[1] == 7 or VERSION[1] == 8:
     from django.core.urlresolvers import reverse
     from django.template import RequestContext
     from django.views.decorators.csrf import csrf_protect
 else:
     from django.urls import reverse
-
-from django.contrib.auth.decorators import login_required
-from django.db.models import Max
-from django.contrib.auth import logout
 
 from talgoxe.models import Spole, Artikel, Typ, Exporter, UnsupportedFormat
 
@@ -93,7 +89,7 @@ def search(request): # TODO Fixa lista över artiklar när man POSTar efter omor
     if method == 'POST':
         ordning = []
         for artikel in request.POST:
-            if re.match('^artikel-', artikel):
+            if match('^artikel-', artikel):
                 id = artikel.replace('artikel-', '')
                 ordning.append(Artikel.objects.get(id = id))
         föreArtikel = ordning[0]
@@ -154,8 +150,8 @@ def print_on_demand(request):
     if method == 'POST':
         lemmata = []
         for key in request.POST:
-            mdata = re.match('selected-(\d+)', key)
-            bdata = re.match('bokstav-(.)', key)
+            mdata = match('selected-(\d+)', key)
+            bdata = match('bokstav-(.)', key)
             if mdata:
                 lemma = Artikel.objects.get(id = int(mdata.group(1)))
                 # lemma.collect()

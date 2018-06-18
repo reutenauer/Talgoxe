@@ -2,16 +2,15 @@
 from __future__ import unicode_literals
 from os import chdir, popen, rename, environ
 from os.path import abspath, dirname, join
-import re
+from re import match, split
 from tempfile import mkdtemp, mktemp
 
 import ezodf
-from lxml import etree
 import docx
 
-from django.db import models
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
 # FIXME Superscripts!
 
@@ -75,7 +74,7 @@ class Artikel(models.Model):
                     for ls in sorted_landskap:
                        self.new_segments.append(Fjäder(geotype, ls.abbrev))
                     landskap = []
-                    bits = re.split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
+                    bits = split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
@@ -93,7 +92,7 @@ class Artikel(models.Model):
                     geotype = currdat.typ
                     state = 'GEOGRAFI'
                 else:
-                    bits = re.split(u'¶', currdat.text)
+                    bits = split(u'¶', currdat.text)
                     if len(bits) == 1:
                         self.append_segment(currdat)
                     else:
@@ -118,10 +117,6 @@ class Artikel(models.Model):
                 self.moments['M2'][m2].text = '%c' % (97 + m2)
                 self.moments['M2'][m2].display = True
         self.moments = { 'M1': [], 'M2': [] }
-
-    def serialise(self):
-        paragraph = self.generate_content()
-        return etree.tostring(paragraph.xmlnode)
 
     def update(self, post_data):
         order = post_data['order'].split(',')
@@ -176,7 +171,7 @@ class Segment(): # Fjäder!
         if type(self.type) == 'unicode' or str(type(self.type)) == "<type 'unicode'>":
             return self.type in ['hh', 'hr', 'ip', 'ko'] # KO is convenient
         else:
-            return self.type.isrightdelim() or re.match('^,', self.text) # TODO Complete
+            return self.type.isrightdelim() or match('^,', self.text) # TODO Complete
 
     def ismoment(self):
         return self.ism1() or self.ism2()
