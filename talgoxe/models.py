@@ -262,7 +262,7 @@ class Spole(models.Model):
     def isgeo(self):
         return self.typ.isgeo()
 
-class Fjäder(Spole):
+class Fjäder:
     def __init__(self, spole, text = None):
         if text: # spole är egentligen en Typ
             self.typ = spole
