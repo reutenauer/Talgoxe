@@ -263,19 +263,12 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
 class Fjäder(Spole):
-    class Meta:
-        proxy = True
-
-    def copy_type(self, typ):
-        self.typ_id = typ.id
-
     def __init__(self, spole, text = None):
         if text: # spole är egentligen en Typ
-            # self.typ = spole
+            self.typ = spole
             self.text = text
         else:
-            # self.typ = spole.typ
-            self.copy_type(spole.typ)
+            self.typ = spole.typ
             self.text = spole.text
 
 class Landskap():
