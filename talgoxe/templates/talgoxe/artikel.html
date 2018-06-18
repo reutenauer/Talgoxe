@@ -3,7 +3,7 @@
 {% with True as setspace %}
     {% for segment in lemma.new_segments %}
         {% if not segment.isrightdelim %}
-        {% if setspace and not segment.isrightdelim %}
+        {% if segment.setspace %}
             <span>⁠ ⁠</span>
         {% endif %}
         {% endif %}
@@ -15,8 +15,8 @@
         {% if segment.ismoment and segment.display %}
             <span class="{{ segment.type }}">{{ segment.text.format }}</span>
         {% else %}
-            {% if segment.type.kod == 'ref' %}
-                <span class="{{ segment.type }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
+            {% if segment.typ == 'REF' %}
+                <span class="{{ segment.typ }}"><a href="{% url 'stickord' segment.text %}">{{ segment.text.format }}</a></span>
             {% else %}
                 <span class="{{ segment.type }}">{{ segment.format }}</span>
             {% endif %}

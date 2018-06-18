@@ -253,36 +253,39 @@ class Fjäder:
             self.text = spole.text.strip()
 
     def isleftdelim(self):
-        return self.typ in ['vh', 'vr']
+        return self.typ in ['VH', 'VR']
 
     def isrightdelim(self):
-        return self.typ in ['hh', 'hr', 'ip', 'ko'] # TOOD Nåogt om text =~ /^,/ ?
+        return self.typ in ['HH', 'HR', 'IP', 'KO'] # TOOD Nåogt om text =~ /^,/ ?
 
     def ismoment(self):
         return self.ism1() or self.ism2()
 
     def ism1(self):
-        return self.typ == 'm1'
+        return self.typ == 'M1'
 
     def ism2(self):
-        return self.typ == 'm2'
+        return self.typ == 'M2'
 
     def format(self): # FIXME Också för P:er från ÖVP?
-        if self.typ == 'vr':
+        if self.typ == 'VR':
             return '('
-        elif self.typ == 'hr':
+        elif self.typ == 'VR':
             return ')'
-        elif self.typ == 'vh':
+        elif self.typ == 'VH':
             return '['
-        elif self.typ == 'hh':
+        elif self.typ == 'HH':
             return ']'
-        elif self.typ == 'äv':
+        elif self.typ == 'ÄV':
             return 'äv.'
         else:
             return self.text
 
     def type(self): # FIXME Remove later!
         return self.typ
+
+    def setspace(self):
+        return not self.isrightdelim() # TODO Lägga till det med den föregående fjädern
 
 class Landskap():
     ordning = [
