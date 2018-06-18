@@ -266,7 +266,7 @@ class Spole(models.Model):
 
 class Fjäder:
     def __init__(self, spole, text = None):
-        self.display = True # FIXME Men inte för KO!
+        self.display = None # FIXME Måste inte ändras för KO
         if text: # spole är egentligen en Typ
             self.typ = spole
             self.text = text
