@@ -66,6 +66,10 @@ class Artikel(models.Model):
         landskap = []
         while i < self.spole_set.count():
             currdat = self.get_spole(i)
+            if currdat.isleftdelim():
+                preventnextspace = True
+            else:
+                preventnextspace = True
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
