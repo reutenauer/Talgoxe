@@ -217,21 +217,6 @@ class Typ(models.Model):
     def isgeo(self):
         return self.kod == 'g'
 
-    def isleftdelim(self):
-        return self.kod in ['vh', 'vr']
-
-    def isrightdelim(self):
-        return self.kod in ['hh', 'hr', 'ip', 'ko']
-
-    def ismoment(self):
-        return self.ism1() or self.ism2()
-
-    def ism1(self):
-        return self.kod == 'm1'
-
-    def ism2(self):
-        return self.kod == 'm2'
-
     def format(self):
         out = self.__str__()
         out += (4 - len(out)) * '\xa0'
@@ -266,9 +251,6 @@ class Fjäder:
         else:
             self.typ = spole.typ
             self.text = spole.text
-
-    def isgeo(self):
-        return self.typ.kod == 'g'
 
     def isleftdelim(self):
         return self.typ.kod in ['vh', 'vr']
