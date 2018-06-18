@@ -67,7 +67,6 @@ class Artikel(models.Model):
         landskap = []
         while i < self.spole_set.count():
             currdat = self.get_spole(i)
-            print(currdat, state)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
@@ -106,7 +105,6 @@ class Artikel(models.Model):
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1
-        print('landskap? ' + str(landskap))
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
