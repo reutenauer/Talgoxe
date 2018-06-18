@@ -83,9 +83,9 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.get_spole(i)))
+                                self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
-                                self.new_segments.append(Segment(maintype, bit))
+                                self.new_segments.append(Fjäder(maintype, bit))
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
@@ -101,14 +101,14 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.get_spole(i)))
+                                self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
-                                self.new_segments.append(Segment(maintype, bit))
+                                self.new_segments.append(Fjäder(maintype, bit))
             i += 1
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
-                self.new_segments.append(Segment(geotype, ls.abbrev))
+                self.new_segments.append(Fjäder(geotype, ls.abbrev))
         if len(self.moments['M1']) > 1:
             for m1 in range(len(self.moments['M1'])):
                 self.moments['M1'][m1].text = '%d' % (m1 + 1)
