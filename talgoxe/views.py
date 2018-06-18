@@ -171,7 +171,7 @@ def print_on_demand(request):
 
 @login_required
 def print(request, format):
-    if format not in ['pdf', 'odf', 'docx']:
+    if format not in ['pdf', 'odt', 'docx']:
         raise UnsupportedFormat(format)
     template = loader.get_template('talgoxe/download_document.html')
     exporter = Exporter(format)

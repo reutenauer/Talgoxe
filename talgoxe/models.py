@@ -368,19 +368,19 @@ class Exporter:
         self.format = format
         initialisers = {
             'pdf' : self.start_pdf,
-            'odf' : self.start_odf,
+            'odt' : self.start_odf,
             'docx' : self.start_docx,
         }
 
         generators = {
             'pdf' : self.generate_pdf_paragraph,
-            'odf' : self.generate_odf_paragraph,
+            'odt' : self.generate_odf_paragraph,
             'docx' : self.generate_docx_paragraph,
         }
 
         savers = {
             'pdf' : self.save_pdf,
-            'odf' : self.save_odf,
+            'odt' : self.save_odf,
             'docx' : self.save_docx,
         }
 
