@@ -246,43 +246,43 @@ class Fjäder:
     def __init__(self, spole, text = None):
         self.display = None # FIXME Måste inte ändras för KO
         if text: # spole är egentligen en Typ
-            self.typ = spole
-            self.text = text
+            self.typ = spole.kod.upper()
+            self.text = text.strip()
         else:
-            self.typ = spole.typ
-            self.text = spole.text
+            self.typ = spole.typ.kod.upper()
+            self.text = spole.text.strip()
 
     def isleftdelim(self):
-        return self.typ.kod in ['vh', 'vr']
+        return self.typ in ['vh', 'vr']
 
     def isrightdelim(self):
-        return self.typ.kod in ['hh', 'hr', 'ip', 'ko'] # TOOD Nåogt om text =~ /^,/ ?
+        return self.typ in ['hh', 'hr', 'ip', 'ko'] # TOOD Nåogt om text =~ /^,/ ?
 
     def ismoment(self):
         return self.ism1() or self.ism2()
 
     def ism1(self):
-        return self.typ.kod == 'm1'
+        return self.typ == 'm1'
 
     def ism2(self):
-        return self.typ.kod == 'm2'
+        return self.typ == 'm2'
 
     def format(self): # FIXME Också för P:er från ÖVP?
-        if self.typ.kod == 'vr':
+        if self.typ == 'vr':
             return '('
-        elif self.typ.kod == 'hr':
+        elif self.typ == 'hr':
             return ')'
-        elif self.typ.kod == 'vh':
+        elif self.typ == 'vh':
             return '['
-        elif self.typ.kod == 'hh':
+        elif self.typ == 'hh':
             return ']'
-        elif self.typ.kod == 'äv':
+        elif self.typ == 'äv':
             return 'äv.'
         else:
-            return self.text.strip()
+            return self.text
 
     def type(self): # FIXME Remove later!
-        return self.typ.kod.upper()
+        return self.typ
 
 class Landskap():
     ordning = [
@@ -383,7 +383,7 @@ class Exporter:
                 setspace = False
             else:
                 setspace = True
-            type = segment.type().__str__()
+            type = segment.typ
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             self.document.write(('\\SDL:%s{%s}' % (type, text)))
 
@@ -458,7 +458,7 @@ class Exporter:
         paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
         spacebefore = True
         for segment in artikel.new_segments:
-            type = segment.type().__str__()
+            type = segment.typ
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
                     paragraph += ezodf.Span(' ')
@@ -484,7 +484,7 @@ class Exporter:
         paragraph.add_run(artikel.lemma, style = 'SO')
         spacebefore = True
         for segment in artikel.new_segments:
-            type = segment.type().__str__()
+            type = segment.typ
             if not type == 'KO':
                 if spacebefore and not segment.isrightdelim():
                     paragraph.add_run(' ', style = self.document.styles[type])
