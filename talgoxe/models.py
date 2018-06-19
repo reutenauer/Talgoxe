@@ -29,7 +29,7 @@ class Artikel(models.Model):
         return self.lemma
 
     def get_spole(self, i):
-        if i < self.spole_set.count():
+        if i < len(self.spolar()):
             return self.spolar()[i] # Man kan missa vissa värden av pos, så .get(pos = i) funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
         else:
             return None
@@ -41,7 +41,7 @@ class Artikel(models.Model):
                 spole = Spole(typ = ok, text = '', pos = 0)
                 self.spolarna = [spole]
             else:
-                self.spolarna = self.spole_set.order_by('pos').all()
+                self.spolarna = self.spole_set.all()
 
         return self.spolarna
 
@@ -113,7 +113,7 @@ class Artikel(models.Model):
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
-        while i < self.spole_set.count():
+        while i < len(self.spolar()):
             # if i > 0:
             #     print(preventnextspace)
             currdat = self.get_spole(i)
@@ -253,6 +253,9 @@ class Spole(models.Model):
     typ = models.ForeignKey(Typ)
     skapat = models.DateTimeField(auto_now_add = True)
     uppdaterat = models.DateTimeField(auto_now = True)
+
+    class Meta:
+        ordering = ('pos',)
 
     def __str__(self):
         return self.typ.__str__() + ' ' + self.text
