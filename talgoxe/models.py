@@ -63,6 +63,24 @@ class Artikel(models.Model):
                 self.moments['M2'][m2].text = '%c' % (97 + m2)
                 self.moments['M2'][m2].display = True
 
+    def handle_pilcrow(self, currdat, i):
+        bits = split(u'¶', currdat.text)
+        if len(bits) == 1:
+            print(i, currdat, self.preventnextspace)
+            self.append_segment(currdat, self.preventnextspace)
+        else:
+            maintype = currdat.typ
+            for bit in bits:
+                if bits.index(bit) > 0:
+                    i += 1
+                    self.new_segments.append(Fjäder(self.get_spole(i)))
+                if bit:
+                    fjäder = Fjäder(maintype, bit)
+                    if self.preventnextspace and bits.index(bit) == 0:
+                        fjäder.preventspace = True
+                    self.new_segments.append(fjäder)
+        return i
+
     def append_segment(self, data, preventnextspace):
         segment = Fjäder(data)
         print(preventnextspace)
@@ -92,21 +110,8 @@ class Artikel(models.Model):
                            fjäder.preventspace = True
                        self.new_segments.append(fjäder)
                     landskap = []
-                    bits = split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
-                    if len(bits) == 1:
-                        print(i, currdat, self.preventnextspace)
-                        self.append_segment(currdat, self.preventnextspace)
-                    else:
-                        maintype = currdat.typ
-                        for bit in bits:
-                            if bits.index(bit) > 0:
-                                i += 1
-                                self.new_segments.append(Fjäder(self.get_spole(i)))
-                            if bit:
-                                fjäder = Fjäder(maintype, bit)
-                                if self.preventnextspace and bits.index(bit) == 0:
-                                    fjäder.preventspace = True
-                                self.new_segments.append(fjäder)
+                    # För pilcrow i ”hårgård” och ”häringa”
+                    i = self.handle_pilcrow(currdat, i)
                     if currdat.isleftdelim():
                         self.preventnextspace = True
                     else:
@@ -118,21 +123,7 @@ class Artikel(models.Model):
                     geotype = currdat.typ
                     state = 'GEOGRAFI'
                 else:
-                    bits = split(u'¶', currdat.text)
-                    if len(bits) == 1:
-                        print(i, currdat, self.preventnextspace)
-                        self.append_segment(currdat, self.preventnextspace)
-                    else:
-                        maintype = currdat.typ
-                        for bit in bits:
-                            if bits.index(bit) > 0:
-                                i += 1
-                                self.new_segments.append(Fjäder(self.get_spole(i)))
-                            if bit:
-                                fjäder = Fjäder(maintype, bit)
-                                if self.preventnextspace and bits.index(bit) == 0:
-                                    fjäder.preventspace = True
-                                self.new_segments.append(fjäder)
+                    i = self.handle_pilcrow(currdat, i)
                     print(str(currdat) + 'currdat.isleftdelim()? ' + str(currdat.isleftdelim()))
                     if currdat.isleftdelim():
                         self.preventnextspace = True
