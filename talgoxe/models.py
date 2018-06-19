@@ -88,6 +88,21 @@ class Artikel(models.Model):
         self.collect_moments(segment)
         self.new_segments.append(segment)
 
+    def handle_landskap(self):
+        sorted_landskap = sorted(self.landskap, key = Landskap.key)
+        for ls in sorted_landskap:
+           fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
+           if self.preventnextspace and sorted_landskap.index(ls) == 0:
+               fjäder.preventspace = True
+           self.new_segments.append(fjäder)
+        self.landskap = []
+
+    def preparenextspace(self, currdat):
+        if currdat.isleftdelim():
+            self.preventnextspace = True
+        else:
+            self.preventnextspace = False
+
     def collect(self):
         self.new_segments = []
         self.preventnextspace = False
@@ -103,42 +118,23 @@ class Artikel(models.Model):
                 if currdat.isgeo():
                     self.landskap.append(Landskap(currdat.text))
                 else:
-                    sorted_landskap = sorted(self.landskap, key = Landskap.key)
-                    for ls in sorted_landskap:
-                       fjäder = Fjäder(geotype, ls.abbrev)
-                       if self.preventnextspace and sorted_landskap.index(ls) == 0:
-                           fjäder.preventspace = True
-                       self.new_segments.append(fjäder)
-                    self.landskap = []
+                    self.handle_landskap()
                     # För pilcrow i ”hårgård” och ”häringa”
                     i = self.handle_pilcrow(currdat, i)
-                    if currdat.isleftdelim():
-                        self.preventnextspace = True
-                    else:
-                        self.preventnextspace = False
+                    self.preparenextspace(currdat)
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
                     self.landskap = [Landskap(currdat.text)]
-                    geotype = currdat.typ
                     state = 'GEOGRAFI'
                 else:
                     i = self.handle_pilcrow(currdat, i)
                     print(str(currdat) + 'currdat.isleftdelim()? ' + str(currdat.isleftdelim()))
-                    if currdat.isleftdelim():
-                        self.preventnextspace = True
-                    else:
-                        self.preventnextspace = False
+                    self.preparenextspace(currdat)
             i += 1
         print('self.preventnextspace? ' + str(self.preventnextspace))
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
-            sorted_landskap = sorted(self.landskap, key = Landskap.key)
-            for ls in sorted_landskap:
-                fjäder = Fjäder(geotype, ls.abbrev)
-                if self.preventnextspace and sorted_landskap.index(ls) == 0:
-                    fjäder.preventspace = True
-                fjäder.preventspace = self.preventnextspace
-                self.new_segments.append(fjäder)
+            self.handle_landskap()
         print(self.moments['M1'], self.moments['M2'])
         self.handle_moments()
         self.moments = { 'M1': [], 'M2': [] }
