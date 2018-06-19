@@ -53,8 +53,9 @@ class Artikel(models.Model):
         elif segment.ism2():
             self.moments['M2'].append(segment)
 
-    def append_segment(self, data):
+    def append_segment(self, data, preventnextspace):
         segment = Fjäder(data)
+        segment.preventspace = preventnextspace
         self.resolve_moments(segment)
         self.new_segments.append(segment)
 
@@ -66,21 +67,20 @@ class Artikel(models.Model):
         landskap = []
         while i < self.spole_set.count():
             currdat = self.get_spole(i)
-            if currdat.isleftdelim():
-                preventnextspace = True
-            else:
-                preventnextspace = True
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     landskap.append(Landskap(currdat.text))
                 else:
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
-                       self.new_segments.append(Fjäder(geotype, ls.abbrev))
+                       fjäder = Fjäder(geotype, ls.abbrev)
+                       if sorted_landskap.index(ls) == 0 and preventnextspace:
+                           fjäder.preventspace = True
+                       self.new_segments.append(fjäder)
                     landskap = []
                     bits = split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
-                        self.append_segment(currdat)
+                        self.append_segment(currdat, preventnextspace)
                     else:
                         maintype = currdat.typ
                         for bit in bits:
@@ -88,9 +88,16 @@ class Artikel(models.Model):
                                 i += 1
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
-                                self.new_segments.append(Fjäder(maintype, bit))
+                                fjäder = Fjäder(maintype, bit)
+                                if bits.index(bit) == 0 and preventnextspace:
+                                    fjäder.preventspace = True
+                                self.new_segments.append(fjäder)
                     state = 'INITIAL'
             else:
+                if currdat.isleftdelim():
+                    preventnextspace = True
+                else:
+                    preventnextspace = True
                 if currdat.isgeo():
                     landskap = [Landskap(currdat.text)]
                     geotype = currdat.typ
@@ -98,7 +105,7 @@ class Artikel(models.Model):
                 else:
                     bits = split(u'¶', currdat.text)
                     if len(bits) == 1:
-                        self.append_segment(currdat)
+                        self.append_segment(currdat, preventnextspace)
                     else:
                         maintype = currdat.typ
                         for bit in bits:
@@ -106,12 +113,17 @@ class Artikel(models.Model):
                                 i += 1
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
-                                self.new_segments.append(Fjäder(maintype, bit))
+                                fjäder = Fjäder(maintype, bit)
+                                if bits.index(bit) == 0 and preventnextspace:
+                                    fjäder.preventspace = True
+                                self.new_segments.append(fjäder)
             i += 1
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
-                self.new_segments.append(Fjäder(geotype, ls.abbrev))
+                fjäder = Fjäder(geotype, ls.abbrev)
+                fjäder.preventspace = preventnextspace
+                self.new_segments.append(fjäder)
         if len(self.moments['M1']) > 1:
             for m1 in range(len(self.moments['M1'])):
                 self.moments['M1'][m1].text = '%d' % (m1 + 1)
