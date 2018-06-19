@@ -35,12 +35,12 @@ class Artikel(models.Model):
             return None
 
     def spolar(self):
-        if self.spole_set.count() == 0: # Artikeln skapades just, vi fejkar en första spole
-            ok = Typ.objects.get(kod = 'OK')
-            spole = Spole(typ = ok, text = '', pos = 0)
-            self.spolarna = [spole]
-        else:
-            if not self.spolarna:
+        if not hasattr(self, 'spolarna'):
+            if self.spole_set.count() == 0: # Artikeln skapades just, vi fejkar en första spole
+                ok = Typ.objects.get(kod = 'OK')
+                spole = Spole(typ = ok, text = '', pos = 0)
+                self.spolarna = [spole]
+            else:
                 self.spolarna = self.spole_set.order_by('pos').all()
 
         return self.spolarna
