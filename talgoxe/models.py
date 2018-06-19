@@ -30,7 +30,7 @@ class Artikel(models.Model):
 
     def get_spole(self, i):
         if i < self.spole_set.count():
-            return self.spole_set.order_by('pos').all()[i] # Man kan missa vissa värden av pos, så .get(pos = i)funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
+            return self.spolar()[i] # Man kan missa vissa värden av pos, så .get(pos = i) funkar inte. Se t.ex. 1öden (id 3012683), spole saknas för pos = 2. AR 2018-06-03.
         else:
             return None
 
@@ -38,9 +38,12 @@ class Artikel(models.Model):
         if self.spole_set.count() == 0: # Artikeln skapades just, vi fejkar en första spole
             ok = Typ.objects.get(kod = 'OK')
             spole = Spole(typ = ok, text = '', pos = 0)
-            return [spole]
+            self.spolarna = [spole]
         else:
-            return self.spole_set.order_by('pos').all()
+            if not self.spolarna:
+                self.spolarna = self.spole_set.order_by('pos').all()
+
+        return self.spolarna
 
     def collect_moments(self, segment):
         if segment.ism1():
