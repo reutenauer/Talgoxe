@@ -15,7 +15,7 @@
 <form action="{% url 'redigera' lemma.id %}" method="POST">
 {% csrf_token %}
 <ul>
-<li>SO&nbsp;&nbsp;: <input type="text" name="stickord" value="{{ lemma }}" size="16"> <input type="submit" value="Spara och ladda om 💾" class="spara-och-ladda-om" tabindex="-1"></li>
+<li>SO&nbsp;&nbsp;: <input type="text" name="stickord" value="{{ lemma.lemma }}" size="16"> <input type="submit" value="Spara och ladda om 💾" class="spara-och-ladda-om" tabindex="-1"></li>
 {% for d in lemma.spolar %}
     <li id="data-{{ d.pos }}">
       {% spaceless %}
