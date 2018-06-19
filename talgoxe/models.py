@@ -72,11 +72,11 @@ class Artikel(models.Model):
 
     def collect(self):
         self.new_segments = []
+        self.preventnextspace = False
         i = 0
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
-        preventnextspace = False
         while i < self.spole_set.count():
             # if i > 0:
             #     print(preventnextspace)
@@ -88,14 +88,14 @@ class Artikel(models.Model):
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        fjäder = Fjäder(geotype, ls.abbrev)
-                       if preventnextspace and sorted_landskap.index(ls) == 0:
+                       if self.preventnextspace and sorted_landskap.index(ls) == 0:
                            fjäder.preventspace = True
                        self.new_segments.append(fjäder)
                     landskap = []
                     bits = split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
-                        print(i, currdat, preventnextspace)
-                        self.append_segment(currdat, preventnextspace)
+                        print(i, currdat, self.preventnextspace)
+                        self.append_segment(currdat, self.preventnextspace)
                     else:
                         maintype = currdat.typ
                         for bit in bits:
@@ -104,13 +104,13 @@ class Artikel(models.Model):
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
                                 fjäder = Fjäder(maintype, bit)
-                                if preventnextspace and bits.index(bit) == 0:
+                                if self.preventnextspace and bits.index(bit) == 0:
                                     fjäder.preventspace = True
                                 self.new_segments.append(fjäder)
                     if currdat.isleftdelim():
-                        preventnextspace = True
+                        self.preventnextspace = True
                     else:
-                        preventnextspace = False
+                        self.preventnextspace = False
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
@@ -120,8 +120,8 @@ class Artikel(models.Model):
                 else:
                     bits = split(u'¶', currdat.text)
                     if len(bits) == 1:
-                        print(i, currdat, preventnextspace)
-                        self.append_segment(currdat, preventnextspace)
+                        print(i, currdat, self.preventnextspace)
+                        self.append_segment(currdat, self.preventnextspace)
                     else:
                         maintype = currdat.typ
                         for bit in bits:
@@ -130,23 +130,23 @@ class Artikel(models.Model):
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
                                 fjäder = Fjäder(maintype, bit)
-                                if preventnextspace and bits.index(bit) == 0:
+                                if self.preventnextspace and bits.index(bit) == 0:
                                     fjäder.preventspace = True
                                 self.new_segments.append(fjäder)
                     print(str(currdat) + 'currdat.isleftdelim()? ' + str(currdat.isleftdelim()))
                     if currdat.isleftdelim():
-                        preventnextspace = True
+                        self.preventnextspace = True
                     else:
-                        preventnextspace = False
+                        self.preventnextspace = False
             i += 1
-        print('preventnextspace? ' + str(preventnextspace))
+        print('self.preventnextspace? ' + str(self.preventnextspace))
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
             for ls in sorted_landskap:
                 fjäder = Fjäder(geotype, ls.abbrev)
-                if preventnextspace and sorted_landskap.index(ls) == 0:
+                if self.preventnextspace and sorted_landskap.index(ls) == 0:
                     fjäder.preventspace = True
-                fjäder.preventspace = preventnextspace
+                fjäder.preventspace = self.preventnextspace
                 self.new_segments.append(fjäder)
         print(self.moments['M1'], self.moments['M2'])
         self.handle_moments()
