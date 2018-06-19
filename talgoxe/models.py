@@ -55,6 +55,7 @@ class Artikel(models.Model):
 
     def append_segment(self, data, preventnextspace):
         segment = Fjäder(data)
+        print(preventnextspace)
         segment.preventspace = preventnextspace
         self.resolve_moments(segment)
         self.new_segments.append(segment)
@@ -66,6 +67,8 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
         while i < self.spole_set.count():
+            # if i > 0:
+            #     print(preventnextspace)
             currdat = self.get_spole(i)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
@@ -80,6 +83,7 @@ class Artikel(models.Model):
                     landskap = []
                     bits = split(u'¶', currdat.text) # För pilcrow i ”hårgård” och ”häringa”
                     if len(bits) == 1:
+                        print(i, currdat)
                         self.append_segment(currdat, preventnextspace)
                     else:
                         maintype = currdat.typ
@@ -105,6 +109,7 @@ class Artikel(models.Model):
                 else:
                     bits = split(u'¶', currdat.text)
                     if len(bits) == 1:
+                        print(i, currdat)
                         self.append_segment(currdat, preventnextspace)
                     else:
                         maintype = currdat.typ
@@ -259,7 +264,7 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
     def isleftdelim(self):
-        return self.typ.kod.upper() in ['HR', 'HH']
+        return self.typ.kod.upper() in ['VR', 'VH']
 
 class Fjäder:
     def __init__(self, spole, text = None):
