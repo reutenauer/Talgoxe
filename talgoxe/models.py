@@ -401,17 +401,13 @@ class Exporter:
         if artikel.rang > 0:
             self.document.write('\lohi[left]{}{\SDL:SO{%d}}' % artikel.rang) # TODO Real superscript
         self.document.write("\\SDL:SO{%s}" % artikel.lemma)
-        setspace = True
         for segment in artikel.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
-            if setspace and not segment.isrightdelim():
+            if not segment.preventspace and not segment.isrightdelim():
                 self.document.write(' ') # FIXME But not if previous segment is left delim!
-            if segment.isleftdelim():
-                setspace = False
-            else:
-                setspace = True
             type = segment.typ
             text = segment.format().replace(u'\\', '\\textbackslash ').replace('~', '{\\char"7E}')
             self.document.write(('\\SDL:%s{%s}' % (type, text)))
+        self.document.write("\\par")
 
     def start_pdf(self):
         self.document = open(self.filename.replace('.pdf', '.tex'), 'w')
@@ -482,17 +478,12 @@ class Exporter:
     def generate_odf_paragraph(self, artikel):
         paragraph = ezodf.Paragraph()
         paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
-        spacebefore = True
         for segment in artikel.new_segments:
             type = segment.typ
             if not type == 'KO':
-                if spacebefore and not segment.isrightdelim():
+                if not segment.preventspace and not segment.isrightdelim():
                     paragraph += ezodf.Span(' ')
                 paragraph += ezodf.Span(segment.format(), style_name = type)
-                if segment.isleftdelim():
-                    spacebefore = False
-                else:
-                    spacebefore = True
         self.document.body += paragraph
 
     def start_docx(self):
@@ -508,21 +499,16 @@ class Exporter:
         if artikel.rang > 0:
             paragraph.add_run(str(artikel.rang), style = 'SO').font.superscript = True
         paragraph.add_run(artikel.lemma, style = 'SO')
-        spacebefore = True
         for segment in artikel.new_segments:
             type = segment.typ
             if not type == 'KO':
-                if spacebefore and not segment.isrightdelim():
+                if not segment.preventspace and not segment.isrightdelim():
                     paragraph.add_run(' ', style = self.document.styles[type])
                 if type == 'ÖVP': # TODO Något bättre
                     run = '(' + segment.format() + ')'
                 else:
                     run = segment.format()
                 paragraph.add_run(run, style = self.document.styles[type])
-                if segment.isleftdelim():
-                    spacebefore = False
-                else:
-                    spacebefore = True
 
     def add_docx_styles(self): # TODO Keyword arguments?
         self.add_docx_style('SO', False, True, 12)
