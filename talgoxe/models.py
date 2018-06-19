@@ -57,24 +57,23 @@ class Artikel(models.Model):
 
     def collect_moments(self, segment):
         if segment.ism1():
-            if len(self.moments['M2']) > 1:
-                for m2 in range(len(self.moments['M2'])):
-                    self.moments['M2'][m2].text = '%c' % (97 + m2)
-                    self.moments['M2'][m2].display = True
+            self.handle_moments('M2')
             self.moments['M2'] = []
             self.moments['M1'].append(segment)
         elif segment.ism2():
             self.moments['M2'].append(segment)
 
-    def handle_moments(self):
-        if len(self.moments['M1']) > 1:
-            for m1 in range(len(self.moments['M1'])):
-                self.moments['M1'][m1].text = '%d' % (m1 + 1)
-                self.moments['M1'][m1].display = True
-        if len(self.moments['M2']) > 1:
-            for m2 in range(len(self.moments['M2'])):
-                self.moments['M2'][m2].text = '%c' % (97 + m2)
-                self.moments['M2'][m2].display = True
+    def handle_moments(self, type):
+        if type == 'M1':
+            format = '%d'
+            offset = 1
+        elif type == 'M2':
+            format = '%c'
+            offset = 97
+        if len(self.moments[type]) > 1:
+            for m in range(len(self.moments[type])):
+                self.moments[type][m].text = format % (m + offset)
+                self.moments[type][m].display = True
 
     def handle_pilcrow(self, currdat, i):
         bits = split(u'¶', currdat.text)
@@ -96,7 +95,6 @@ class Artikel(models.Model):
 
     def append_segment(self, data, preventnextspace):
         segment = Fjäder(data)
-        print(preventnextspace)
         segment.preventspace = preventnextspace
         self.collect_moments(segment)
         self.new_segments.append(segment)
@@ -120,7 +118,7 @@ class Artikel(models.Model):
         self.new_segments = []
         self.preventnextspace = False
         i = 0
-        state = 'INITIAL'
+        state = 'ALLMÄNT'
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
         while i < len(self.spolar()):
@@ -132,7 +130,7 @@ class Artikel(models.Model):
                     self.handle_landskap()
                     i = self.handle_pilcrow(currdat, i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preparenextspace(currdat)
-                    state = 'INITIAL'
+                    state = 'ALLMÄNT'
             else:
                 if currdat.isgeo():
                     self.landskap = [Landskap(currdat.text)]
@@ -143,7 +141,8 @@ class Artikel(models.Model):
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.handle_landskap()
-        self.handle_moments()
+        self.handle_moments('M1')
+        self.handle_moments('M2')
         self.moments = { 'M1': [], 'M2': [] }
 
     def update(self, post_data):
