@@ -94,22 +94,22 @@ class Artikel(models.Model):
         i = 0
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
-        landskap = []
+        self.landskap = []
         while i < self.spole_set.count():
             # if i > 0:
             #     print(preventnextspace)
             currdat = self.get_spole(i)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
-                    landskap.append(Landskap(currdat.text))
+                    self.landskap.append(Landskap(currdat.text))
                 else:
-                    sorted_landskap = sorted(landskap, key = Landskap.key)
+                    sorted_landskap = sorted(self.landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        fjäder = Fjäder(geotype, ls.abbrev)
                        if self.preventnextspace and sorted_landskap.index(ls) == 0:
                            fjäder.preventspace = True
                        self.new_segments.append(fjäder)
-                    landskap = []
+                    self.landskap = []
                     # För pilcrow i ”hårgård” och ”häringa”
                     i = self.handle_pilcrow(currdat, i)
                     if currdat.isleftdelim():
@@ -119,7 +119,7 @@ class Artikel(models.Model):
                     state = 'INITIAL'
             else:
                 if currdat.isgeo():
-                    landskap = [Landskap(currdat.text)]
+                    self.landskap = [Landskap(currdat.text)]
                     geotype = currdat.typ
                     state = 'GEOGRAFI'
                 else:
@@ -131,8 +131,8 @@ class Artikel(models.Model):
                         self.preventnextspace = False
             i += 1
         print('self.preventnextspace? ' + str(self.preventnextspace))
-        if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
-            sorted_landskap = sorted(landskap, key = Landskap.key)
+        if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
+            sorted_landskap = sorted(self.landskap, key = Landskap.key)
             for ls in sorted_landskap:
                 fjäder = Fjäder(geotype, ls.abbrev)
                 if self.preventnextspace and sorted_landskap.index(ls) == 0:
