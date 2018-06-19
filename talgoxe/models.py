@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from math import floor
 from os import chdir, popen, rename, environ
 from os.path import abspath, dirname, join
 from re import match, split
@@ -25,8 +26,17 @@ class Artikel(models.Model):
     uppdaterat = models.DateTimeField(auto_now = True)
     segments = []
 
+    superscripts = [
+        '⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹',
+    ]
+
     def __str__(self):
-        return self.lemma
+        r = self.rang
+        prefix = ''
+        while r > 0:
+            prefix = Artikel.superscripts[r % 10] + prefix
+            r = floor(r / 10)
+        return prefix + self.lemma
 
     def get_spole(self, i):
         if i < len(self.spolar()):
