@@ -259,7 +259,7 @@ class Spole(models.Model):
         return self.typ.isgeo()
 
     def isleftdelim(self):
-        return self.typ.kod in ['VH', 'VR']
+        return self.typ.kod.upper() in ['HR', 'HH']
 
 class Fjäder:
     def __init__(self, spole, text = None):
@@ -287,7 +287,7 @@ class Fjäder:
     def format(self): # FIXME Också för P:er från ÖVP?
         if self.typ == 'VR':
             return '('
-        elif self.typ == 'VR':
+        elif self.typ == 'HR':
             return ')'
         elif self.typ == 'VH':
             return '['
