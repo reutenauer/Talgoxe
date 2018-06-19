@@ -97,7 +97,7 @@ class Artikel(models.Model):
                 if currdat.isleftdelim():
                     preventnextspace = True
                 else:
-                    preventnextspace = True
+                    preventnextspace = False
                 if currdat.isgeo():
                     landskap = [Landskap(currdat.text)]
                     geotype = currdat.typ
