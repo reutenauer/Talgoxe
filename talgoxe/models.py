@@ -74,7 +74,7 @@ class Artikel(models.Model):
                     sorted_landskap = sorted(landskap, key = Landskap.key)
                     for ls in sorted_landskap:
                        fjäder = Fjäder(geotype, ls.abbrev)
-                       if sorted_landskap.index(ls) == 0 and preventnextspace:
+                       if preventnextspace and sorted_landskap.index(ls) == 0:
                            fjäder.preventspace = True
                        self.new_segments.append(fjäder)
                     landskap = []
@@ -89,7 +89,7 @@ class Artikel(models.Model):
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
                                 fjäder = Fjäder(maintype, bit)
-                                if bits.index(bit) == 0 and preventnextspace:
+                                if preventnextspace and bits.index(bit) == 0:
                                     fjäder.preventspace = True
                                 self.new_segments.append(fjäder)
                     state = 'INITIAL'
@@ -114,7 +114,7 @@ class Artikel(models.Model):
                                 self.new_segments.append(Fjäder(self.get_spole(i)))
                             if bit:
                                 fjäder = Fjäder(maintype, bit)
-                                if bits.index(bit) == 0 and preventnextspace:
+                                if preventnextspace and bits.index(bit) == 0:
                                     fjäder.preventspace = True
                                 self.new_segments.append(fjäder)
             i += 1
@@ -267,6 +267,7 @@ class Fjäder:
         else:
             self.typ = spole.typ.kod.upper()
             self.text = spole.text.strip()
+        self.preventspace = False
 
     def isleftdelim(self):
         return self.typ in ['VH', 'VR']
@@ -301,7 +302,7 @@ class Fjäder:
         return self.typ
 
     def setspace(self):
-        return not self.isrightdelim() # TODO Lägga till det med den föregående fjädern
+        return not self.preventspace and not self.isrightdelim() # TODO Lägga till det med den föregående fjädern
 
 class Landskap():
     ordning = [
