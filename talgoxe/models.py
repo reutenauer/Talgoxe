@@ -258,6 +258,9 @@ class Spole(models.Model):
     def isgeo(self):
         return self.typ.isgeo()
 
+    def isleftdelim(self):
+        return self.typ.kod in ['VH', 'VR']
+
 class Fjäder:
     def __init__(self, spole, text = None):
         self.display = None # FIXME Måste inte ändras för KO
@@ -268,9 +271,6 @@ class Fjäder:
             self.typ = spole.typ.kod.upper()
             self.text = spole.text.strip()
         self.preventspace = False
-
-    def isleftdelim(self):
-        return self.typ in ['VH', 'VR']
 
     def isrightdelim(self):
         return self.typ in ['HH', 'HR', 'IP', 'KO'] # TOOD Nåogt om text =~ /^,/ ?
