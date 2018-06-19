@@ -55,14 +55,6 @@ class Artikel(models.Model):
 
         return self.spolarna
 
-    def collect_moments(self, segment):
-        if segment.ism1():
-            self.handle_moments('M2')
-            self.moments['M2'] = []
-            self.moments['M1'].append(segment)
-        elif segment.ism2():
-            self.moments['M2'].append(segment)
-
     def handle_moments(self, type):
         if type == 'M1':
             format = '%d'
@@ -96,7 +88,12 @@ class Artikel(models.Model):
     def append_segment(self, data, preventnextspace):
         segment = Fjäder(data)
         segment.preventspace = preventnextspace
-        self.collect_moments(segment)
+        if segment.ism1():
+            self.handle_moments('M2')
+            self.moments['M2'] = []
+            self.moments['M1'].append(segment)
+        elif segment.ism2():
+            self.moments['M2'].append(segment)
         self.new_segments.append(segment)
 
     def handle_landskap(self):
