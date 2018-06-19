@@ -66,6 +66,7 @@ class Artikel(models.Model):
         state = 'INITIAL'
         self.moments = { 'M1': [], 'M2': [] }
         landskap = []
+        preventnextspace = False
         while i < self.spole_set.count():
             # if i > 0:
             #     print(preventnextspace)
@@ -98,10 +99,6 @@ class Artikel(models.Model):
                                 self.new_segments.append(fjäder)
                     state = 'INITIAL'
             else:
-                if currdat.isleftdelim():
-                    preventnextspace = True
-                else:
-                    preventnextspace = False
                 if currdat.isgeo():
                     landskap = [Landskap(currdat.text)]
                     geotype = currdat.typ
@@ -122,6 +119,10 @@ class Artikel(models.Model):
                                 if preventnextspace and bits.index(bit) == 0:
                                     fjäder.preventspace = True
                                 self.new_segments.append(fjäder)
+                if currdat.isleftdelim():
+                    preventnextspace = True
+                else:
+                    preventnextspace = False
             i += 1
         if landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             sorted_landskap = sorted(landskap, key = Landskap.key)
