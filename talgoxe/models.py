@@ -31,6 +31,9 @@ class Artikel(models.Model):
     ]
 
     def __str__(self):
+        return self.lemma
+
+    def cutestring(self):
         r = self.rang
         prefix = ''
         while r > 0:
