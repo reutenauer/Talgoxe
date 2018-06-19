@@ -124,16 +124,13 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
         while i < len(self.spolar()):
-            # if i > 0:
-            #     print(preventnextspace)
             currdat = self.get_spole(i)
             if state == 'GEOGRAFI':
                 if currdat.isgeo():
                     self.landskap.append(Landskap(currdat.text))
                 else:
                     self.handle_landskap()
-                    # För pilcrow i ”hårgård” och ”häringa”
-                    i = self.handle_pilcrow(currdat, i)
+                    i = self.handle_pilcrow(currdat, i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preparenextspace(currdat)
                     state = 'INITIAL'
             else:
@@ -142,13 +139,10 @@ class Artikel(models.Model):
                     state = 'GEOGRAFI'
                 else:
                     i = self.handle_pilcrow(currdat, i)
-                    print(str(currdat) + 'currdat.isleftdelim()? ' + str(currdat.isleftdelim()))
                     self.preparenextspace(currdat)
             i += 1
-        print('self.preventnextspace? ' + str(self.preventnextspace))
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.handle_landskap()
-        print(self.moments['M1'], self.moments['M2'])
         self.handle_moments()
         self.moments = { 'M1': [], 'M2': [] }
 
