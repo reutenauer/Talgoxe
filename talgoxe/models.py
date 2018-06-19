@@ -67,11 +67,12 @@ class Artikel(models.Model):
                 self.moments[type][m].text = format % (m + offset)
                 self.moments[type][m].display = True
 
-    def handle_pilcrow(self, currdat, i):
+    def handle_pilcrow(self, i):
+        currdat = self.get_spole(i)
         bits = split(u'¶', currdat.text)
         if len(bits) == 1:
             print(i, currdat, self.preventnextspace)
-            self.append_segment(currdat, self.preventnextspace)
+            self.append_segment(currdat)
         else:
             maintype = currdat.typ
             for bit in bits:
@@ -85,9 +86,9 @@ class Artikel(models.Model):
                     self.new_segments.append(fjäder)
         return i
 
-    def append_segment(self, data, preventnextspace):
+    def append_segment(self, data):
         segment = Fjäder(data)
-        segment.preventspace = preventnextspace
+        segment.preventspace = self.preventnextspace
         if segment.ism1():
             self.handle_moments('M2')
             self.moments['M2'] = []
@@ -105,12 +106,6 @@ class Artikel(models.Model):
            self.new_segments.append(fjäder)
         self.landskap = []
 
-    def preparenextspace(self, currdat):
-        if currdat.isleftdelim():
-            self.preventnextspace = True
-        else:
-            self.preventnextspace = False
-
     def collect(self):
         self.new_segments = []
         self.preventnextspace = False
@@ -125,16 +120,16 @@ class Artikel(models.Model):
                     self.landskap.append(Landskap(currdat.text))
                 else:
                     self.handle_landskap()
-                    i = self.handle_pilcrow(currdat, i) # För pilcrow i ”hårgård” och ”häringa”
-                    self.preparenextspace(currdat)
+                    i = self.handle_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
+                    self.preventnextspace = currdat.isleftdelim()
                     state = 'ALLMÄNT'
             else:
                 if currdat.isgeo():
                     self.landskap = [Landskap(currdat.text)]
                     state = 'GEOGRAFI'
                 else:
-                    i = self.handle_pilcrow(currdat, i)
-                    self.preparenextspace(currdat)
+                    i = self.handle_pilcrow(i)
+                    self.preventnextspace = currdat.isleftdelim()
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.handle_landskap()
@@ -284,7 +279,7 @@ class Fjäder:
         self.preventspace = False
 
     def isrightdelim(self):
-        return self.typ in ['HH', 'HR', 'IP', 'KO'] # TOOD Nåogt om text =~ /^,/ ?
+        return self.typ in ['HH', 'HR', 'IP', 'KO'] or match(r'^,', self.text)
 
     def ismoment(self):
         return self.ism1() or self.ism2()
