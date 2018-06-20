@@ -59,7 +59,7 @@ def redigera(request, id):
         artikel.update(request.POST)
 
     template = loader.get_template('talgoxe/redigera.html')
-    artiklar = Artikel.objects.order_by('lemma', 'rang') # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
+    artiklar = Artikel.objects.all() # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
     artikel = Artikel.objects.get(id = id)
     artikel.collect()
     context = {
@@ -119,15 +119,15 @@ def search(request): # TODO Fixa lista över artiklar när man POSTar efter omor
         sök_överallt_eller_inte = 'söker överallt'
     else:
         sök_överallt_eller_inte = 'söker bara uppslagsord'
-    lemmata = list(Artikel.objects.filter(lemma__contains = söksträng))
+    artiklar = list(Artikel.objects.filter(lemma__contains = söksträng))
     if sök_överallt:
         spolar = Spole.objects.filter(text__contains = söksträng).select_related('artikel')
-        lemmata += [spole.artikel for spole in spolar]
-    lemmata = sorted(list(OrderedDict.fromkeys(lemmata)), key = lambda lemma: (lemma.lemma, lemma.rang))
+        artiklar += [spole.artikel for spole in spolar]
+    artiklar = sorted(list(OrderedDict.fromkeys(artiklar)), key = lambda artikel: (artikel.lemma, artikel.rang))
     context = {
             'q' : söksträng,
-            'lemmata' : lemmata,
-            'pagetitle' : '%d sökresultat för ”%s” (%s)' % (len(lemmata), söksträng, sök_överallt_eller_inte),
+            'artiklar' : artiklar,
+            'pagetitle' : '%d sökresultat för ”%s” (%s)' % (len(artiklar), söksträng, sök_överallt_eller_inte),
             'uri' : uri,
             'sök_överallt' : sök_överallt,
         }
@@ -139,7 +139,7 @@ def artikel(request, id):
     artikel = Artikel.objects.get(id = id)
     template = loader.get_template('talgoxe/artikel.html')
     artikel.collect()
-    context = { 'lemma' : artikel, 'format' : format }
+    context = { 'artikel' : artikel, 'format' : format }
 
     return render_template(request, template, context)
 
@@ -148,24 +148,22 @@ def print_on_demand(request):
     method = request.META['REQUEST_METHOD']
     template = loader.get_template('talgoxe/print_on_demand.html')
     if method == 'POST':
-        lemmata = []
+        artiklar = []
         for key in request.POST:
             mdata = match('selected-(\d+)', key)
             bdata = match('bokstav-(.)', key)
             if mdata:
-                lemma = Artikel.objects.get(id = int(mdata.group(1)))
-                # lemma.collect()
-                lemmata.append(lemma)
+                artiklar.append(Artikel.objects.get(id = int(mdata.group(1))))
             elif bdata:
                 hel_bokstav = Artikel.objects.filter(lemma__startswith = bdata.group(1))
-                lemmata += hel_bokstav
-        lemmata = sorted(lemmata, key = lambda lemma: (lemma.lemma, lemma.rang)) # TODO Make unique
-        context = { 'lemmata' : lemmata, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(lemmata), 'pagetitle' : '%d artiklar' % len(lemmata) }
+                artiklar += hel_bokstav
+        artiklar = sorted(artiklar, key = lambda artikel: (artikel.lemma, artikel.rang)) # TODO Make unique
+        context = { 'artiklar' : artiklar, 'redo' : True, 'titel' : 'Ditt urval på %d artiklar' % len(artiklar), 'pagetitle' : '%d artiklar' % len(artiklar) }
         template = loader.get_template('talgoxe/search.html')
     elif method == 'GET':
-        lemmata = Artikel.objects.order_by('lemma', 'rang')
+        artiklar = Artikel.objects.order_by('lemma', 'rang')
         bokstäver = [chr(i) for i in range(0x61, 0x7B)] + ['å', 'ä', 'ö']
-        context = { 'lemmata' : lemmata, 'checkboxes' : True, 'bokstäver' : bokstäver, 'pagetitle' : '%d artiklar' % lemmata.count() }
+        context = { 'artiklar' : artiklar, 'checkboxes' : True, 'bokstäver' : bokstäver, 'pagetitle' : '%d artiklar' % artiklar.count() }
 
     return render_template(request, template, context)
 
