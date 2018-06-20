@@ -57,7 +57,7 @@ class Artikel(models.Model):
 
         return self.spolarna
 
-    def handle_moments(self, type):
+    def number_moments(self, type):
         if type == 'M1':
             format = '%d'
             offset = 1
@@ -69,37 +69,39 @@ class Artikel(models.Model):
                 self.moments[type][m].text = format % (m + offset)
                 self.moments[type][m].display = True
 
-    def handle_pilcrow(self, i):
+    def analyse_spole(self, i):
         spole = self.get_spole(i)
         bits = split(u'¶', spole.text)
         if len(bits) == 1:
-            print(i, spole, self.preventnextspace)
-            self.append_segment(spole)
+            self.append_fjäder(spole)
         else:
             huvudtyp = spole.typ
             for bit in bits:
                 if bits.index(bit) > 0:
                     i += 1
-                    self.fjädrar.append(Fjäder(self.get_spole(i)))
+                    self.append_fjäder(Fjäder(self.get_spole(i)), True)
                 if bit:
                     fjäder = Fjäder(huvudtyp, bit)
                     if self.preventnextspace and bits.index(bit) == 0:
                         fjäder.preventspace = True
-                    self.fjädrar.append(fjäder)
+                    self.append_fjäder(fjäder, True)
         return i
 
-    def append_segment(self, data):
-        segment = Fjäder(data)
-        segment.preventspace = self.preventnextspace
-        if segment.ism1():
-            self.handle_moments('M2')
-            self.moments['M2'] = []
-            self.moments['M1'].append(segment)
-        elif segment.ism2():
-            self.moments['M2'].append(segment)
+    def append_fjäder(self, data, skipmoments = False):
+        if skipmoments:
+            segment = data
+        else:
+            segment = Fjäder(data)
+            segment.preventspace = self.preventnextspace
+            if segment.ism1():
+                self.number_moments('M2')
+                self.moments['M2'] = []
+                self.moments['M1'].append(segment)
+            elif segment.ism2():
+                self.moments['M2'].append(segment)
         self.fjädrar.append(segment)
 
-    def handle_landskap(self):
+    def flush_landskap(self):
         sorted_landskap = sorted(self.landskap, key = Landskap.key)
         for ls in sorted_landskap:
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
@@ -122,21 +124,21 @@ class Artikel(models.Model):
                     self.landskap = [Landskap(spole.text)]
                     state = 'GEOGRAFI'
                 else:
-                    i = self.handle_pilcrow(i)
+                    i = self.analyse_spole(i)
                     self.preventnextspace = spole.isleftdelim()
             elif state == 'GEOGRAFI':
                 if spole.isgeo():
                     self.landskap.append(Landskap(spole.text))
                 else:
-                    self.handle_landskap()
-                    i = self.handle_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
+                    self.flush_landskap()
+                    i = self.analyse_spole(i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preventnextspace = spole.isleftdelim()
                     state = 'ALLMÄNT'
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
-            self.handle_landskap()
-        self.handle_moments('M1')
-        self.handle_moments('M2')
+            self.flush_landskap()
+        self.number_moments('M1')
+        self.number_moments('M2')
         self.moments = { 'M1': [], 'M2': [] }
 
     def update(self, post_data):
