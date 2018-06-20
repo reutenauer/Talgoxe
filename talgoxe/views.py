@@ -30,26 +30,26 @@ def render_template(request, template, context):
 @login_required
 def index(request):
     template = loader.get_template('talgoxe/index.html')
-    lemmata = Artikel.objects.order_by('lemma', 'rang')
-    context = { 'lemmata' : lemmata, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
+    artiklar = Artikel.objects.all()
+    context = { 'artiklar' : artiklar, 'pagetitle' : "Talgoxe – Svenskt dialektlexikon", 'checkboxes' : False }
     return render_template(request, template, context)
 
 @login_required # FIXME Något om användaren faktiskt är utloggad?
 def create(request):
-    stickord = request.POST['ny_stickord'].strip()
-    företrädare = Artikel.objects.filter(lemma = stickord)
+    nylemma = request.POST['nylemma'].strip()
+    företrädare = Artikel.objects.filter(lemma = nylemma)
     maxrang = företrädare.aggregate(Max('rang'))['rang__max']
     if maxrang == None:
         rang = 0
     elif maxrang == 0:
-        lemma0 = företrädare.first()
-        lemma0.rang = 1
-        lemma0.save()
+        artikel0 = företrädare.first()
+        artikel0.rang = 1
+        artikel0.save()
         rang = 2
     elif maxrang > 0:
         rang = maxrang + 1
-    lemma = Artikel.objects.create(lemma = stickord, rang = rang)
-    return HttpResponseRedirect(reverse('redigera', args = (lemma.id,)))
+    artikel = Artikel.objects.create(lemma = nylemma, rang = rang)
+    return HttpResponseRedirect(reverse('redigera', args = (artikel.id,)))
 
 @login_required
 def redigera(request, id):
@@ -63,8 +63,8 @@ def redigera(request, id):
     artikel = Artikel.objects.get(id = id)
     artikel.collect()
     context = {
-        'lemma': artikel,
-        'lemmata': artiklar,
+        'artikel': artikel,
+        'artiklar': artiklar,
         'pagetitle': "%s – redigera i Svenskt dialektlexikon" % artikel.lemma,
     }
 

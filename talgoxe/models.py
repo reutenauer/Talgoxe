@@ -19,7 +19,9 @@ class UnsupportedFormat(Exception):
   pass
 
 class Artikel(models.Model):
-    # TODO Meta with ordering = ('lemma', 'rang')?
+    class Meta:
+        ordering = ('lemma', 'rang')
+
     lemma = models.CharField(max_length = 100)
     rang = models.SmallIntegerField()
     skapat = models.DateTimeField(auto_now_add = True)
