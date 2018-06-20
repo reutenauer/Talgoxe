@@ -117,7 +117,14 @@ class Artikel(models.Model):
         self.landskap = []
         while i < len(self.spolar()):
             spole = self.get_spole(i)
-            if state == 'GEOGRAFI':
+            if state == 'ALLMÄNT':
+                if spole.isgeo():
+                    self.landskap = [Landskap(spole.text)]
+                    state = 'GEOGRAFI'
+                else:
+                    i = self.handle_pilcrow(i)
+                    self.preventnextspace = spole.isleftdelim()
+            elif state == 'GEOGRAFI':
                 if spole.isgeo():
                     self.landskap.append(Landskap(spole.text))
                 else:
@@ -125,13 +132,6 @@ class Artikel(models.Model):
                     i = self.handle_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preventnextspace = spole.isleftdelim()
                     state = 'ALLMÄNT'
-            else:
-                if spole.isgeo():
-                    self.landskap = [Landskap(spole.text)]
-                    state = 'GEOGRAFI'
-                else:
-                    i = self.handle_pilcrow(i)
-                    self.preventnextspace = spole.isleftdelim()
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.handle_landskap()
