@@ -1,7 +1,7 @@
 {% spaceless %}
 <span class="SO">{% include "talgoxe/lemma.html" with artikel=lemma %}</span>
 {% with True as setspace %}
-    {% for segment in lemma.new_segments %}
+    {% for segment in lemma.fjädrar %}
         {% if not segment.isrightdelim %}
         {% if segment.setspace %}
             <span>⁠ ⁠</span>

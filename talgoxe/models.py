@@ -68,22 +68,22 @@ class Artikel(models.Model):
                 self.moments[type][m].display = True
 
     def handle_pilcrow(self, i):
-        currdat = self.get_spole(i)
-        bits = split(u'¶', currdat.text)
+        spole = self.get_spole(i)
+        bits = split(u'¶', spole.text)
         if len(bits) == 1:
-            print(i, currdat, self.preventnextspace)
-            self.append_segment(currdat)
+            print(i, spole, self.preventnextspace)
+            self.append_segment(spole)
         else:
-            maintype = currdat.typ
+            huvudtyp = spole.typ
             for bit in bits:
                 if bits.index(bit) > 0:
                     i += 1
-                    self.new_segments.append(Fjäder(self.get_spole(i)))
+                    self.fjädrar.append(Fjäder(self.get_spole(i)))
                 if bit:
-                    fjäder = Fjäder(maintype, bit)
+                    fjäder = Fjäder(huvudtyp, bit)
                     if self.preventnextspace and bits.index(bit) == 0:
                         fjäder.preventspace = True
-                    self.new_segments.append(fjäder)
+                    self.fjädrar.append(fjäder)
         return i
 
     def append_segment(self, data):
@@ -95,7 +95,7 @@ class Artikel(models.Model):
             self.moments['M1'].append(segment)
         elif segment.ism2():
             self.moments['M2'].append(segment)
-        self.new_segments.append(segment)
+        self.fjädrar.append(segment)
 
     def handle_landskap(self):
         sorted_landskap = sorted(self.landskap, key = Landskap.key)
@@ -103,33 +103,33 @@ class Artikel(models.Model):
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
            if self.preventnextspace and sorted_landskap.index(ls) == 0:
                fjäder.preventspace = True
-           self.new_segments.append(fjäder)
+           self.fjädrar.append(fjäder)
         self.landskap = []
 
     def collect(self):
-        self.new_segments = []
+        self.fjädrar = []
         self.preventnextspace = False
         i = 0
         state = 'ALLMÄNT'
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
         while i < len(self.spolar()):
-            currdat = self.get_spole(i)
+            spole = self.get_spole(i)
             if state == 'GEOGRAFI':
-                if currdat.isgeo():
-                    self.landskap.append(Landskap(currdat.text))
+                if spole.isgeo():
+                    self.landskap.append(Landskap(spole.text))
                 else:
                     self.handle_landskap()
                     i = self.handle_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
-                    self.preventnextspace = currdat.isleftdelim()
+                    self.preventnextspace = spole.isleftdelim()
                     state = 'ALLMÄNT'
             else:
-                if currdat.isgeo():
-                    self.landskap = [Landskap(currdat.text)]
+                if spole.isgeo():
+                    self.landskap = [Landskap(spole.text)]
                     state = 'GEOGRAFI'
                 else:
                     i = self.handle_pilcrow(i)
-                    self.preventnextspace = currdat.isleftdelim()
+                    self.preventnextspace = spole.isleftdelim()
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.handle_landskap()
@@ -401,7 +401,7 @@ class Exporter:
         if artikel.rang > 0:
             self.document.write('\lohi[left]{}{\SDL:SO{%d}}' % artikel.rang) # TODO Real superscript
         self.document.write("\\SDL:SO{%s}" % artikel.lemma)
-        for segment in artikel.new_segments: # TODO Handle moments!  segment.ismoment and segment.display
+        for segment in artikel.fjädrar: # TODO Handle moments!  segment.ismoment and segment.display
             if not segment.preventspace and not segment.isrightdelim():
                 self.document.write(' ') # FIXME But not if previous segment is left delim!
             type = segment.typ
@@ -478,7 +478,7 @@ class Exporter:
     def generate_odf_paragraph(self, artikel):
         paragraph = ezodf.Paragraph()
         paragraph += ezodf.Span(artikel.lemma, style_name = 'SO') # TODO Homografnumrering!
-        for segment in artikel.new_segments:
+        for segment in artikel.fjädrar:
             type = segment.typ
             if not type == 'KO':
                 if not segment.preventspace and not segment.isrightdelim():
@@ -499,7 +499,7 @@ class Exporter:
         if artikel.rang > 0:
             paragraph.add_run(str(artikel.rang), style = 'SO').font.superscript = True
         paragraph.add_run(artikel.lemma, style = 'SO')
-        for segment in artikel.new_segments:
+        for segment in artikel.fjädrar:
             type = segment.typ
             if not type == 'KO':
                 if not segment.preventspace and not segment.isrightdelim():
