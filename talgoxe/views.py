@@ -72,14 +72,14 @@ def redigera(request, id):
 
 @login_required
 def artikel_efter_stickord(request, stickord):
-    lemmata = Artikel.objects.filter(id__gt = 0, lemma = stickord).order_by('rang')
+    artiklar = Artikel.objects.filter(lemma = stickord)
     # TODO: 0!
-    if len(lemmata) == 1:
-        return HttpResponseRedirect(reverse('redigera', args = (lemmata.first().id,)))
+    if len(artiklar) == 1:
+        return HttpResponseRedirect(reverse('redigera', args = (artiklar.first().id,)))
     else:
         template = loader.get_template('talgoxe/stickord.html')
         context = {
-            'lemmata' : lemmata
+            'artiklar' : artiklar
         }
         return render_template(request, template, context)
 
