@@ -6,7 +6,7 @@
 <h2>Redo att skriva ut</h2>
 {% for lemma in lemmata %}
     <input type="hidden" class="toprint" value="article-{{ lemma.id }}" />
-    {% include 'talgoxe/artikel.html' with lemma=lemma new_segments=lemma.new_segments %}
+    {% include 'talgoxe/artikel.html' with lemma=lemma %}
     <br />
 {% endfor %}
 
