@@ -107,7 +107,7 @@ class Artikel(models.Model):
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
            if self.preventnextspace and sorted_landskap.index(ls) == 0:
                fjäder.preventspace = True
-           self.fjädrar.append(fjäder)
+           self.append_fjäder(fjäder, True)
         self.landskap = []
 
     def collect(self):
@@ -126,9 +126,11 @@ class Artikel(models.Model):
                 else:
                     i = self.analyse_spole(i)
                     self.preventnextspace = spole.isleftdelim()
+                    # state är fortfarande 'ALLMÄNT'
             elif state == 'GEOGRAFI':
                 if spole.isgeo():
                     self.landskap.append(Landskap(spole.text))
+                    # state är fortfarande 'GEOGRAFI'
                 else:
                     self.flush_landskap()
                     i = self.analyse_spole(i) # För pilcrow i ”hårgård” och ”häringa”
