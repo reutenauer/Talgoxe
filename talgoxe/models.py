@@ -378,6 +378,29 @@ class Landskap():
     def __str__(self):
         return self.abbrev
 
+    @staticmethod
+    def reduce_landskap(lista):
+        antal_per_del = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
+        delar = ['Götal', 'Sveal', 'Norrl']
+        landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
+        for landskap in lista:
+            if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index('Götal'):
+                landskap_per_del['Götal'].append(landskap)
+            elif Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index('Sveal'):
+                landskap_per_del['Sveal'].append(landskap)
+            else:
+                landskap_per_del['Norrl'].append(landskap)
+            print(landskap)
+        print(len(landskap_per_del['Götal']))
+        utskriftsform = []
+        for landsdel, landskapen in landskap_per_del.items():
+            if len(landskapen) >= antal_per_del[landsdel]:
+                utskriftsform.append(Landskap(landsdel))
+            else:
+                utskriftsform += sorted(landskapen, key = Landskap.key)
+
+        return utskriftsform
+
 class Exporter:
     def __init__(self, format):
         self.format = format
