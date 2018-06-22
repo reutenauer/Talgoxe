@@ -385,12 +385,10 @@ class Landskap():
         landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
         print(lista)
         for landskap in lista:
-            if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index('Götal'):
-                landskap_per_del['Götal'].append(landskap)
-            elif Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index('Sveal'):
-                landskap_per_del['Sveal'].append(landskap)
-            else:
-                landskap_per_del['Norrl'].append(landskap)
+            for landsdel in delar:
+                if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index(landsdel):
+                    landskap_per_del[landsdel].append(landskap)
+                    break;
             print(landskap)
         print(len(landskap_per_del['Götal']))
         utskriftsform = []
