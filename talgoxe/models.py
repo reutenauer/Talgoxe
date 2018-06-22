@@ -103,7 +103,6 @@ class Artikel(models.Model):
 
     def flush_landskap(self):
         sorted_landskap = Landskap.reduce(self.landskap)
-        print(list(map(lambda l: l.abbrev, sorted_landskap)))
         for ls in sorted_landskap:
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
            if self.preventnextspace and sorted_landskap.index(ls) == 0:
@@ -383,14 +382,11 @@ class Landskap():
         antal_per_del = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
         delar = ['Götal', 'Sveal', 'Norrl']
         landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
-        print(lista)
         for landskap in lista:
             for landsdel in delar:
                 if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index(landsdel):
                     landskap_per_del[landsdel].append(landskap)
                     break;
-            print(landskap)
-        print(len(landskap_per_del['Götal']))
         utskriftsform = []
         for landsdel, landskapen in landskap_per_del.items():
             if len(landskapen) >= antal_per_del[landsdel]:
