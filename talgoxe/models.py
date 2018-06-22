@@ -383,6 +383,7 @@ class Landskap():
         antal_per_del = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
         delar = ['Götal', 'Sveal', 'Norrl']
         landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
+        print(lista)
         for landskap in lista:
             if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index('Götal'):
                 landskap_per_del['Götal'].append(landskap)
