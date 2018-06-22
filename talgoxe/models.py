@@ -102,7 +102,7 @@ class Artikel(models.Model):
         self.fjädrar.append(segment)
 
     def flush_landskap(self):
-        sorted_landskap = sorted(self.landskap, key = Landskap.key)
+        sorted_landskap = Landskap.reduce_landskap(self.landskap)
         print(list(map(lambda l: l.abbrev, sorted_landskap)))
         for ls in sorted_landskap:
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
