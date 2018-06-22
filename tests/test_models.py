@@ -20,16 +20,16 @@ class LandskapTestCase(TestCase):
     def test_reduce_landskap(self):
         input = [Landskap('Skåne'), Landskap('Blek'), Landskap('Öland'), Landskap('Smål'),
           Landskap('Hall'), Landskap('Västg'), Landskap('Boh'), Landskap('Dalsl')]
-        self.assertEqual(Landskap.reduce_landskap(input)[0].abbrev, 'Götal')
+        self.assertEqual(Landskap.reduce(input)[0].abbrev, 'Götal')
 
     def test_that_reduce_landskap_also_sorts(self):
         bokstavsordningssorterade = [Landskap('Blek'), Landskap('Dalsl'), Landskap('Skåne'), Landskap('Smål'), Landskap('Västg')]
-        self.assertEqual(list(map(lambda ls: ls.abbrev, Landskap.reduce_landskap(bokstavsordningssorterade))), ['Skåne', 'Blek', 'Smål', 'Västg', 'Dalsl'])
+        self.assertEqual(list(map(lambda ls: ls.abbrev, Landskap.reduce(bokstavsordningssorterade))), ['Skåne', 'Blek', 'Smål', 'Västg', 'Dalsl'])
 
     def test_ett_mer_komplicerat_fall(self):
         landskap = self.till_landskap(['Blek', 'Gotl', 'Dal' ,'Gästr', 'Norrb',
           'Närke', 'Skåne', 'Smål', 'Sörml', 'Västg', 'Värml', 'Ång', 'Östg'])
-        namn = self.från_landskap(Landskap.reduce_landskap(landskap))
+        namn = self.från_landskap(Landskap.reduce(landskap))
         self.assertEqual(namn, ['Skåne', 'Blek', 'Smål', 'Västg', 'Gotl',
           'Östg', 'Sveal', 'Gästr', 'Ång', 'Norrb'])
 
@@ -37,5 +37,5 @@ class LandskapTestCase(TestCase):
         landskap = self.till_landskap(['Blek', 'Boh', 'Dal', 'Dalsl', 'Gästr', 'Häls', 'Jämtl',
           'Lappl', 'Norrb', 'Närke', 'Smål', 'Sörml', 'Uppl',
           'Värml', 'Västb', 'Västg', 'Västm', 'Öland', 'Östg'])
-        namn = self.från_landskap(Landskap.reduce_landskap(landskap))
+        namn = self.från_landskap(Landskap.reduce(landskap))
         self.assertEqual(namn, ['Götal', 'Sveal', 'Norrl'])

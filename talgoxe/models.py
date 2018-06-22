@@ -102,7 +102,7 @@ class Artikel(models.Model):
         self.fjädrar.append(segment)
 
     def flush_landskap(self):
-        sorted_landskap = Landskap.reduce_landskap(self.landskap)
+        sorted_landskap = Landskap.reduce(self.landskap)
         print(list(map(lambda l: l.abbrev, sorted_landskap)))
         for ls in sorted_landskap:
            fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
@@ -379,7 +379,7 @@ class Landskap():
         return self.abbrev
 
     @staticmethod
-    def reduce_landskap(lista):
+    def reduce(lista):
         antal_per_del = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
         delar = ['Götal', 'Sveal', 'Norrl']
         landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
