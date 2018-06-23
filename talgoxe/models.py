@@ -103,8 +103,9 @@ class Artikel(models.Model):
 
     def flush_landskap(self):
         sorted_landskap = Landskap.reduce(self.landskap)
+        geotyp = Typ.objects.get(kod = 'g')
         for ls in sorted_landskap:
-           fjäder = Fjäder(Typ.objects.get(kod = 'g'), ls.abbrev)
+           fjäder = Fjäder(geotyp, ls.abbrev)
            if self.preventnextspace and sorted_landskap.index(ls) == 0:
                fjäder.preventspace = True
            self.append_fjäder(fjäder, True)
