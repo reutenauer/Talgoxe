@@ -1,5 +1,21 @@
 from django.test import TestCase
-from talgoxe.models import Landskap
+from talgoxe.models import Artikel, Typ, Spole, Landskap
+
+class ArtikelTestCase(TestCase):
+    def setUp(self):
+        Typ.objects.create(kod = 'so')
+
+    def test_so_sov(self):
+        artikel = Artikel.objects.create(lemma = 'fabbel', rang = 0)
+        oktyp = Typ.objects.create(kod = 'ok')
+        Spole.objects.create(typ = oktyp, text = 'm.', artikel = artikel, pos = 0)
+        Spole.objects.create(typ = oktyp, text = 'n.', artikel = artikel, pos = 1)
+        artikel.collect()
+        # list(map(lambda fjäder: print(fjäder), artikel.fjädrar))
+        for fjäder in artikel.fjädrar:
+            print(fjäder.typ, fjäder.text)
+        self.assertEqual(3, len(artikel.fjädrar))
+        self.assertEqual('el.', artikel.fjädrar[1].text)
 
 class LandskapTestCase(TestCase):
     def setUp(self):

@@ -69,7 +69,7 @@ class Artikel(models.Model):
                 self.moments[type][m].text = format % (m + offset)
                 self.moments[type][m].display = True
 
-    def analyse_spole(self, i):
+    def resolve_pilcrow(self, i):
         spole = self.get_spole(i)
         bits = split(u'¶', spole.text)
         if len(bits) == 1:
@@ -118,28 +118,56 @@ class Artikel(models.Model):
         state = 'ALLMÄNT'
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
+        self.kö = []
+        sotyp = Typ.objects.get(kod = 'so')
+        oktyp = Typ.objects.get(kod = 'ok')
         while i < len(self.spolar()):
             spole = self.get_spole(i)
             if state == 'ALLMÄNT':
                 if spole.isgeo():
                     self.landskap = [Landskap(spole.text)]
                     state = 'GEOGRAFI'
+                elif spole.typ == sotyp:
+                    pass
+                elif spole.typ == oktyp:
+                    self.kö.append(spole)
+                    state = 'ORDKLASS'
                 else:
-                    i = self.analyse_spole(i)
+                    i = self.resolve_pilcrow(i)
                     self.preventnextspace = spole.isleftdelim()
                     # state är fortfarande 'ALLMÄNT'
             elif state == 'GEOGRAFI':
                 if spole.isgeo():
                     self.landskap.append(Landskap(spole.text))
                     # state är fortfarande 'GEOGRAFI'
+                elif spole.typ == oktyp:
+                    self.kö.append(spole)
+                    state = 'ORDKLASS'
                 else:
                     self.flush_landskap()
-                    i = self.analyse_spole(i) # För pilcrow i ”hårgård” och ”häringa”
+                    i = self.resolve_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preventnextspace = spole.isleftdelim()
+                    state = 'ALLMÄNT'
+            elif state == 'ORDKLASS':
+                print('Hej hej hej!')
+                if spole.isgeo():
+                    self.landskap = [Landskap(spole.text)]
+                    state = 'GEOGRAFI'
+                elif spole.typ == oktyp:
+                    print('Hej igen')
+                    self.append_fjäder(Fjäder(self.kö[0]), True) # TODO Ta preventnextspace i hänsyn!
+                    self.append_fjäder(Fjäder(Typ.objects.get(kod = 'ok'), 'el.'), True)
+                    self.kö = [spole]
+                    # state är fortfarande 'ORDKLASS'
+                else:
+                    print('Nu är jag här')
+                    self.append_fjäder(Fjäder(self.kö[0]), True) # TODO som ovan
                     state = 'ALLMÄNT'
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
             self.flush_landskap()
+        if self.kö:
+            self.append_fjäder(Fjäder(self.kö[0]), True)
         self.number_moments('M1')
         self.number_moments('M2')
         self.moments = { 'M1': [], 'M2': [] }
@@ -274,15 +302,15 @@ class Spole(models.Model):
     def isleftdelim(self):
         return self.typ.kod.upper() in ['VR', 'VH']
 
-class Fjäder:
-    def __init__(self, spole, text = None):
+class Fjäder: # TODO __str__()
+    def __init__(self, spole_eller_typ, text = None):
         self.display = None # FIXME Måste inte ändras för KO
-        if text: # spole är egentligen en Typ
-            self.typ = spole.kod.upper()
+        if text: # spole_eller_typ är en Typ
+            self.typ = spole_eller_typ.kod.upper()
             self.text = text.strip()
-        else:
-            self.typ = spole.typ.kod.upper()
-            self.text = spole.text.strip()
+        else: # spole_eller_typ är en Spole
+            self.typ = spole_eller_typ.typ.kod.upper()
+            self.text = spole_eller_typ.text.strip()
         self.preventspace = False
 
     def isrightdelim(self):
