@@ -358,6 +358,8 @@ class Landskap():
       u'Norrl' : u'Norrl',
     }
 
+    antal_per_landsdel = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
+
     def cmp(self, other):
         if self.abbrev in self.ordning and other.abbrev in self.ordning:
             return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
@@ -379,17 +381,15 @@ class Landskap():
 
     @staticmethod
     def reduce(lista):
-        antal_per_del = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
-        delar = ['Götal', 'Sveal', 'Norrl']
         landskap_per_del = { 'Götal' : [], 'Sveal' : [], 'Norrl' : [] }
         for landskap in lista:
-            for landsdel in delar:
+            for landsdel in Landskap.antal_per_landsdel.keys():
                 if Landskap.ordning.index(landskap.abbrev) < Landskap.ordning.index(landsdel):
                     landskap_per_del[landsdel].append(landskap)
                     break;
         utskriftsform = []
         for landsdel, landskapen in landskap_per_del.items():
-            if len(landskapen) >= antal_per_del[landsdel]:
+            if len(landskapen) >= Landskap.antal_per_landsdel[landsdel]:
                 utskriftsform.append(Landskap(landsdel))
             else:
                 utskriftsform += sorted(landskapen, key = Landskap.key)
