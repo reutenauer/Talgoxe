@@ -317,18 +317,9 @@ class Fjäder:
         return not self.preventspace and not self.isrightdelim() # TODO Lägga till det med den föregående fjädern
 
 class Landskap():
-    ordning = [
-        u'Skåne', u'Blek', u'Öland', u'Smål', u'Hall', u'Västg', u'Boh', u'Dalsl', u'Gotl', u'Östg', # 0-9
-        u'Götal', # 10
-        u'Sörml', u'Närke', u'Värml', u'Uppl', u'Västm', u'Dal', # 11 - 16
-        u'Sveal', # 17
-        u'Gästr', u'Häls', u'Härj', u'Med', u'Jämtl', u'Ång', u'Västb', u'Lappl', u'Norrb', # 18 - 26
-        u'Norrl', # 27
-    ]
-
     # TODO: Something more object-oriented (methods short, long, rank)
     short_abbrev = {
-      u'Sk' : u'Skåne',
+      u'Sk' : u'Skåne', # 0
       u'Bl' : u'Blek',
       u'Öl' : u'Öland',
       u'Sm' : u'Smål',
@@ -337,16 +328,16 @@ class Landskap():
       u'Bo' : u'Boh',
       u'Dsl': u'Dalsl',
       u'Gl' : u'Gotl',
-      u'Ög' : u'Östg',
-      u'Götal' : u'Götal',
-      u'Sdm': u'Sörml',
+      u'Ög' : u'Östg', # 9
+      u'Götal' : u'Götal', # 10
+      u'Sdm': u'Sörml', # 11
       u'Nk' : u'Närke',
       u'Vrm': u'Värml',
       u'Ul' : u'Uppl',
       u'Vstm' : u'Västm',
-      u'Dal': u'Dal',
-      u'Sveal' : u'Sveal',
-      u'Gst': u'Gästr',
+      u'Dal': u'Dal', # 16
+      u'Sveal' : u'Sveal', # 17
+      u'Gst': u'Gästr', # 18
       u'Hsl': u'Häls',
       u'Hrj': u'Härj',
       u'Mp' : u'Med',
@@ -354,22 +345,17 @@ class Landskap():
       u'Åm' : u'Ång',
       u'Vb' : u'Västb',
       u'Lpl': u'Lappl',
-      u'Nb' : u'Norrb',
-      u'Norrl' : u'Norrl',
+      u'Nb' : u'Norrb', # 26
+      u'Norrl' : u'Norrl', # 27
     }
+    ordning = list(short_abbrev.values())
 
     antal_per_landsdel = { 'Götal' : 7, 'Sveal' : 4, 'Norrl' : 6 }
 
-    def cmp(self, other):
-        if self.abbrev in self.ordning and other.abbrev in self.ordning:
-            return cmp(self.ordning.index(self.abbrev), self.ordning.index(other.abbrev))
-        else:
-            return 0
-
     @staticmethod
-    def key(self):
-        if self.abbrev in self.ordning:
-            return self.ordning.index(self.abbrev)
+    def key(landskap):
+        if landskap.abbrev in Landskap.ordning:
+            return Landskap.ordning.index(landskap.abbrev)
         else:
             return -1 # Så det är lättare att se dem
 
