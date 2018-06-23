@@ -11,9 +11,6 @@ class ArtikelTestCase(TestCase):
         Spole.objects.create(typ = oktyp, text = 'm.', artikel = artikel, pos = 0)
         Spole.objects.create(typ = oktyp, text = 'n.', artikel = artikel, pos = 1)
         artikel.collect()
-        # list(map(lambda fjäder: print(fjäder), artikel.fjädrar))
-        for fjäder in artikel.fjädrar:
-            print(fjäder.typ, fjäder.text)
         self.assertEqual(3, len(artikel.fjädrar))
         self.assertEqual('el.', artikel.fjädrar[1].text)
 

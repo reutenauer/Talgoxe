@@ -149,18 +149,15 @@ class Artikel(models.Model):
                     self.preventnextspace = spole.isleftdelim()
                     state = 'ALLMÄNT'
             elif state == 'ORDKLASS':
-                print('Hej hej hej!')
                 if spole.isgeo():
                     self.landskap = [Landskap(spole.text)]
                     state = 'GEOGRAFI'
                 elif spole.typ == oktyp:
-                    print('Hej igen')
                     self.append_fjäder(Fjäder(self.kö[0]), True) # TODO Ta preventnextspace i hänsyn!
                     self.append_fjäder(Fjäder(Typ.objects.get(kod = 'ok'), 'el.'), True)
                     self.kö = [spole]
                     # state är fortfarande 'ORDKLASS'
                 else:
-                    print('Nu är jag här')
                     self.append_fjäder(Fjäder(self.kö[0]), True) # TODO som ovan
                     state = 'ALLMÄNT'
             i += 1
