@@ -4,6 +4,7 @@ from talgoxe.models import Artikel, Typ, Spole, Landskap
 class ArtikelTestCase(TestCase):
     def setUp(self):
         self.sotyp = Typ.objects.create(kod = 'so')
+        self.sovtyp = Typ.objects.create(kod = 'sov')
         self.oktyp = Typ.objects.create(kod = 'ok')
         self.m1typ = Typ.objects.create(kod = 'm1')
         self.betyp = Typ.objects.create(kod = 'be')
@@ -16,8 +17,8 @@ class ArtikelTestCase(TestCase):
         Spole.objects.create(typ = self.oktyp, text = 'm.', artikel = artikel, pos = 0)
         Spole.objects.create(typ = self.oktyp, text = 'n.', artikel = artikel, pos = 1)
         artikel.collect()
-        self.assertEqual(3, len(artikel.fjädrar))
-        self.assertEqual('el.', artikel.fjädrar[1].text)
+        self.assertEqual(4, len(artikel.fjädrar))
+        self.assertEqual('el.', artikel.fjädrar[2].text)
 
     def test_dagom(self):
         artikel = Artikel.objects.create(lemma = 'dagom', rang = 0)
@@ -27,7 +28,14 @@ class ArtikelTestCase(TestCase):
         Spole.objects.create(typ = self.gtyp , text = 'gotl', artikel = artikel, pos = 3)
         Spole.objects.create(typ = self.iptyp, text = '.', artikel = artikel, pos = 4)
         artikel.collect()
-        self.assertEqual(5, len(artikel.fjädrar))
+        self.assertEqual(6, len(artikel.fjädrar))
+
+    def test_första_fjädern_är_so(self):
+        artikel = Artikel.objects.create(lemma = 'dagom', rang = 0)
+        Spole.objects.create(typ = self.betyp, text = 'dagligen', artikel = artikel, pos = 0)
+        artikel.collect()
+        self.assertEqual(2, len(artikel.fjädrar))
+        self.assertEqual('dagom', artikel.fjädrar[0].text)
 
 class LandskapTestCase(TestCase):
     def setUp(self):
