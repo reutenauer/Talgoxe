@@ -57,7 +57,7 @@ class Artikel(models.Model):
 
         return self.spolarna
 
-    def number_moments(self, type):
+    def freeze_moments(self, type):
         if type == 'M1':
             format = '%d'
             offset = 1
@@ -69,7 +69,7 @@ class Artikel(models.Model):
                 self.moments[type][m].text = format % (m + offset)
                 self.moments[type][m].display = True
 
-    def resolve_pilcrow(self, i):
+    def freeze_pilcrow(self, i):
         spole = self.get_spole(i)
         bits = split(u'¶', spole.text)
         if len(bits) == 1:
@@ -94,14 +94,14 @@ class Artikel(models.Model):
             segment = Fjäder(data)
             segment.preventspace = self.preventnextspace
             if segment.ism1():
-                self.number_moments('M2')
+                self.freeze_moments('M2')
                 self.moments['M2'] = []
                 self.moments['M1'].append(segment)
             elif segment.ism2():
                 self.moments['M2'].append(segment)
         self.fjädrar.append(segment)
 
-    def flush_landskap(self):
+    def freeze_landskap(self):
         sorted_landskap = Landskap.reduce(self.landskap)
         geotyp = Typ.objects.get(kod = 'g')
         for ls in sorted_landskap:
@@ -119,7 +119,7 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
         self.kö = []
-        sotyp = Typ.objects.get(kod = 'so')
+        sotyp = Typ.objects.get(kod = 'so') # FIXME Lägga till SO som fjäder!
         oktyp = Typ.objects.get(kod = 'ok')
         while i < len(self.spolar()):
             spole = self.get_spole(i)
@@ -133,7 +133,7 @@ class Artikel(models.Model):
                     self.kö.append(spole)
                     state = 'ORDKLASS'
                 else:
-                    i = self.resolve_pilcrow(i)
+                    i = self.freeze_pilcrow(i)
                     self.preventnextspace = spole.isleftdelim()
                     # state är fortfarande 'ALLMÄNT'
             elif state == 'GEOGRAFI':
@@ -144,8 +144,8 @@ class Artikel(models.Model):
                     self.kö.append(spole)
                     state = 'ORDKLASS'
                 else:
-                    self.flush_landskap()
-                    i = self.resolve_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
+                    self.freeze_landskap()
+                    i = self.freeze_pilcrow(i) # För pilcrow i ”hårgård” och ”häringa”
                     self.preventnextspace = spole.isleftdelim()
                     state = 'ALLMÄNT'
             elif state == 'ORDKLASS':
@@ -162,11 +162,11 @@ class Artikel(models.Model):
                     state = 'ALLMÄNT'
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
-            self.flush_landskap()
+            self.freeze_landskap()
         if self.kö:
             self.append_fjäder(Fjäder(self.kö[0]), True)
-        self.number_moments('M1')
-        self.number_moments('M2')
+        self.freeze_moments('M1')
+        self.freeze_moments('M2')
         self.moments = { 'M1': [], 'M2': [] }
 
     def update(self, post_data):
