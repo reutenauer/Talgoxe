@@ -121,7 +121,7 @@ class Artikel(models.Model):
         self.kö = []
         sovtyp = Typ.objects.get(kod = 'sov') # FIXME Lägga till SO som typ?
         oktyp = Typ.objects.get(kod = 'ok')
-        sofjäder = Fjäder(sovtyp, self.lemma)
+        sofjäder = Fjäder(sovtyp, '%s' % self)
         sofjäder.preventspace = True
         self.append_fjäder(sofjäder, True)
         while i < len(self.spolar()):
@@ -438,8 +438,6 @@ class Exporter:
 
     def generate_pdf_paragraph(self, artikel):
         self.document.write("\\hskip-0.5em")
-        if artikel.rang > 0:
-            self.document.write('\lohi[left]{}{\SDL:SO{%d}}' % artikel.rang) # TODO Real superscript
         for segment in artikel.fjädrar: # TODO Handle moments!  segment.ismoment and segment.display
             if not segment.preventspace and not segment.isrightdelim():
                 self.document.write(' ') # FIXME But not if previous segment is left delim!
@@ -516,7 +514,6 @@ class Exporter:
 
     def generate_odf_paragraph(self, artikel):
         paragraph = ezodf.Paragraph()
-        # TODO Homografnumrering!
         for segment in artikel.fjädrar:
             type = segment.typ
             if not type == 'KO':
@@ -535,8 +532,6 @@ class Exporter:
 
     def generate_docx_paragraph(self, artikel):
         paragraph = self.document.add_paragraph()
-        if artikel.rang > 0:
-            paragraph.add_run(str(artikel.rang), style = 'SO').font.superscript = True
         for segment in artikel.fjädrar:
             type = segment.typ
             if not type == 'KO':
