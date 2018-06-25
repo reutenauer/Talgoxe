@@ -119,7 +119,7 @@ class Artikel(models.Model):
         self.moments = { 'M1': [], 'M2': [] }
         self.landskap = []
         self.kö = []
-        sotyp = Typ.objects.get(kod = 'so') # FIXME Lägga till SO som fjäder!
+        # sotyp = Typ.objects.get(kod = 'so') # FIXME Lägga till SO som fjäder!
         oktyp = Typ.objects.get(kod = 'ok')
         while i < len(self.spolar()):
             spole = self.get_spole(i)
@@ -127,8 +127,8 @@ class Artikel(models.Model):
                 if spole.isgeo():
                     self.landskap = [Landskap(spole.text)]
                     state = 'GEOGRAFI'
-                elif spole.typ == sotyp:
-                    pass
+                # elif spole.typ == sotyp:
+                #     pass
                 elif spole.typ == oktyp:
                     self.kö.append(spole)
                     state = 'ORDKLASS'
