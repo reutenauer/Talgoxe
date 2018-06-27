@@ -637,6 +637,9 @@ class Exporter:
         return join('ord', filename)
 
 class PDFExporter(Exporter):
+    def __init__(self):
+        self.format = 'pdf'
+
     def hello(self):
       print(__class__)
       print('hello world')
