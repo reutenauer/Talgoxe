@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from inspect import getmodule
 from math import floor
 from os import chdir, popen, rename, environ
 from os.path import abspath, basename, dirname, join
@@ -415,6 +416,9 @@ class Landskap():
 
 class Exporter:
     def __init__(self, format):
+        print(__name__)
+        print(type(__name__))
+        # print(getattr(globals()[__name__], 'PDFExporter'))
         from talgoxe import models
         print(getattr(models, 'Typ'))
         # print(basename(__main__.__file__))
@@ -435,6 +439,9 @@ class Exporter:
         print(globals()[self.format.upper() + 'Exporter'])
         print(self.__class__.__module__)
         module = __class__.__module__
+        # getattr(getmodule(
+        print(getmodule(self))
+        print(getattr(getmodule(self), 'PDFExporter'))
         from talgoxe.models import PDFExporter
         initialisers = {
             'pdf' : self.start_pdf,
