@@ -1,5 +1,9 @@
+from os import popen
+from os.path import abspath, dirname, join
+
 from django.test import TestCase
-from talgoxe.models import Artikel, Typ, Spole, Landskap
+
+from talgoxe.models import Artikel, Typ, Spole, Landskap, Exporter
 
 class ArtikelTestCase(TestCase):
     def setUp(self):
@@ -75,3 +79,22 @@ class LandskapTestCase(TestCase):
           'Värml', 'Västb', 'Västg', 'Västm', 'Öland', 'Östg'])
         namn = self.från_landskap(Landskap.reduce(landskap))
         self.assertEqual(namn, ['Götal', 'Sveal', 'Norrl'])
+
+class ExporterTestCase(TestCase):
+  def setUp(self):
+      dumtyp = Typ.objects.create(kod = 'dum')
+      Typ.objects.create(kod = 'sov')
+      Typ.objects.create(kod = 'ok')
+      self.dagom = Artikel.objects.create(lemma = 'dagom', rang = 0)
+      Spole.objects.create(typ = dumtyp, text = 'a', artikel = self.dagom, pos = 0)
+      Spole.objects.create(typ = dumtyp, text = 'b', artikel = self.dagom, pos = 1)
+      Spole.objects.create(typ = dumtyp, text = 'c', artikel = self.dagom, pos = 2)
+
+  def test_docx_export(self):
+      exporter = Exporter("pdf")
+      filepath = exporter.export([self.dagom.id])
+      print(filepath)
+      fileabspath = join(abspath(dirname(__file__)), '..', 'talgoxe', 'static', filepath)
+      print(fileabspath)
+      filetype = popen('file talgoxe/static/' + filepath).read().split(':')[1].strip()
+      print(filetype)
