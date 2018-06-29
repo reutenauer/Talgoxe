@@ -96,5 +96,6 @@ class ExporterTestCase(TestCase):
       print(filepath)
       fileabspath = join(abspath(dirname(__file__)), '..', 'talgoxe', 'static', filepath)
       print(fileabspath)
-      filetype = popen('file talgoxe/static/' + filepath).read().split(':')[1].strip()
+      filetype = popen('file %s' % fileabspath).read().split(':')[1].strip()
       print(filetype)
+      assertEqual('PDF document, version 1.7', filetype)
