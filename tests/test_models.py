@@ -81,21 +81,21 @@ class LandskapTestCase(TestCase):
         self.assertEqual(namn, ['Götal', 'Sveal', 'Norrl'])
 
 class ExporterTestCase(TestCase):
-  def setUp(self):
-      dumtyp = Typ.objects.create(kod = 'dum')
-      Typ.objects.create(kod = 'sov')
-      Typ.objects.create(kod = 'ok')
-      self.dagom = Artikel.objects.create(lemma = 'dagom', rang = 0)
-      Spole.objects.create(typ = dumtyp, text = 'a', artikel = self.dagom, pos = 0)
-      Spole.objects.create(typ = dumtyp, text = 'b', artikel = self.dagom, pos = 1)
-      Spole.objects.create(typ = dumtyp, text = 'c', artikel = self.dagom, pos = 2)
+    def setUp(self):
+        dumtyp = Typ.objects.create(kod = 'dum')
+        Typ.objects.create(kod = 'sov')
+        Typ.objects.create(kod = 'ok')
+        self.dagom = Artikel.objects.create(lemma = 'dagom', rang = 0)
+        Spole.objects.create(typ = dumtyp, text = 'a', artikel = self.dagom, pos = 0)
+        Spole.objects.create(typ = dumtyp, text = 'b', artikel = self.dagom, pos = 1)
+        Spole.objects.create(typ = dumtyp, text = 'c', artikel = self.dagom, pos = 2)
 
-  def test_docx_export(self):
-      exporter = Exporter("pdf")
-      filepath = exporter.export([self.dagom.id])
-      print(filepath)
-      fileabspath = join(abspath(dirname(__file__)), '..', 'talgoxe', 'static', filepath)
-      print(fileabspath)
-      filetype = popen('file %s' % fileabspath).read().split(':')[1].strip()
-      print(filetype)
-      assertEqual('PDF document, version 1.7', filetype)
+    def test_docx_export(self):
+        exporter = Exporter("pdf")
+        filepath = exporter.export([self.dagom.id])
+        print(filepath)
+        fileabspath = join(abspath(dirname(__file__)), '..', 'talgoxe', 'static', filepath)
+        print(fileabspath)
+        filetype = popen('file %s' % fileabspath).read().split(':')[1].strip()
+        print(filetype)
+        assertEqual('PDF document, version 1.7', filetype)
