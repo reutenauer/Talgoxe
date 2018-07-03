@@ -436,7 +436,7 @@ class Exporter:
         print(globals()['Typ'])
         print(globals()['PDFExporter'])
         print(self.__class__)
-        print(globals()[self.format.upper() + 'Exporter'])
+        # print(globals()[self.format.upper() + 'Exporter'])
         print(self.__class__.__module__)
         module = __class__.__module__
         # getattr(getmodule(
