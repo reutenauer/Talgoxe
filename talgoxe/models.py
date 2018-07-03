@@ -416,33 +416,8 @@ class Landskap():
 
 class Exporter:
     def __init__(self, format):
-        print(__name__)
-        print(type(__name__))
-        # print(getattr(globals()[__name__], 'PDFExporter'))
-        from talgoxe import models
-        print(getattr(models, 'Typ'))
-        # print(basename(__main__.__file__))
-        print(__spec__.name)
-        import __main__
-        print(__name__)
-        # print(getattr(__main__, 'Artikel'))
-        print(__main__.__name__)
-        print(__class__)
         self.format = format
-        # import __class__.__module__
-        # print(getattr(__class__.__module__, 'PDFExporter'))
-        print(__class__.__module__)
-        # print(locals()['PDFExporter'])
-        print(globals()['Typ'])
-        print(globals()['PDFExporter'])
-        print(self.__class__)
-        # print(globals()[self.format.upper() + 'Exporter'])
-        print(self.__class__.__module__)
-        module = __class__.__module__
-        # getattr(getmodule(
-        print(getmodule(self))
         print(getattr(getmodule(self), 'PDFExporter'))
-        from talgoxe.models import PDFExporter
         initialisers = {
             'pdf' : self.start_pdf,
             'odt' : self.start_odf,
@@ -646,8 +621,3 @@ class Exporter:
 class PDFExporter(Exporter):
     def __init__(self):
         self.format = 'pdf'
-
-    def hello(self):
-      print(__class__)
-      print('hello world')
-      print(__class__.__module__)
