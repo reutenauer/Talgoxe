@@ -165,6 +165,7 @@ class Artikel(models.Model):
                     self.append_fjäder(Fjäder(self.kö[0]), True) # TODO som ovan
                     self.append_fjäder(Fjäder(spole), True)
                     self.preventnextspace = spole.isleftdelim()
+                    self.kö = []
                     state = 'ALLMÄNT'
             i += 1
         if self.landskap: # För landskapsnamnet på slutet av ”häringa”, efter bugfixet ovan
