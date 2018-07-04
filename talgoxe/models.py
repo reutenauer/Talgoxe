@@ -316,6 +316,9 @@ class Fjäder: # TODO __str__()
             self.text = spole_eller_typ.text.strip()
         self.preventspace = False
 
+    def __str__(self):
+        return self.typ.upper() + ' ' + self.text
+
     def isrightdelim(self):
         return self.typ in ['HH', 'HR', 'IP', 'KO'] or match(r'^,', self.text)
 
