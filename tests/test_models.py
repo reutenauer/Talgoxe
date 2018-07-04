@@ -15,6 +15,14 @@ class ArtikelTestCase(TestCase):
         self.gtyp = Typ.objects.create(kod = 'g')
         self.iptyp = Typ.objects.create(kod = 'ip')
 
+    def dump_artikel(self, artikel):
+        dump = ''
+        artikel.collect()
+        for fjäder in artikel.fjädrar:
+            dump += fjäder.typ.upper() + ' ' + fjäder.text + ' '
+
+        return dump
+
     def test_so_sov(self):
         artikel = Artikel.objects.create(lemma = 'fabbel', rang = 0)
 
@@ -33,6 +41,7 @@ class ArtikelTestCase(TestCase):
         Spole.objects.create(typ = self.iptyp, text = '.', artikel = artikel, pos = 4)
         artikel.collect()
         self.assertEqual(6, len(artikel.fjädrar))
+        self.assertEqual('SOV dagom OK adv. M1  BE dagligen G Gotl IP . ', self.dump_artikel(artikel))
 
     def test_första_fjädern_är_so(self):
         artikel = Artikel.objects.create(lemma = 'dagom', rang = 0)
