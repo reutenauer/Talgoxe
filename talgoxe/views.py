@@ -55,9 +55,11 @@ def create(request):
 def redigera(request, id):
     method = request.META['REQUEST_METHOD']
     if method == 'POST':
+        # print(len(request.POST.keys()))
         artikel = Artikel.objects.get(id = id)
         artikel.update(request.POST)
 
+    print(3)
     template = loader.get_template('talgoxe/redigera.html')
     artiklar = Artikel.objects.all() # Anm. Svensk alfabetisk ordning verkar funka på frigg-test! Locale?
     artikel = Artikel.objects.get(id = id)

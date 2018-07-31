@@ -43,6 +43,9 @@ class ArtikelTestCase(TestCase):
         self.assertEqual(6, len(artikel.fjädrar))
         self.assertEqual('SOV dagom OK adv. M1  BE dagligen G Gotl IP . ', self.dump_artikel(artikel))
 
+    def test_överflödig_fjäder(self):
+        pass # TODO Skriv; jfr. kommit 78a9797
+
     def test_första_fjädern_är_so(self):
         artikel = Artikel.objects.create(lemma = 'dagom', rang = 0)
         Spole.objects.create(typ = self.betyp, text = 'dagligen', artikel = artikel, pos = 0)
