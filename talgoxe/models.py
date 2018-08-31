@@ -69,7 +69,8 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.get_spole(i)))
+                                if i < self.spole_set.count():
+                                    self.new_segments.append(Segment(self.get_spole(i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
                     state = 'INITIAL'
@@ -87,7 +88,8 @@ class Artikel(models.Model):
                         for bit in bits:
                             if bits.index(bit) > 0:
                                 i += 1
-                                self.new_segments.append(Segment(self.get_spole(i)))
+                                if i < self.spole_set.count():
+                                    self.new_segments.append(Segment(self.get_spole(i)))
                             if bit:
                                 self.new_segments.append(Segment(maintype, bit))
             i += 1

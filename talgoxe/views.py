@@ -189,26 +189,53 @@ def export_to_odf(request, id):
     return render_template(request, template, context)
 
 def export_to_docx(request, ids):
-  tempfilename = mktemp('.docx')
-  if len(ids) == 1:
-      id = ids[0]
-      lemma = Artikel.objects.get(id = id)
-      docx = lemma.process_docx(tempfilename)
-      filename = '%s-%s.docx' % (id, lemma.lemma)
-  else:
-      filename = 'sdl-utdrag.docx'
-      document = Document()
-      Artikel.add_docx_styles(document)
-      for i in ids:
-          lemma = Artikel.objects.get(id = i)
-          lemma.generate_docx_paragraph(document)
-      document.save(tempfilename)
-  staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
-  os.rename(tempfilename, join(staticpath, filename))
-  template = loader.get_template('talgoxe/download_odf.html')
-  context = {'filepath': join('ord', filename)}
+    # export_letters_to_docx()
+    tempfilename = mktemp('.docx')
+    if len(ids) == 1:
+        id = ids[0]
+        lemma = Artikel.objects.get(id = id)
+        docx = lemma.process_docx(tempfilename)
+        filename = '%s-%s.docx' % (id, lemma.lemma)
+    else:
+        filename = 'sdl-utdrag.docx'
+        document = Document()
+        Artikel.add_docx_styles(document)
+        for i in ids:
+            lemma = Artikel.objects.get(id = i)
+            lemma.generate_docx_paragraph(document)
+        document.save(tempfilename)
+    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
+    os.rename(tempfilename, join(staticpath, filename))
+    template = loader.get_template('talgoxe/download_odf.html')
+    context = {'filepath': join('ord', filename)}
 
-  return render_template(request, template, context)
+    return render_template(request, template, context)
+
+# Create word-files, one file for each letter in the swedish alphabet.
+def export_letters_to_docx():
+    letter = 'a'
+    while letter <= 'z':
+        export_letter_to_docx(letter)
+        letter = chr(ord(letter) + 1)
+    letter = 'å'
+    export_letter_to_docx(letter)
+    letter = 'ä'
+    export_letter_to_docx(letter)
+    letter = 'ö'
+    export_letter_to_docx(letter)
+
+def export_letter_to_docx(letter):
+    staticpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ord')
+    lemmas = []
+    hel_bokstav = Artikel.objects.filter(lemma__startswith=letter)
+    lemmas += hel_bokstav
+    lemmas = sorted(lemmas, key=lambda lemma: (lemma.lemma, lemma.rang))
+    filename = letter + '20180831.docx'
+    document = Document()
+    Artikel.add_docx_styles(document)
+    for lemma in lemmas:
+        lemma.generate_docx_paragraph(document)
+    document.save(join(staticpath, filename))
 
 @login_required
 def search(request):
